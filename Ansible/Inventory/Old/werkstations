@@ -1,0 +1,2 @@
+[werkstations]
+WC10EP-WS-001 ansible_user=labadmin ansible_password=labadmin ansible_connection=winrm

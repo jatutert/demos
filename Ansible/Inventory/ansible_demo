@@ -1,0 +1,40 @@
+# 
+#
+# Ansible Demo Inventory bestand
+# Vagrant Omgeving
+# 
+# Versie 08 December 2023 
+# Gemaakt door John Tutert
+# 
+# 
+
+# wachtwoord sudo voor ansible 
+[ansibledemo]
+# 
+# manier 1 
+ulx-s-2204-l-a-010 ansible_sudo_pass=vagrant
+# ulx-s-2204-l-a-011 ansible_sudo_pass=vagrant
+# manier 2 
+# ulx-s-slv-0[01:02] ansible_sudo_pass=vagrant 
+
+# Overzicht van alle servers binnen de demo
+[demoservers]
+# 
+# https://stackoverflow.com/questions/33280244/ssh-error-permission-denied-publickey-password-in-ansible
+# Voorkomen van permission denied door ssh pass en user
+# 
+ulx-s-2204-l-a-010 ansible_ssh_pass=vagrant ansible_ssh_user=vagrant 
+# ulx-s-2204-l-a-011 ansible_ssh_pass=vagrant ansible_ssh_user=vagrant 
+
+# Overzicht van alle servers in Nederland
+[netherlands]
+ulx-s-2204-l-a-010
+
+# Overzicht van alle servers in Duitsland 
+[germany]
+# ulx-s-2204-l-a-011
+
+# Overzicht van alle servers in Europa 
+[europe:children]
+netherlands
+germany

@@ -1,0 +1,5 @@
+---
+- hosts: werkstations
+  tasks:
+  - name: 
+    ansible.windows.win_command: whoami

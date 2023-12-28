@@ -1,0 +1,222 @@
+---
+- hosts: ansibledemo
+#
+# ##################################################################
+# Demonstratie Ansible Playbook
+# Versie 004 
+# #################################################################
+# Gemaakt 8 december 2023
+# Auteur John Tutert
+# #################################################################
+#
+#
+# ###################
+# SUDO
+# ###################
+#
+#   https://stackoverflow.com/questions/20176957/user-vs-sudo-vs-sudo-user-in-ansible-playbooks
+#
+# user: vagrant
+  become: true
+# become_user: vagrant
+#
+# ##################
+# VARIABELEN 
+# ##################
+# 
+#   https://www.digitalocean.com/community/tutorials/how-to-use-ansible-to-install-and-set-up-docker-on-ubuntu-22-04 
+#
+  vars:
+
+# Docker
+
+    alpine_container_count: 2
+    ubuntu_container_count: 2
+#    default_container_name: docker  
+#    default_container_image: ubuntu
+    default_container_command: sleep 1d
+
+    demo_container_naam_alpine: demo_alpine
+    demo_container_naam_ubuntu_latest: demo_ulx_latest
+    demo_container_naam_ubuntu_2004: demo_ulx_2004
+    demo_container_naam_ubuntu_2304: demo_ulx_2304
+#   demo_container_naam_registry: demo_registry
+
+    demo_container_image_alpine: alpine:latest
+    demo_container_image_ubuntu_latest: ubuntu:latest
+    demo_container_image_ubuntu_2004: ubuntu:20.04
+    demo_container_image_ubuntu_2304: ubuntu:23.04
+#   demo_container_image_registry: registry
+
+#
+#
+# #####################
+# TAKEN
+# ######################
+#
+#
+
+  tasks:
+
+    # JTU # Screenfetch Installeren
+    - name: Zorgen dat ScreenFetch aanwezig is
+      apt:
+        name: screenfetch
+        state: present
+
+    # JTU # Midnight Commander Installeren
+    - name: Zorgen dat MidNight-Commander aanwezig is
+      apt:
+        name: mc
+        state: present
+
+     # JTU # Firewall uitzetten 
+    - name: Firewall uitzetten
+      ufw:
+        state: disabled
+
+    # ################################# Installatie DOCKER #########################################
+    
+    # Installatie APTITUDE 
+    - name: Install aptitude
+      apt:
+        name: aptitude
+        state: latest
+        update_cache: true
+
+    # Installatie Benodigde onderdelen voor Docker
+    - name: Install required system packages
+      apt:
+        pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - python3-pip
+          - virtualenv
+          - python3-setuptools
+        state: latest
+        update_cache: true
+
+    # GPG sleutel installeren tbv installatie Docker
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    # Repository toevoegen tbv installatie Docker
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu jammy stable
+        state: present
+
+    # Installeren Docker 
+    - name: Update apt and install docker-ce
+      apt:
+        name: docker-ce
+        state: latest
+        update_cache: true
+
+    # Installeren Python 
+    - name: Install Docker Module for Python
+      pip:
+        name: docker
+
+    # ########################################## Docker Images #####################################
+
+    # ### PULL ###
+    
+    - name: Docker Pull Alpine Image Latest
+      ansible.builtin.docker_image:
+        name: "{{ demo_container_image_alpine }}"
+        source: pull
+
+    - name: Docker Pull Ubuntu Image 2204
+      ansible.builtin.docker_image:
+        name: "{{ demo_container_image_ubuntu_latest }}"
+        source: pull
+
+    - name: Docker Pull Ubuntu Image 2004
+      ansible.builtin.docker_image:
+        name: "{{ demo_container_image_ubuntu_2004 }}"
+        source: pull
+
+    - name: Docker Pull Ubuntu Image 2304
+      ansible.builtin.docker_image:
+        name: "{{ demo_container_image_ubuntu_2304 }}"
+        source: pull
+
+    # ## BUILD ##
+    
+    # https://www.redhat.com/sysadmin/container-images-ansible
+    # https://docs.ansible.com/ansible/latest/collections/community/docker/docker_image_module.html
+
+#    - name: Downloaden dockerfile flask demo deutsch 
+#      shell "curl -s -o /home/vagrant/docker/flask-demo/flask-demo-dkr-file-de https://raw.githubusercontent.com/jatutert/docker-demos/main/flask-demo-dkr-file-de"
+
+#    - name: Downloaden dockerfiles flask demo francais
+#      shell "curl -s -o /home/vagrant/docker/flask-demo/flask-demo-dkr-file-fr https://raw.githubusercontent.com/jatutert/docker-demos/main/flask-demo-dkr-file-fr"
+
+#    - name: Downloaden dockerfiles flask demo italiano
+#      shell "curl -s -o /home/vagrant/docker/flask-demo/flask-demo-dkr-file-it https://raw.githubusercontent.com/jatutert/docker-demos/main/flask-demo-dkr-file-it"
+
+#    - name: Downloaden dockerfiles flask demo nederlands
+#      shell "curl -s -o /home/vagrant/docker/flask-demo/flask-demo-dkr-file-nl https://raw.githubusercontent.com/jatutert/docker-demos/main/flask-demo-dkr-file-nl"
+
+#    - name: Downloaden dockerfiles flask demo english
+#      shell "curl -s -o /home/vagrant/docker/flask-demo/flask-demo-dkr-file-uk https://raw.githubusercontent.com/jatutert/docker-demos/main/flask-demo-dkr-file-uk"
+
+#    - name: Downloaden python broncode applicatie flask 
+#       shell "curl -s -o /home/vagrant/docker/flask-demo/app.py https://raw.githubusercontent.com/pmanzoni/flask/master/app.py"
+    
+#    - name: Docker Build flask demo 
+#      ansible.builtin.docker_image:
+#        name: flaskdemo
+#        build: 
+#          path: /home/vagrant/    pad naar de dockerfile 
+#          source: build 
+#        state: present 
+
+    # ######################################### Docker Containers ########################################
+
+    - name: Docker Create Alpine latest containers
+      ansible.builtin.docker_container:
+        name: "{{ demo_container_naam_alpine }}"
+        image: "{{ demo_container_image_alpine }}"
+        command: "{{ default_container_command }}"
+        auto_remove: yes
+        detach: yes
+        # https://medium.com/@Oskarr3/docker-containers-with-ansible-89e98dacd1e2
+        # env: "{{ container_env }}"
+        # ports: "{{ container_ports }}"
+        # volumes: "{{ container_volumes }}"
+        # working_dir: "{{ container_workdir }}"
+        # networks:
+        #   - name: "{{ network_name }}"
+
+    - name: Docker Create Ubuntu latest containers
+      community.docker.docker_container:
+        name: "{{ demo_container_naam_ubuntu_latest }}"
+        image: "{{ demo_container_image_ubuntu_latest }}"
+        command: "{{ default_container_command }}"
+        auto_remove: yes
+        detach: yes 
+        # https://medium.com/@Oskarr3/docker-containers-with-ansible-89e98dacd1e2
+        # env: "{{ container_env }}"
+        # ports: "{{ container_ports }}"
+        # volumes: "{{ container_volumes }}"
+        # working_dir: "{{ container_workdir }}"
+        
+    # https://github.com/moovs/docker-with-ansible/blob/master/roles/docker/main.yml
+    - name: Docker groep maken
+      group:
+        name: docker
+        state: present 
+       
+    # https://github.com/moovs/docker-with-ansible/blob/master/roles/docker/main.yml
+    # Geeft een Warning maar werk wel 
+    - name: Gebruiker toevoegen aan Docker groep
+      user: 
+        name: vagrant
+        group: docker 
+        append: yes         

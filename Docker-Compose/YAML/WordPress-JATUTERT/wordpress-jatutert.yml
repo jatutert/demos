@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+ wordpress:
+  image: wordpress:latest
+  ports:
+   - "8085:80"
+  depends_on:
+   - db
+  restart: always
+  environment:
+   WORDPRESS_DB_HOST: db
+   WORDPRESS_DB_USER: wordpress
+   WORDPRESS_DB_PASSWORD: wordpress
+  volumes:
+   - ./wp_data:/var/www/html
+  networks:
+   - wp-netwerk
+ db:
+  image: "mysql:5.7"
+  command: '--default-authentication-plugin=mysql_native_password'
+  restart: always
+  environment:
+   MYSQL_ROOT_PASSWORD: "!@LABadmin#$23"
+   MYSQL_DATABASE: wordpress
+   MYSQL_USER: wordpress
+   MYSQL_PASSWORD: wordpress
+  expose:
+   - 3306
+   - 33060
+  volumes:
+   - ./db_data:/var/lib/mysql
+  networks:
+   - wp-netwerk
+
+networks:
+ wp-netwerk:
+ 
+volumes:
+ wp_data:
+ db_data:

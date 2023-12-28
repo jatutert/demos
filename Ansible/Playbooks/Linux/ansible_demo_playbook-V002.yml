@@ -1,0 +1,144 @@
+---
+- hosts: ansibledemo
+#
+# ##################################################################
+# Demonstratie Ansible Playbook
+# #################################################################
+# Gemaakt 8 december 2023
+# Auteur John Tutert
+# #################################################################
+#
+#
+# ###################
+# SUDO
+# ###################
+#
+#   https://stackoverflow.com/questions/20176957/user-vs-sudo-vs-sudo-user-in-ansible-playbooks
+#
+# user: vagrant
+  become: true
+# become_user: vagrant
+#
+# ##################
+# DOCKER
+# ##################
+# 
+#   https://www.digitalocean.com/community/tutorials/how-to-use-ansible-to-install-and-set-up-docker-on-ubuntu-22-04 
+#
+  vars:
+    alpine_container_count: 2
+    ubuntu_container_count: 2
+#    default_container_name: docker  
+#    default_container_image: ubuntu
+    default_container_command: sleep 1d
+
+    demo_container_naam_alpine: demo_alpine
+    demo_container_naam_ubuntu_latest: demo_ulx_latest
+    demo_container_naam_ubuntu_2004: demo_ulx_2004
+    demo_container_naam_ubuntu_2310: demo_ulx_2304
+#   demo_container_naam_registry: demo_registry
+
+    demo_container_image_alpine: alpine:latest
+    demo_container_image_ubuntu_latest: ubuntu:latest
+    demo_container_image_ubuntu_2004: ubuntu:20.04
+    demo_container_image_ubuntu_2310: ubuntu:23.10
+#   demo_container_image_registry: registry
+#
+# 
+#
+#
+  tasks:
+
+    # Screenfetch demo John
+    - name: Zorgen dat ScreenFetch aanwezig is
+      apt:
+        name: screenfetch
+        state: present
+
+    # Midnight Commander demo John
+    - name: Zorgen dat MidNight-Commander aanwezig is
+      apt:
+        name: mc
+        state: present
+
+     # Firewall uitzetten demo John 
+    - name: Firewall uitzetten
+      ufw:
+        state: disabled
+
+    # Docker demo DigitalOcean 
+    - name: Install aptitude
+      apt:
+        name: aptitude
+        state: latest
+        update_cache: true
+
+    - name: Install required system packages
+      apt:
+        pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - python3-pip
+          - virtualenv
+          - python3-setuptools
+        state: latest
+        update_cache: true
+
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu jammy stable
+        state: present
+
+    - name: Update apt and install docker-ce
+      apt:
+        name: docker-ce
+        state: latest
+        update_cache: true
+
+    - name: Install Docker Module for Python
+      pip:
+        name: docker
+
+    - name: Pull Alpine Image Latest
+      community.docker.docker_image:
+        name: "{{ demo_container_image_alpine }}"
+        source: pull
+
+    - name: Pull Ubuntu Image 22.04
+      community.docker.docker_image:
+        name: "{{ demo_container_image_ubuntu_latest }}"
+        source: pull
+
+   - name: Pull Ubuntu Image 20.04
+      community.docker.docker_image:
+        name: "{{ demo_container_image_ubuntu_2004 }}"
+        source: pull
+
+   - name: Pull Ubuntu Image 23.04
+      community.docker.docker_image:
+        name: "{{ demo_container_image_ubuntu_2304 }}"
+        source: pull
+
+    - name: Create Alpine latest containers
+      community.docker.docker_container:
+        name: "{{ demo_container_naam_alpine }}{{ item }}"
+        image: "{{ demo_container_image_alpine }}"
+        command: "{{ default_container_command }}"
+        state: present
+        with_sequence: count={{ alpine_container_count }}
+
+    - name: Create Ubuntu latest containers
+      community.docker.docker_container:
+        name: "{{ demo_container_naam_ubuntu_latest }}{{ item }}"
+        image: "{{ demo_container_image_ubuntu_latest }}"
+        command: "{{ default_container_command }}"
+        state: present
+        with_sequence: count={{ ubuntu_container_count }}
+        
