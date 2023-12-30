@@ -1,0 +1,28 @@
+---
+- hosts: webservers
+  become: true
+  vars:
+    doel_melding: We gaan aan de slag met
+  tasks:
+  - name: Geef informatie    
+    debug: 
+      msg: "{{ doel_melding }} {{ inventory_hostname | lower }}"
+  - name: Updaten applicaties
+    apt:
+     upgrade: yes
+     update_cache: yes
+  - name: Zorgen dat NGINX aanwezig is
+    apt:
+      name: nginx
+      state: present
+  - name: Zorgen dat ScreenFetch aanwezig is
+    apt:
+     name: screenfetch
+     state: present
+  - name: Zorgen dat MidNight-Commander aanwezig is
+    apt: 
+     name: mc
+     state: present
+  - name: Firewall uitzetten
+    ufw:
+     state: disabled

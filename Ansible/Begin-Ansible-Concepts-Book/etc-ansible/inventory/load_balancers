@@ -1,0 +1,2 @@
+[load_balancers]
+ulx-lb-0[01:01] ansible_sudo_pass=labadmin

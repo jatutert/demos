@@ -1,0 +1,27 @@
+[webservers]
+ulx-wb-0[01:02] ansible_sudo_pass=labadmin
+
+### In Yaml formaat: 
+### ---
+###   webservers:
+###      hosts:
+###        ulx-wb-0[01:02]: 
+### 
+
+[production]
+ulx-wb-001
+
+[netherlands]
+ulx-wb-001]
+
+[staging]
+ulx-wb-002
+
+[germany]
+ulx-wb-002
+
+[europe:children]
+netherlands
+germany
+
+

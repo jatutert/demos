@@ -1,0 +1,4 @@
+:: Installeren Minikube versie 1.31.2 
+winget install --id Kubernetes.minikube -v 1.31.2
+:: Installeren KubeCTL 
+winget install -e --id Kubernetes.kubectl

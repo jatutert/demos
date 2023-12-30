@@ -1,0 +1,7 @@
+[db_servers]
+ulx-db-0[01:01] ansible_sudo_pass=labadmin
+
+### ---
+### db_servers: 
+### hosts: 
+### ulx-db-0[01:01]: 
