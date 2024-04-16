@@ -45,7 +45,7 @@ if not exist %USERPROFILE%\Downloads\WS19DC-Trial.VHD (
 @VBoxManage createvm --name "WS19DC-T-001" --basefolder "D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server" --default --ostype "Windows2019_64" --register 
 ::
 :: Aanpassingen doen aan VM
-@VBoxManage -q modifyvm WS19DC-T-001 --description="Windows Server 2019 DataCenter 180 days Trail"
+@VBoxManage -q modifyvm WS19DC-T-001 --description="Windows Server 2019 DataCenter 180 days Trial"
 @VBoxManage -q modifyvm WS19DC-T-001 --audio-enabled=off
 @VBoxManage -q modifyvm WS19DC-T-001 --memory=8192
 @VBoxManage -q modifyvm WS19DC-T-001 --clipboard-mode=bidirectional --drag-and-drop=bidirectional

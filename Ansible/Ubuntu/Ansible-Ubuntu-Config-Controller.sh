@@ -2,7 +2,7 @@
 #
 #
 # Configuratiescript Ansible demo op Ubuntu 22.04
-# Versie: 05 april 2024 (Op basis van Ubuntu Config d.d. 16 febr. 2024) 
+# Versie: 16 april 2024 (Op basis van Ubuntu Config d.d. 16 febr. 2024) 
 # Auteur: John Tutert
 #
 # ######################
@@ -36,6 +36,7 @@
 # bugfiles (09122023)
 # Nieuwe GitHub Structuur verwerkt (29dec2023)
 # Semaphore Ansible Management installatie opgenomen binnen Ansible 
+# bugfixes
 #
 # Check of script wordt uitgevoerd als SUDO 
 if [ $(id -u) -ne 0 ]; then
@@ -54,22 +55,21 @@ VERSION_CODENAME=$(grep -oP '(?<=^VERSION_CODENAME=).+' /etc/os-release | tr -d 
 # Function Change Repo Ubuntu 
 #
 function change_ubuntu_repo () {
-    clear
-    echo "Aanpassen Ubuntu Repository"
+    # echo "Aanpassen Ubuntu Repository"
     if grep -q "mirrors.edge.kernel.org" /etc/apt/sources.list; then
         sed "s@mirrors.edge.kernel.org@nl.archive.ubuntu.com@" -i /etc/apt/sources.list
-        echo "Ubuntu Repository aangepast kernel.org naar ubuntu.com in sources.list"
+        # echo "Ubuntu Repository aangepast kernel.org naar ubuntu.com in sources.list"
     else
         # Replace the value with nl.archive.ubuntu.com
-        echo "Mirrors.edge.kernel.org waarde niet aangetroffen in sources.list"
+        # echo "Mirrors.edge.kernel.org waarde niet aangetroffen in sources.list"
     fi
     #
     if grep -q "nl.archive.ubuntu.com" /etc/apt/sources.list; then
-        echo "Ubuntu Repository is juist ingesteld"
+        # echo "Ubuntu Repository is juist ingesteld"
     else
         # Replace the value with nl.archive.ubuntu.com
         sed "s@archive.ubuntu.com@nl.archive.ubuntu.com@" -i /etc/apt/sources.list
-        echo "Ubuntu Repository aangepast naar nl.archive.ubuntu.com in sources.list"
+        # echo "Ubuntu Repository aangepast naar nl.archive.ubuntu.com in sources.list"
     fi
 }
 #
@@ -81,7 +81,7 @@ function ubuntu_update () {
     apt autoremove -qq -y
     timedatectl set-timezone Europe/Amsterdam
     # VMware Tools 
-    apt install -qq -y open-vm-tools 
+    apt install -qq -y open-vm-tools > /dev/null 2>&1
     # apt install -qq -y mc
     # apt install -qq -y screenfetch
     # apt install -qq -y wget
