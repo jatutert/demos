@@ -36,7 +36,6 @@
 # bugfiles (09122023)
 # Nieuwe GitHub Structuur verwerkt (29dec2023)
 # Semaphore Ansible Management installatie opgenomen binnen Ansible 
-# bugfixes
 #
 # Check of script wordt uitgevoerd als SUDO 
 if [ $(id -u) -ne 0 ]; then
@@ -55,21 +54,21 @@ VERSION_CODENAME=$(grep -oP '(?<=^VERSION_CODENAME=).+' /etc/os-release | tr -d 
 # Function Change Repo Ubuntu 
 #
 function change_ubuntu_repo () {
-    # echo "Aanpassen Ubuntu Repository"
+     # echo "Aanpassen Ubuntu Repository"
     if grep -q "mirrors.edge.kernel.org" /etc/apt/sources.list; then
         sed "s@mirrors.edge.kernel.org@nl.archive.ubuntu.com@" -i /etc/apt/sources.list
-        echo "Ubuntu Repository aangepast kernel.org naar ubuntu.com in sources.list" > /dev/null 2>&1
+         echo "Ubuntu Repository aangepast kernel.org naar ubuntu.com in sources.list" > /dev/null 2>&1
     else
         # Replace the value with nl.archive.ubuntu.com
-        echo "Repository mirrors.edge.kernel.org waarde niet aangetroffen in sources.list" > /dev/null 2>&1
+         echo "Repository mirrors.edge.kernel.org waarde niet aangetroffen in sources.list" > /dev/null 2>&1
     fi
     #
     if grep -q "nl.archive.ubuntu.com" /etc/apt/sources.list; then
-        echo "Ubuntu Repository is juist ingesteld" > /dev/null 2>&1
+         echo "Ubuntu Repository is juist ingesteld" > /dev/null 2>&1
     else
         # Replace the value with nl.archive.ubuntu.com
         sed "s@archive.ubuntu.com@nl.archive.ubuntu.com@" -i /etc/apt/sources.list
-        echo "Ubuntu Repository aangepast naar nl.archive.ubuntu.com in sources.list" > /dev/null 2>&1
+         echo "Ubuntu Repository aangepast naar nl.archive.ubuntu.com in sources.list" > /dev/null 2>&1
     fi
 }
 #
@@ -230,116 +229,58 @@ function maak_directories () {
 }
 #
 #
+clear
+echo "Installatie Ansible inclusief demo omgeving gestart ..."
 #
 #
-# MASTER
+# SLAVE
 # ######
 #
-#
+# 
 # Haal de hostname op
 hostname=$(hostname)
 #
-# Hostname ulx-s-2204-L-A-001 is Ansible Controller 
-if [ "$hostname" == "ulx-s-2204-l-a-001" ]; then
-    #
-    # STAP 1
-	# Updaten Ubuntu
-	#
-	echo "Stap 1 - Update Ubuntu gestart ..."
-    # 1A Aanpassen Ubuntu Standaard Repository naar Nederland 
+# Hostname ulx-s-2204-L-A-010 is slaaf 1 voor ansible controller 
+if [ "$hostname" == "ulx-s-2204-l-a-010" ]; then
+    # Stap 1 Installatie
+    # Aanpassen Ubuntu Standaard Repository naar Nederland 
     change_ubuntu_repo
-    # 1B Upgraden Ubuntu naar laatste stand van zaken 
-    ubuntu_update
-    # 1C Ansible Repo toevoegen 
-    apt-add-repository ppa:ansible/ansible -y > /dev/null 2>&1
-    # 1D Upgraden Ubuntu naar laatste stand van zaken
+    # Upgraden Ubuntu naar laatste stand van zaken 
     ubuntu_update
     #
-	# STAP 2
-	# Installatie Ansible Controller op Ubuntu 22.04
-	echo "Stap 2 - Installatie Ansible Controller gestart ..."
-	#
-    apt install ansible -y > /dev/null 2>&1
+    # Stap 2 Installatie SSHPASS
     # 
-    # STAP 3
-    # Aanpassen etc hosts bestand
-	echo "Stap 3 - Aanpassen hosts betand gestart ..."
-    #	
-    # 3a vullen variable hostname
+    # Starten installatie sshpass
+    apt install sshpass -y
+    #
+    # Stap 3 Aanpassen etc hosts bestand
+    #
+    # vullen variable hostname
     hostname=$(hostname)
-    # 3b Haal het IP-adres van eth1 op
+    # Haal het IP-adres van eth1 op
     eth1_ip=$(ip addr show eth1 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
-    # 3c Voeg 1 toe aan het IP-adres van eth1
+    # Voeg 1 toe aan het IP-adres van eth1
     IFS=. read -r a b c d <<< "$eth1_ip"
-    eth1_plus1_ip="$a.$b.$c.$((d+1))"
-    # 3d Sla de IP-adressen op in afzonderlijke variabelen
+    eth1_min1_ip="$a.$b.$c.$((d-1))"
+    # Sla de IP-adressen op in afzonderlijke variabelen
     eth1_ip_var="eth1_ip=$eth1_ip"
-    eth1_plus1_ip_var="eth1_plus1_ip=$eth1_plus1_ip"
-    # 3e Aanpassen hosts bestand 
+    eth1_min1_ip_var="eth1_min1_ip=$eth1_min1_ip"
     if grep -q "$eth1_ip" /etc/hosts; then
         echo "$hostname already exists in /etc/hosts"
     else
         # Add the hostname and IP address to /etc/hosts
-        echo "$eth1_ip ulx-s-2204-l-a-001" | sudo tee -a /etc/hosts > /dev/null
-        echo "$eth1_plus1_ip ulx-s-2204-l-a-010" | sudo tee -a /etc/hosts > /dev/null
+        echo "$eth1_ip ulx-s-2204-l-a-010" | sudo tee -a /etc/hosts > /dev/null
+        echo "$eth1_min1_ip ulx-s-2204-l-a-001" | sudo tee -a /etc/hosts > /dev/null
         echo "Hostname $hostname added to /etc/hosts"
-    fi
+    fi                
     #
+    # Stap 4 SSH verbinden script maken 
+    echo 'echo Uitvoeren als user Vagrant en niet als Root' > /home/$SUDO_USER/ansible_cntrl_ssh.sh 
+    echo 'sshpass -p "vagrant" ssh -o StrictHostKeyChecking=no vagrant@ulx-s-2204-l-a-001' > /home/$SUDO_USER/ansible_cntrl_ssh.sh 
+    chmod +x /home/$SUDO_USER/ansible_cntrl_ssh.sh 
     #
-    # STAP 4
-	# Inventory ophalen van GitHUB
-	echo "Stap 4 - Ophalen Inventory bestanden vanaf GitHUB JATUTERT gestart ..."
-    mkdir -p /etc/ansible/inventory 
-    curl -s -o /etc/ansible/inventory/ansible_demo https://raw.githubusercontent.com/jatutert/demos/main/Ansible/Inventory/ansible_demo
-    # curl -s -o /etc/ansible/inventory/db_servers https://raw.githubusercontent.com/jatutert/demos/main/Ansible/Inventory/Old/db_servers
-    # curl -s -o /etc/ansible/inventory/load_balancers https://raw.githubusercontent.com/jatutert/demos/main/Ansible/Inventory/Old/load_balancers
-    # curl -s -o /etc/ansible/inventory/webservers https://raw.githubusercontent.com/jatutert/demos/main/Ansible/Inventory/Old/webservers
-    # curl -s -o /etc/ansible/inventory/werkstations https://raw.githubusercontent.com/jatutert/demos/main/Ansible/Inventory/Old/werkstations
-    echo "Ophalen Inventory vanaf GitHub gereed"
-    # 
-    # STAP 5
-	# Aanpassen ansible config met Inventory
-	echo "Stap 5 - Aanpassen Ansible config met Inventory gestart ..."
-    if grep -q "defaults" /etc/ansible/ansible.cfg; then
-        echo "Ansible Configuratiebestand reeds voorzien van Inventory"
-    else
-        # Add the hostname and IP address to /etc/hosts
-        echo "[defaults]" | sudo tee -a /etc/ansible/ansible.cfg > /dev/null
-        echo "inventory = inventory/" | sudo tee -a /etc/ansible/ansible.cfg > /dev/null
-        echo "Ansible Configuratiebestand voorzien van Inventory"
-    fi
+    # Stap x  
     #
-    # STAP 6
-	# Playbooks ophalen van GitHUB
-	echo "Stap 6 - Ophalen Playbooks vanaf GitHUB JATUTERT gestart ..."
-    mkdir -p /home/$SUDO_USER/playbooks
-    chown -f -R $SUDO_USER /home/$SUDO_USER/playbooks
-    curl -s -o /home/$SUDO_USER/playbooks/ansible_demo_playbook.yml https://raw.githubusercontent.com/jatutert/demos/main/Ansible/Playbooks/Linux/ansible_demo_playbook.yml
-    echo "Ophalen Ansible Playbooks vanaf GitHUB gereed"
-    #
-    # STAP 7
-	# SSH verbinden script maken 
-	# Uitvoeren als user Vagrant en niet als Root anders krijg je SSH foutmelding bij Ansible 
-	echo "Stap 7 - SSH Verbindingsscript maken gestart ..."
-    echo 'echo Uitvoeren als user Vagrant en niet als Root' > /home/$SUDO_USER/ansible_host_ssh.sh
-	echo 'sshpass -p "vagrant" ssh -o StrictHostKeyChecking=no vagrant@ulx-s-2204-l-a-010' > /home/$SUDO_USER/ansible_host_ssh.sh 
-    chmod +x /home/$SUDO_USER/ansible_host_ssh.sh
-    # 
-    # STAP 8
-	# Installatie semaphore 
-    # https://docs.semui.co/administration-guide/installations
-	# 
-	# Deze stap zit nu in Windows Command file 09 04 2024 JTU
-	# 
-	# echo "Stap 8 - Installatie SemaPhore gestart ..."
-    # snap install semaphore
-    # snap stop semaphore
-	# semaphore user add --admin --login labadmin --name=LABAdmin --email=labadmin@labadmin.local --password=labadmin
-    # snap start semaphore
-    # # Aanpassen standaard poort 3000 naar 4444
-    # snap set semaphore port=4444
-    # # Herstarten com nieuwe poort actief te maken 
-    # snap restart semaphore
 fi
 #
 # Thats all folks 

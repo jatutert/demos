@@ -58,7 +58,7 @@ function change_ubuntu_repo () {
     # echo "Aanpassen Ubuntu Repository"
     if grep -q "mirrors.edge.kernel.org" /etc/apt/sources.list; then
         sed "s@mirrors.edge.kernel.org@nl.archive.ubuntu.com@" -i /etc/apt/sources.list
-        # echo "Ubuntu Repository aangepast kernel.org naar ubuntu.com in sources.list"
+        echo "Ubuntu Repository aangepast kernel.org naar ubuntu.com in sources.list" > /dev/null 2>&1
     else
         # Replace the value with nl.archive.ubuntu.com
         echo "Repository mirrors.edge.kernel.org waarde niet aangetroffen in sources.list" > /dev/null 2>&1
@@ -320,7 +320,8 @@ if [ "$hostname" == "ulx-s-2204-l-a-001" ]; then
     # STAP 7
 	# SSH verbinden script maken 
 	echo "Stap 7 - SSH Verbindingsscript maken gestart ..."
-    echo 'sshpass -p "vagrant" ssh -o StrictHostKeyChecking=no vagrant@ulx-s-2204-l-a-010' > /home/$SUDO_USER/ansible_host_ssh.sh 
+    echo 'echo Uitvoeren als user Vagrant en niet als Root' > /home/$SUDO_USER/ansible_host_ssh.sh
+	echo 'sshpass -p "vagrant" ssh -o StrictHostKeyChecking=no vagrant@ulx-s-2204-l-a-010' > /home/$SUDO_USER/ansible_host_ssh.sh 
     chmod +x /home/$SUDO_USER/ansible_host_ssh.sh
     # 
     # STAP 8
