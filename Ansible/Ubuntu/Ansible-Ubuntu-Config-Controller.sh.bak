@@ -58,7 +58,7 @@ function change_ubuntu_repo () {
     # echo "Aanpassen Ubuntu Repository"
     if grep -q "mirrors.edge.kernel.org" /etc/apt/sources.list; then
         sed "s@mirrors.edge.kernel.org@nl.archive.ubuntu.com@" -i /etc/apt/sources.list
-        echo "Ubuntu Repository aangepast kernel.org naar ubuntu.com in sources.list" > /dev/null 2>&1
+        # echo "Ubuntu Repository aangepast kernel.org naar ubuntu.com in sources.list"
     else
         # Replace the value with nl.archive.ubuntu.com
         echo "Repository mirrors.edge.kernel.org waarde niet aangetroffen in sources.list" > /dev/null 2>&1
