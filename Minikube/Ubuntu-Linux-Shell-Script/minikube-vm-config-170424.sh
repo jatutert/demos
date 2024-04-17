@@ -2,7 +2,7 @@
 #
 #
 # Configuratiescript Minikube Virtual Machine
-# Versie: 1.0.0 DEVELOP d.d. 12-12-2023
+# Versie: 1.0.0 DEVELOP d.d. 17-04-2024
 # Auteur: John Tutert
 #
 # ######################
@@ -12,7 +12,11 @@
 # Verwijderen functies voor minikube docker 
 # Verwijderen Minikube Ansible onderdelen 
 # Aanpassen sudo user naar user 
-# xx xxxxx 2023 
+# 17 april 2024
+# check sudo verwijderd bij start van het script 
+# SUDO USER naar USER
+# URLs github jatutert hersteld 
+# Installatie Docker Compose opgenomen bij optie 4 
 #
 #
 # Check of script wordt uitgevoerd als SUDO 
@@ -20,6 +24,8 @@
 #    echo "Dit script moet worden uitgevoerd als sudo."
 #    exit 1
 # fi
+#
+#
 # Vullen Variabelen 
 PRETTY_NAME=$(grep -oP '(?<=^PRETTY_NAME=).+' /etc/os-release | tr -d '"')
 NAME=$(grep -oP '(?<=^NAME=).+' /etc/os-release | tr -d '"')
@@ -27,6 +33,11 @@ VERSION=$(grep -oP '(?<=^VERSION=).+' /etc/os-release | tr -d '"')
 VERSION_ID=$(grep -oP '(?<=^VERSION_ID=).+' /etc/os-release | tr -d '"')
 VERSION_CODENAME=$(grep -oP '(?<=^VERSION_CODENAME=).+' /etc/os-release | tr -d '"')
 # 
+#
+alias ll="ls -la"
+sudo timedatectl set-timezone Europe/Amsterdam
+#
+#
 # Functies
 #
 # Function Change Repo Ubuntu 
@@ -327,24 +338,24 @@ while true; do
             #
             curl -s -o /home/$USER/docker/flask-demo/flask-demo-dkr-file https://raw.githubusercontent.com/pmanzoni/flask/master/Dockerfile
             # Meerdere talen demo dockerfiles 
-            curl -s -o /home/$USER/docker/flask-demo/flask-demo-dkr-file-de https://raw.githubusercontent.com/jatutert/docker-demos/main/flask-demo-dkr-file-de
-            curl -s -o /home/$USER/docker/flask-demo/flask-demo-dkr-file-fr https://raw.githubusercontent.com/jatutert/docker-demos/main/flask-demo-dkr-file-fr
-            curl -s -o /home/$USER/docker/flask-demo/flask-demo-dkr-file-it https://raw.githubusercontent.com/jatutert/docker-demos/main/flask-demo-dkr-file-it
-            curl -s -o /home/$USER/docker/flask-demo/flask-demo-dkr-file-nl https://raw.githubusercontent.com/jatutert/docker-demos/main/flask-demo-dkr-file-nl
-            curl -s -o /home/$USER/docker/flask-demo/flask-demo-dkr-file-uk https://raw.githubusercontent.com/jatutert/docker-demos/main/flask-demo-dkr-file-uk
+            curl -s -o /home/$USER/docker/flask-demo/flask-demo-dkr-file-de https://raw.githubusercontent.com/jatutert/demos/main/Docker/FLASK/flask-demo-dkr-file-de
+            curl -s -o /home/$USER/docker/flask-demo/flask-demo-dkr-file-fr https://raw.githubusercontent.com/jatutert/demos/main/Docker/FLASK/flask-demo-dkr-file-fr
+            curl -s -o /home/$USER/docker/flask-demo/flask-demo-dkr-file-it https://raw.githubusercontent.com/jatutert/demos/main/Docker/FLASK/flask-demo-dkr-file-it
+            curl -s -o /home/$USER/docker/flask-demo/flask-demo-dkr-file-nl https://raw.githubusercontent.com/jatutert/demos/main/Docker/FLASK/flask-demo-dkr-file-nl
+            curl -s -o /home/$USER/docker/flask-demo/flask-demo-dkr-file-uk https://raw.githubusercontent.com/jatutert/demos/main/Docker/FLASK/flask-demo-dkr-file-uk
             # Python Script
             curl -s -o /home/$USER/docker/flask-demo/app.py https://raw.githubusercontent.com/pmanzoni/flask/master/app.py
             # Default index.html
             curl -s -o /home/$SUSER/docker/flask-demo/templates/index.html https://raw.githubusercontent.com/pmanzoni/flask/master/templates/index.html
             # Meerdere talen demo index.html 
-            curl -s -o /home/$USER/docker/flask-demo/deutsch/index.html https://raw.githubusercontent.com/jatutert/docker-demos/main/index-deutsch.html
-            curl -s -o /home/$USER/docker/flask-demo/english/index.html https://raw.githubusercontent.com/jatutert/docker-demos/main/index-english.html
-            curl -s -o /home/$USER/docker/flask-demo/francais/index.html https://raw.githubusercontent.com/jatutert/docker-demos/main/index-francais.html
-            curl -s -o /home/$USER/docker/flask-demo/italiano/index.html https://raw.githubusercontent.com/jatutert/docker-demos/main/index-italiano.html
-            curl -s -o /home/$USER/docker/flask-demo/nederlands/index.html https://raw.githubusercontent.com/jatutert/docker-demos/main/index-nederlands.html
+            curl -s -o /home/$USER/docker/flask-demo/deutsch/index.html https://raw.githubusercontent.com/jatutert/demos/main/Docker/FLASK/index-deutsch.html
+            curl -s -o /home/$USER/docker/flask-demo/english/index.html https://raw.githubusercontent.com/jatutert/demos/main/Docker/FLASK/index-english.html
+            curl -s -o /home/$USER/docker/flask-demo/francais/index.html https://raw.githubusercontent.com/jatutert/demos/main/Docker/FLASK/index-francais.html
+            curl -s -o /home/$USER/docker/flask-demo/italiano/index.html https://raw.githubusercontent.com/jatutert/demos/main/Docker/FLASK/index-italiano.html
+            curl -s -o /home/$USER/docker/flask-demo/nederlands/index.html https://raw.githubusercontent.com/jatutert/demos/main/Docker/FLASK/index-nederlands.html
             #
-            curl -s -o /home/$USER/docker/flask-demo/flask-image-build.sh https://raw.githubusercontent.com/jatutert/docker-demos/main/flask-image-build.sh
-            curl -s -o /home/$USER/docker/flask-demo/flask-demo-run.sh https://raw.githubusercontent.com/jatutert/docker-demos/main/flask-demo-run.sh
+            curl -s -o /home/$USER/docker/flask-demo/flask-image-build.sh https://raw.githubusercontent.com/jatutert/demos/main/Docker/FLASK/flask-image-build.sh
+            curl -s -o /home/$USER/docker/flask-demo/flask-demo-run.sh https://raw.githubusercontent.com/jatutert/demos/main/Docker/FLASK/flask-demo-run.sh
             #
             chmod +x /home/$USER/docker/flask-demo/flask-image-build.sh
             chmod +x /home/$USER/docker/flask-demo/flask-demo-run.sh
@@ -360,9 +371,15 @@ while true; do
             #
             # DOCKER COMPOSE 
             #
+			# Installatie Docker Compose in Minikube VM 
+			DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker} 
+			mkdir -p $DOCKER_CONFIG/cli-plugins
+			curl -SL https://github.com/docker/compose/releases/download/v2.26.1/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+			chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+			#
             # DOCKER COMPOSE YAML JTU bestanden ophalen
-            curl -s -o /home/$USER/yaml/docker-compose/nextcloud/docker-compose.yml https://raw.githubusercontent.com/jatutert/docker-compose-yaml/main/docker-compose-nextcloud-vagrant.yml
-            curl -s -o /home/$USER/yaml/docker-compose/odoo/docker-compose.yml https://raw.githubusercontent.com/jatutert/docker-compose-yaml/main/docker-compose-odoo-vagrant.yml  
+            curl -s -o /home/$USER/yaml/docker-compose/nextcloud/docker-compose.yml https://raw.githubusercontent.com/jatutert/demos/main/Docker-Compose/YAML/NextCloud/docker-compose-nextcloud-vagrant.yml
+            curl -s -o /home/$USER/yaml/docker-compose/odoo/docker-compose.yml https://raw.githubusercontent.com/jatutert/demos/main/Docker-Compose/YAML/Odoo/docker-compose-odoo-vagrant.yml 
             # DOCKER COMPOSE YAML awesome compose YAML bestanden ophalen
             curl -s -o /home/$USER/yaml/docker-compose/prometheus-grafana/prometheus-grafana.yml https://raw.githubusercontent.com/docker/awesome-compose/master/prometheus-grafana/compose.yaml
             curl -s -o /home/$USER/yaml/docker-compose/nextcloud/nextcloud-redis-mariadb.yml https://raw.githubusercontent.com/docker/awesome-compose/master/nextcloud-redis-mariadb/compose.yaml

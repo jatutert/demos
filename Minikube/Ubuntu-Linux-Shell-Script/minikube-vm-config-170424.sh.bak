@@ -2,7 +2,7 @@
 #
 #
 # Configuratiescript Minikube Virtual Machine
-# Versie: 1.0.0 DEVELOP d.d. 12-12-2023
+# Versie: 1.0.0 DEVELOP d.d. 17-04-2024
 # Auteur: John Tutert
 #
 # ######################
@@ -12,7 +12,11 @@
 # Verwijderen functies voor minikube docker 
 # Verwijderen Minikube Ansible onderdelen 
 # Aanpassen sudo user naar user 
-# xx xxxxx 2023 
+# 17 april 2024
+# check sudo verwijderd bij start van het script 
+# SUDO USER naar USER
+# URLs github jatutert hersteld 
+# Installatie Docker Compose opgenomen bij optie 4 
 #
 #
 # Check of script wordt uitgevoerd als SUDO 
@@ -20,6 +24,8 @@
 #    echo "Dit script moet worden uitgevoerd als sudo."
 #    exit 1
 # fi
+#
+#
 # Vullen Variabelen 
 PRETTY_NAME=$(grep -oP '(?<=^PRETTY_NAME=).+' /etc/os-release | tr -d '"')
 NAME=$(grep -oP '(?<=^NAME=).+' /etc/os-release | tr -d '"')
@@ -27,6 +33,10 @@ VERSION=$(grep -oP '(?<=^VERSION=).+' /etc/os-release | tr -d '"')
 VERSION_ID=$(grep -oP '(?<=^VERSION_ID=).+' /etc/os-release | tr -d '"')
 VERSION_CODENAME=$(grep -oP '(?<=^VERSION_CODENAME=).+' /etc/os-release | tr -d '"')
 # 
+#
+alias ll="ls -la"
+#
+#
 # Functies
 #
 # Function Change Repo Ubuntu 
@@ -71,7 +81,7 @@ function ubuntu_update () {
 #
 function maak_directories () {
     #
-    if [ ! -d "/home/$SUDO_USER/scripts" ]; then
+    if [ ! -d "/home/$USER/scripts" ]; then
         mkdir -p /home/$USER/scripts
         mkdir -p /home/$USER/scripts/gui
         mkdir -p /home/$USER/scripts/tmp
@@ -134,34 +144,34 @@ function maak_directories () {
         chown -f -R $USER /home/$USER/data
     fi
     #
-    if [ ! -d "/home/$SUDO_USER/yaml" ]; then  
-        mkdir -p /home/$SUDO_USER/yaml
-        mkdir -p /home/$SUDO_USER/yaml/docker-compose
-        mkdir -p /home/$SUDO_USER/yaml/docker-compose/mysql
-        mkdir -p /home/$SUDO_USER/yaml/docker-compose/nextcloud
-        mkdir -p /home/$SUDO_USER/yaml/docker-compose/nginx
-        mkdir -p /home/$SUDO_USER/yaml/docker-compose/odoo
-        mkdir -p /home/$SUDO_USER/yaml/docker-compose/prometheus-grafana
-        mkdir -p /home/$SUDO_USER/yaml/docker-compose/wordpress
-        mkdir -p /home/$SUDO_USER/yaml/kubernetes
-        mkdir -p /home/$SUDO_USER/yaml/kubernetes/mysql
-        mkdir -p /home/$SUDO_USER/yaml/kubernetes/nextcloud
-        mkdir -p /home/$SUDO_USER/yaml/kubernetes/nginx
-        mkdir -p /home/$SUDO_USER/yaml/kubernetes/odoo
-        mkdir -p /home/$SUDO_USER/yaml/kubernetes/prometheus-grafana
-        mkdir -p /home/$SUDO_USER/yaml/kubernetes/wordpress
+    if [ ! -d "/home/$USER/yaml" ]; then  
+        mkdir -p /home/$USER/yaml
+        mkdir -p /home/$USER/yaml/docker-compose
+        mkdir -p /home/$USER/yaml/docker-compose/mysql
+        mkdir -p /home/$USER/yaml/docker-compose/nextcloud
+        mkdir -p /home/$USER/yaml/docker-compose/nginx
+        mkdir -p /home/$USER/yaml/docker-compose/odoo
+        mkdir -p /home/$USER/yaml/docker-compose/prometheus-grafana
+        mkdir -p /home/$USER/yaml/docker-compose/wordpress
+        mkdir -p /home/$USER/yaml/kubernetes
+        mkdir -p /home/$USER/yaml/kubernetes/mysql
+        mkdir -p /home/$USER/yaml/kubernetes/nextcloud
+        mkdir -p /home/$USER/yaml/kubernetes/nginx
+        mkdir -p /home/$USER/yaml/kubernetes/odoo
+        mkdir -p /home/$USER/yaml/kubernetes/prometheus-grafana
+        mkdir -p /home/$USER/yaml/kubernetes/wordpress
         chown -f -R $USER /home/$USER/yaml
     fi
     #
-    if [ ! -d "/home/$SUDO_USER/k8s-demo" ]; then  
-        mkdir -p /home/$SUDO_USER/k8s-demo 
-        mkdir -p /home/$SUDO_USER/k8s-demo/mysql
-        mkdir -p /home/$SUDO_USER/k8s-demo/nextcloud
-        mkdir -p /home/$SUDO_USER/k8s-demo/nginx
-        mkdir -p /home/$SUDO_USER/k8s-demo/nginx/simple
-        mkdir -p /home/$SUDO_USER/k8s-demo/nginx/replicas
-        mkdir -p /home/$SUDO_USER/k8s-demo/odoo
-        chown -f -R $SUDO_USER /home/$SUDO_USER/k8s-demo
+    if [ ! -d "/home/$USER/k8s-demo" ]; then  
+        mkdir -p /home/$USER/k8s-demo 
+        mkdir -p /home/$USER/k8s-demo/mysql
+        mkdir -p /home/$USER/k8s-demo/nextcloud
+        mkdir -p /home/$USER/k8s-demo/nginx
+        mkdir -p /home/$USER/k8s-demo/nginx/simple
+        mkdir -p /home/$USER/k8s-demo/nginx/replicas
+        mkdir -p /home/$USER/k8s-demo/odoo
+        chown -f -R $USER /home/$USER/k8s-demo
     fi 
 }
 #
@@ -173,7 +183,7 @@ while true; do
     clear
     echo 'Configuratie' $NAME $VERSION 'HoofdMenu'
     echo 'Script wordt uitgevoerd als user' $USER
-    echo 'Gestart vanuit user' $SUDO_USER
+    echo 'Gestart vanuit user' $USER
     echo " "
     echo "Maak een keuze:"
     echo " " 
@@ -197,9 +207,9 @@ while true; do
             change_ubuntu_repo
             # Functie Bijwerken Ubuntu uitvoeren 
             ubuntu_update
-            if [ ! -d "/home/$SUDO_USER/tmp" ]; then
-                mkdir -p /home/$SUDO_USER/tmp
-                chown -f -R $SUDO_USER /home/$SUDO_USER/tmp
+            if [ ! -d "/home/$USER/tmp" ]; then
+                mkdir -p /home/$USER/tmp
+                chown -f -R $USER /home/$USER/tmp
             fi 
             ;;
         2)
@@ -210,78 +220,78 @@ while true; do
             maak_directories
             #
             # Docker-CE images ophalen script maken 
-            echo '#! /bin/bash'       > /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh
-            echo echo Hello World    >> /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh
-            echo 'docker pull hello-world > /dev/null 2>&1'  >> /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh
-            echo echo prakhar1989 static-site >> /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh
-            echo 'docker pull prakhar1989/static-site > /dev/null 2>&1' >> /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh 
-            echo echo Alpine Linux   >> /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh
-            echo 'docker pull alpine > /dev/null 2>&1'       >> /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh
-            echo echo Debian Linux   >> /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh
-            echo 'docker pull debian > /dev/null 2>&1'       >> /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh
-            echo echo MariaDB DBMS   >> /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh
-            echo 'docker pull mariadb:10.6 > /dev/null 2>&1' >> /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh
-            echo echo MinIO          >> /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh
-            echo 'docker pull minio/minio > /dev/null 2>&1'  >> /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh
-            echo echo NextCloud      >> /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh
-            echo 'docker pull nextcloud > /dev/null 2>&1'    >> /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh
-            echo echo NGNINX         >> /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh
-            echo 'docker pull nginx > /dev/null 2>&1'        >> /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh
-            echo echo ODOO ERP       >> /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh
-            echo 'docker pull odoo:latest > /dev/null 2>&1'  >> /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh
-            echo echo Postgress DBMS >> /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh
-            echo 'docker pull postgres:latest > /dev/null 2>&1' >> /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh
-            echo echo Registry       >> /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh
-            echo 'docker pull registry > /dev/null 2>&1'     >> /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh
-            echo echo Ubuntu 20 04 LTS >> /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh
-            echo 'docker pull ubuntu:20.04 > /dev/null 2>&1' >> /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh
-            echo echo WordPress      >> /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh
-            echo 'docker pull wordpress > /dev/null 2>&1'    >> /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh
-            chmod +x /home/$SUDO_USER/scripts/docker/pull-images/docker-pull-images.sh
+            echo '#! /bin/bash'       > /home/$USER/scripts/docker/pull-images/docker-pull-images.sh
+            echo echo Hello World    >> /home/$USER/scripts/docker/pull-images/docker-pull-images.sh
+            echo 'docker pull hello-world > /dev/null 2>&1'  >> /home/$USER/scripts/docker/pull-images/docker-pull-images.sh
+            echo echo prakhar1989 static-site >> /home/$USER/scripts/docker/pull-images/docker-pull-images.sh
+            echo 'docker pull prakhar1989/static-site > /dev/null 2>&1' >> /home/$USER/scripts/docker/pull-images/docker-pull-images.sh 
+            echo echo Alpine Linux   >> /home/$USER/scripts/docker/pull-images/docker-pull-images.sh
+            echo 'docker pull alpine > /dev/null 2>&1'       >> /home/$USER/scripts/docker/pull-images/docker-pull-images.sh
+            echo echo Debian Linux   >> /home/$USER/scripts/docker/pull-images/docker-pull-images.sh
+            echo 'docker pull debian > /dev/null 2>&1'       >> /home/$USER/scripts/docker/pull-images/docker-pull-images.sh
+            echo echo MariaDB DBMS   >> /home/$USER/scripts/docker/pull-images/docker-pull-images.sh
+            echo 'docker pull mariadb:10.6 > /dev/null 2>&1' >> /home/$USER/scripts/docker/pull-images/docker-pull-images.sh
+            echo echo MinIO          >> /home/$USER/scripts/docker/pull-images/docker-pull-images.sh
+            echo 'docker pull minio/minio > /dev/null 2>&1'  >> /home/$USER/scripts/docker/pull-images/docker-pull-images.sh
+            echo echo NextCloud      >> /home/$USER/scripts/docker/pull-images/docker-pull-images.sh
+            echo 'docker pull nextcloud > /dev/null 2>&1'    >> /home/$USER/scripts/docker/pull-images/docker-pull-images.sh
+            echo echo NGNINX         >> /home/$USER/scripts/docker/pull-images/docker-pull-images.sh
+            echo 'docker pull nginx > /dev/null 2>&1'        >> /home/$USER/scripts/docker/pull-images/docker-pull-images.sh
+            echo echo ODOO ERP       >> /home/$USER/scripts/docker/pull-images/docker-pull-images.sh
+            echo 'docker pull odoo:latest > /dev/null 2>&1'  >> /home/$USER/scripts/docker/pull-images/docker-pull-images.sh
+            echo echo Postgress DBMS >> /home/$USER/scripts/docker/pull-images/docker-pull-images.sh
+            echo 'docker pull postgres:latest > /dev/null 2>&1' >> /home/$USER/scripts/docker/pull-images/docker-pull-images.sh
+            echo echo Registry       >> /home/$USER/scripts/docker/pull-images/docker-pull-images.sh
+            echo 'docker pull registry > /dev/null 2>&1'     >> /home/$USER/scripts/docker/pull-images/docker-pull-images.sh
+            echo echo Ubuntu 20 04 LTS >> /home/$USER/scripts/docker/pull-images/docker-pull-images.sh
+            echo 'docker pull ubuntu:20.04 > /dev/null 2>&1' >> /home/$USER/scripts/docker/pull-images/docker-pull-images.sh
+            echo echo WordPress      >> /home/$USER/scripts/docker/pull-images/docker-pull-images.sh
+            echo 'docker pull wordpress > /dev/null 2>&1'    >> /home/$USER/scripts/docker/pull-images/docker-pull-images.sh
+            chmod +x /home/$USER/scripts/docker/pull-images/docker-pull-images.sh
             # Docker-CE demo Alpine script maken
-            echo '#! /bin/bash' > /home/$SUDO_USER/scripts/docker/alpine-run/alpine-run.sh
-            echo 'clear' >> /home/$SUDO_USER/scripts/docker/alpine-run/alpine-run.sh
-            echo 'docker run -it alpine /bin/sh' >> /home/$SUDO_USER/scripts/docker/alpine-run/alpine-run.sh
-            chmod +x /home/$SUDO_USER/scripts/docker/alpine-run/alpine-run.sh
+            echo '#! /bin/bash' > /home/$USER/scripts/docker/alpine-run/alpine-run.sh
+            echo 'clear' >> /home/$USER/scripts/docker/alpine-run/alpine-run.sh
+            echo 'docker run -it alpine /bin/sh' >> /home/$USER/scripts/docker/alpine-run/alpine-run.sh
+            chmod +x /home/$USER/scripts/docker/alpine-run/alpine-run.sh
             # Portainer Run
-            echo '#! /bin/bash' > /home/$SUDO_USER/scripts/docker/portainer/portainer-run.sh
-            echo 'docker pull portainer/portainer-ce:latest' >> /home/$SUDO_USER/scripts/docker/portainer/portainer-run.sh
-            echo 'docker volume create portainer_data' >> /home/$SUDO_USER/scripts/docker/portainer/portainer-run.sh
-            echo 'docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest' >> /home/$SUDO_USER/scripts/docker/portainer/portainer-run.sh
-            echo 'echo Ga naar https://xxxxxxx:9443' >> /home/$SUDO_USER/scripts/docker/portainer/portainer-run.sh
-            chmod +x /home/$SUDO_USER/scripts/docker/portainer/portainer-run.sh
+            echo '#! /bin/bash' > /home/$USER/scripts/docker/portainer/portainer-run.sh
+            echo 'docker pull portainer/portainer-ce:latest' >> /home/$USER/scripts/docker/portainer/portainer-run.sh
+            echo 'docker volume create portainer_data' >> /home/$USER/scripts/docker/portainer/portainer-run.sh
+            echo 'docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest' >> /home/$USER/scripts/docker/portainer/portainer-run.sh
+            echo 'echo Ga naar https://xxxxxxx:9443' >> /home/$USER/scripts/docker/portainer/portainer-run.sh
+            chmod +x /home/$USER/scripts/docker/portainer/portainer-run.sh
             # Portainer Remove
-            echo '#! /bin/bash' > /home/$SUDO_USER/scripts/docker/portainer/portainer-remove.sh
-            echo 'docker stop portainer' >> /home/$SUDO_USER/scripts/docker/portainer/portainer-remove.sh
-            echo 'docker rm portainer' >> /home/$SUDO_USER/scripts/docker/portainer/portainer-remove.sh
-            echo 'docker rmi portainer/portainer-ce:latest' >> /home/$SUDO_USER/scripts/docker/portainer/portainer-remove.sh
-            echo 'docker volume rm portainer_data' >> /home/$SUDO_USER/scripts/docker/portainer/portainer-remove.sh
-            echo 'docker system prune' >> /home/$SUDO_USER/scripts/docker/portainer/portainer-remove.sh
-            chmod +x /home/$SUDO_USER/scripts/docker/portainer/portainer-remove.sh
+            echo '#! /bin/bash' > /home/$USER/scripts/docker/portainer/portainer-remove.sh
+            echo 'docker stop portainer' >> /home/$USER/scripts/docker/portainer/portainer-remove.sh
+            echo 'docker rm portainer' >> /home/$USER/scripts/docker/portainer/portainer-remove.sh
+            echo 'docker rmi portainer/portainer-ce:latest' >> /home/$USER/scripts/docker/portainer/portainer-remove.sh
+            echo 'docker volume rm portainer_data' >> /home/$USER/scripts/docker/portainer/portainer-remove.sh
+            echo 'docker system prune' >> /home/$USER/scripts/docker/portainer/portainer-remove.sh
+            chmod +x /home/$USER/scripts/docker/portainer/portainer-remove.sh
             # Docker Compose demo script NextCloud
-            echo '#! /bin/bash' > /home/$SUDO_USER/scripts/docker-compose/nextcloud/docker-compose-nextcloud.sh
-            echo '#' >> /home/$SUDO_USER/scripts/docker-compose/nextcloud/docker-compose-nextcloud.sh
-            echo 'cd /home/$USER' >> /home/$SUDO_USER/scripts/docker-compose/nextcloud/docker-compose-nextcloud.sh
-            echo 'clear' >> /home/$SUDO_USER/scripts/docker-compose/nextcloud/docker-compose-nextcloud.sh
-            echo 'docker compose -f /home/$USER/yaml/docker-compose/nextcloud/docker-compose.yml up --quiet-pull -d' >> /home/$SUDO_USER/scripts/docker-compose/nextcloud/docker-compose-nextcloud.sh
-            echo 'echo NextCloud port 8888'	>> /home/$SUDO_USER/scripts/docker-compose/nextcloud/docker-compose-nextcloud.sh
-            chmod +x /home/$SUDO_USER/scripts/docker-compose/nextcloud/docker-compose-nextcloud.sh
+            echo '#! /bin/bash' > /home/$USER/scripts/docker-compose/nextcloud/docker-compose-nextcloud.sh
+            echo '#' >> /home/$USER/scripts/docker-compose/nextcloud/docker-compose-nextcloud.sh
+            echo 'cd /home/$USER' >> /home/$USER/scripts/docker-compose/nextcloud/docker-compose-nextcloud.sh
+            echo 'clear' >> /home/$USER/scripts/docker-compose/nextcloud/docker-compose-nextcloud.sh
+            echo 'docker compose -f /home/$USER/yaml/docker-compose/nextcloud/docker-compose.yml up --quiet-pull -d' >> /home/$USER/scripts/docker-compose/nextcloud/docker-compose-nextcloud.sh
+            echo 'echo NextCloud port 8888'	>> /home/$USER/scripts/docker-compose/nextcloud/docker-compose-nextcloud.sh
+            chmod +x /home/$USER/scripts/docker-compose/nextcloud/docker-compose-nextcloud.sh
             # Docker Compose demo script ODOO
-            echo '#! /bin/bash' > /home/$SUDO_USER/scripts/docker-compose/odoo/docker-compose-odoo.sh
-            echo '#'>> /home/$SUDO_USER/scripts/docker-compose/odoo/docker-compose-odoo.sh
-            echo 'cd /home/$USER' >> /home/$SUDO_USER/scripts/docker-compose/odoo/docker-compose-odoo.sh
-            echo 'clear' >> /home/$SUDO_USER/scripts/docker-compose/odoo/docker-compose-odoo.sh
-            echo 'docker compose -f /home/$USER/yaml/docker-compose/odoo/docker-compose.yml up --quiet-pull -d' >> /home/$SUDO_USER/scripts/docker-compose/odoo/docker-compose-odoo.sh
-            echo 'echo Odoo port 10016' >> /home/$SUDO_USER/scripts/docker-compose/odoo/docker-compose-odoo.sh
-            echo 'echo Chat port 20016' >> /home/$SUDO_USER/scripts/docker-compose/odoo/docker-compose-odoo.sh
-            chmod +x /home/$SUDO_USER/scripts/docker-compose/odoo/docker-compose-odoo.sh
+            echo '#! /bin/bash' > /home/$USER/scripts/docker-compose/odoo/docker-compose-odoo.sh
+            echo '#'>> /home/$USER/scripts/docker-compose/odoo/docker-compose-odoo.sh
+            echo 'cd /home/$USER' >> /home/$USER/scripts/docker-compose/odoo/docker-compose-odoo.sh
+            echo 'clear' >> /home/$USER/scripts/docker-compose/odoo/docker-compose-odoo.sh
+            echo 'docker compose -f /home/$USER/yaml/docker-compose/odoo/docker-compose.yml up --quiet-pull -d' >> /home/$USER/scripts/docker-compose/odoo/docker-compose-odoo.sh
+            echo 'echo Odoo port 10016' >> /home/$USER/scripts/docker-compose/odoo/docker-compose-odoo.sh
+            echo 'echo Chat port 20016' >> /home/$USER/scripts/docker-compose/odoo/docker-compose-odoo.sh
+            chmod +x /home/$USER/scripts/docker-compose/odoo/docker-compose-odoo.sh
             # Introductie Infrastructuren
-            curl -s -o /home/$SUDO_USER/scripts/intro_infra/install-mysqlserver.sh https://raw.githubusercontent.com/msiekmans/linux-server-scripts/main/install-mysqlserver.sh
-            curl -s -o /home/$SUDO_USER/scripts/intro_infra/install-webserver.sh https://raw.githubusercontent.com/msiekmans/linux-server-scripts/main/install-webserver.sh
-            curl -s -o /home/$SUDO_USER/scripts/intro_infra/install-sftpserver.sh https://raw.githubusercontent.com/msiekmans/linux-server-scripts/main/install-sftpserver.sh
-            chmod +x /home/$SUDO_USER/scripts/intro_infra/install-mysqlserver.sh
-            chmod +x /home/$SUDO_USER/scripts/intro_infra/install-webserver.sh
-            chmod +x /home/$SUDO_USER/scripts/intro_infra/install-sftpserver.sh
+            curl -s -o /home/$USER/scripts/intro_infra/install-mysqlserver.sh https://raw.githubusercontent.com/msiekmans/linux-server-scripts/main/install-mysqlserver.sh
+            curl -s -o /home/$USER/scripts/intro_infra/install-webserver.sh https://raw.githubusercontent.com/msiekmans/linux-server-scripts/main/install-webserver.sh
+            curl -s -o /home/$USER/scripts/intro_infra/install-sftpserver.sh https://raw.githubusercontent.com/msiekmans/linux-server-scripts/main/install-sftpserver.sh
+            chmod +x /home/$USER/scripts/intro_infra/install-mysqlserver.sh
+            chmod +x /home/$USER/scripts/intro_infra/install-webserver.sh
+            chmod +x /home/$USER/scripts/intro_infra/install-sftpserver.sh
             ;;
         3)
             # Installatie Cockpit 
@@ -302,73 +312,79 @@ while true; do
             # Voorbeelden maken of downloaden 
             #
             # VOORBEELD ## Dockerfile uit slides van lesweek 4 module virtualisatie 
-            echo '# start with OS ubuntu' > /home/$SUDO_USER/docker/apache/ubtu-apache-dkr-file
-            echo 'FROM ubuntu:latest' >> /home/$SUDO_USER/docker/apache/ubtu-apache-dkr-file
-            echo 'RUN apt-get update' >> /home/$SUDO_USER/docker/apache/ubtu-apache-dkr-file
-            echo 'RUN apt-get -y upgrade' >> /home/$SUDO_USER/docker/apache/ubtu-apache-dkr-file
-            echo '# install apache2 in noninteractivemode' >> /home/$SUDO_USER/docker/apache/ubtu-apache-dkr-file
-            echo 'RUN DEBIAN_FRONTEND=noninteractive apt-get -y install apache2' >> /home/$SUDO_USER/docker/apache/ubtu-apache-dkr-file
-            echo '# copy website' >> /home/$SUDO_USER/docker/apache/ubtu-apache-dkr-file
-            echo 'COPY index.html /var/www/html/' >> /home/$SUDO_USER/docker/apache/ubtu-apache-dkr-file
-            echo '# start webserver' >> /home/$SUDO_USER/docker/apache/ubtu-apache-dkr-file
-            echo 'CMD /usr/sbin/apache2ctl -D FOREGROUND' >> /home/$SUDO_USER/docker/apache/ubtu-apache-dkr-file
-            echo '# expose port 80' >> /home/$SUDO_USER/docker/apache/ubtu-apache-dkr-file
-            echo 'EXPOSE 80' >> /home/$SUDO_USER/docker/apache/ubtu-apache-dkr-file
+            echo '# start with OS ubuntu' > /home/$USER/docker/apache/ubtu-apache-dkr-file
+            echo 'FROM ubuntu:latest' >> /home/$USER/docker/apache/ubtu-apache-dkr-file
+            echo 'RUN apt-get update' >> /home/$USER/docker/apache/ubtu-apache-dkr-file
+            echo 'RUN apt-get -y upgrade' >> /home/$USER/docker/apache/ubtu-apache-dkr-file
+            echo '# install apache2 in noninteractivemode' >> /home/$USER/docker/apache/ubtu-apache-dkr-file
+            echo 'RUN DEBIAN_FRONTEND=noninteractive apt-get -y install apache2' >> /home/$USER/docker/apache/ubtu-apache-dkr-file
+            echo '# copy website' >> /home/$USER/docker/apache/ubtu-apache-dkr-file
+            echo 'COPY index.html /var/www/html/' >> /home/$USER/docker/apache/ubtu-apache-dkr-file
+            echo '# start webserver' >> /home/$USER/docker/apache/ubtu-apache-dkr-file
+            echo 'CMD /usr/sbin/apache2ctl -D FOREGROUND' >> /home/$USER/docker/apache/ubtu-apache-dkr-file
+            echo '# expose port 80' >> /home/$USER/docker/apache/ubtu-apache-dkr-file
+            echo 'EXPOSE 80' >> /home/$USER/docker/apache/ubtu-apache-dkr-file
             #
-            echo "#! /bin/bash" > /home/$SUDO_USER/docker/apache/ubtu-apache-dkr-build.sh
-            echo "docker build –f /home/$SUDO_USER/docker/apache/ubtu-apache-dkr-file -t ubtu-apache:V100 ." >> /home/$SUDO_USER/docker/apache/ubtu-apache-dkr-build.sh
-            chmod +x /home/$SUDO_USER/docker/apache/ubtu-apache-dkr-build.sh
+            echo "#! /bin/bash" > /home/$USER/docker/apache/ubtu-apache-dkr-build.sh
+            echo "docker build –f /home/$USER/docker/apache/ubtu-apache-dkr-file -t ubtu-apache:V100 ." >> /home/$USER/docker/apache/ubtu-apache-dkr-build.sh
+            chmod +x /home/$USER/docker/apache/ubtu-apache-dkr-build.sh
             #
             # VOORBEELD ## FLASK demo
             #
-            # $SUDO_USER is aangepast naar $USER voor minikube VM met ubuntu 
+            # $USER is aangepast naar $USER voor minikube VM met ubuntu 
             #
             # Onderstaande commandos uitvoeren met SUDO ervoor in minikube VM
             #
             curl -s -o /home/$USER/docker/flask-demo/flask-demo-dkr-file https://raw.githubusercontent.com/pmanzoni/flask/master/Dockerfile
             # Meerdere talen demo dockerfiles 
-            curl -s -o /home/$USER/docker/flask-demo/flask-demo-dkr-file-de https://raw.githubusercontent.com/jatutert/docker-demos/main/flask-demo-dkr-file-de
-            curl -s -o /home/$USER/docker/flask-demo/flask-demo-dkr-file-fr https://raw.githubusercontent.com/jatutert/docker-demos/main/flask-demo-dkr-file-fr
-            curl -s -o /home/$USER/docker/flask-demo/flask-demo-dkr-file-it https://raw.githubusercontent.com/jatutert/docker-demos/main/flask-demo-dkr-file-it
-            curl -s -o /home/$USER/docker/flask-demo/flask-demo-dkr-file-nl https://raw.githubusercontent.com/jatutert/docker-demos/main/flask-demo-dkr-file-nl
-            curl -s -o /home/$USER/docker/flask-demo/flask-demo-dkr-file-uk https://raw.githubusercontent.com/jatutert/docker-demos/main/flask-demo-dkr-file-uk
+            curl -s -o /home/$USER/docker/flask-demo/flask-demo-dkr-file-de https://raw.githubusercontent.com/jatutert/demos/main/Docker/FLASK/flask-demo-dkr-file-de
+            curl -s -o /home/$USER/docker/flask-demo/flask-demo-dkr-file-fr https://raw.githubusercontent.com/jatutert/demos/main/Docker/FLASK/flask-demo-dkr-file-fr
+            curl -s -o /home/$USER/docker/flask-demo/flask-demo-dkr-file-it https://raw.githubusercontent.com/jatutert/demos/main/Docker/FLASK/flask-demo-dkr-file-it
+            curl -s -o /home/$USER/docker/flask-demo/flask-demo-dkr-file-nl https://raw.githubusercontent.com/jatutert/demos/main/Docker/FLASK/flask-demo-dkr-file-nl
+            curl -s -o /home/$USER/docker/flask-demo/flask-demo-dkr-file-uk https://raw.githubusercontent.com/jatutert/demos/main/Docker/FLASK/flask-demo-dkr-file-uk
             # Python Script
             curl -s -o /home/$USER/docker/flask-demo/app.py https://raw.githubusercontent.com/pmanzoni/flask/master/app.py
             # Default index.html
             curl -s -o /home/$SUSER/docker/flask-demo/templates/index.html https://raw.githubusercontent.com/pmanzoni/flask/master/templates/index.html
             # Meerdere talen demo index.html 
-            curl -s -o /home/$USER/docker/flask-demo/deutsch/index.html https://raw.githubusercontent.com/jatutert/docker-demos/main/index-deutsch.html
-            curl -s -o /home/$USER/docker/flask-demo/english/index.html https://raw.githubusercontent.com/jatutert/docker-demos/main/index-english.html
-            curl -s -o /home/$USER/docker/flask-demo/francais/index.html https://raw.githubusercontent.com/jatutert/docker-demos/main/index-francais.html
-            curl -s -o /home/$USER/docker/flask-demo/italiano/index.html https://raw.githubusercontent.com/jatutert/docker-demos/main/index-italiano.html
-            curl -s -o /home/$USER/docker/flask-demo/nederlands/index.html https://raw.githubusercontent.com/jatutert/docker-demos/main/index-nederlands.html
+            curl -s -o /home/$USER/docker/flask-demo/deutsch/index.html https://raw.githubusercontent.com/jatutert/demos/main/Docker/FLASK/index-deutsch.html
+            curl -s -o /home/$USER/docker/flask-demo/english/index.html https://raw.githubusercontent.com/jatutert/demos/main/Docker/FLASK/index-english.html
+            curl -s -o /home/$USER/docker/flask-demo/francais/index.html https://raw.githubusercontent.com/jatutert/demos/main/Docker/FLASK/index-francais.html
+            curl -s -o /home/$USER/docker/flask-demo/italiano/index.html https://raw.githubusercontent.com/jatutert/demos/main/Docker/FLASK/index-italiano.html
+            curl -s -o /home/$USER/docker/flask-demo/nederlands/index.html https://raw.githubusercontent.com/jatutert/demos/main/Docker/FLASK/index-nederlands.html
             #
-            curl -s -o /home/$USER/docker/flask-demo/flask-image-build.sh https://raw.githubusercontent.com/jatutert/docker-demos/main/flask-image-build.sh
-            curl -s -o /home/$USER/docker/flask-demo/flask-demo-run.sh https://raw.githubusercontent.com/jatutert/docker-demos/main/flask-demo-run.sh
+            curl -s -o /home/$USER/docker/flask-demo/flask-image-build.sh https://raw.githubusercontent.com/jatutert/demos/main/Docker/FLASK/flask-image-build.sh
+            curl -s -o /home/$USER/docker/flask-demo/flask-demo-run.sh https://raw.githubusercontent.com/jatutert/demos/main/Docker/FLASK/flask-demo-run.sh
             #
             chmod +x /home/$USER/docker/flask-demo/flask-image-build.sh
             chmod +x /home/$USER/docker/flask-demo/flask-demo-run.sh
             #
             # VOORBEELD ## MINIO Docker
-            echo '#! /bin/bash' > /home/$SUDO_USER/scripts/minio_scripts/minio-docker-run.sh
-            echo '#' >> /home/$SUDO_USER/scripts/minio_scripts/minio-docker-run.sh
-            echo '# Minio Object Storage on Docker' >> /home/$SUDO_USER/scripts/minio_scripts/minio-docker-run.sh
-            echo 'docker run -d -p 9000:9000 -p 9001:9001 -p 9090:9090 --name minio -v /home/$USER/data/minio:/data -e "MINIO_ROOT_USER=minio1234" -e "MINIO_ROOT_PASSWORD=minio1234" minio/minio server /data --console-address ":9001"' >>/home/$SUDO_USER/scripts/minio_scripts/minio-docker-run.sh
-            echo 'echo MINIO_ROOT_USER=minio1234' >> /home/$SUDO_USER/scripts/minio_scripts/minio-docker-run.sh
-            echo 'echo MINIO_ROOT_PASSWORD=minio1234' >> /home/$SUDO_USER/scripts/minio_scripts/minio-docker-run.sh
-            chmod +x /home/$SUDO_USER/scripts/minio_scripts/minio-docker-run.sh
+            echo '#! /bin/bash' > /home/$USER/scripts/minio_scripts/minio-docker-run.sh
+            echo '#' >> /home/$USER/scripts/minio_scripts/minio-docker-run.sh
+            echo '# Minio Object Storage on Docker' >> /home/$USER/scripts/minio_scripts/minio-docker-run.sh
+            echo 'docker run -d -p 9000:9000 -p 9001:9001 -p 9090:9090 --name minio -v /home/$USER/data/minio:/data -e "MINIO_ROOT_USER=minio1234" -e "MINIO_ROOT_PASSWORD=minio1234" minio/minio server /data --console-address ":9001"' >>/home/$USER/scripts/minio_scripts/minio-docker-run.sh
+            echo 'echo MINIO_ROOT_USER=minio1234' >> /home/$USER/scripts/minio_scripts/minio-docker-run.sh
+            echo 'echo MINIO_ROOT_PASSWORD=minio1234' >> /home/$USER/scripts/minio_scripts/minio-docker-run.sh
+            chmod +x /home/$USER/scripts/minio_scripts/minio-docker-run.sh
             #
             # DOCKER COMPOSE 
             #
+			# Installatie Docker Compose in Minikube VM 
+			DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker} 
+			mkdir -p $DOCKER_CONFIG/cli-plugins
+			curl -SL https://github.com/docker/compose/releases/download/v2.26.1/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+			chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+			#
             # DOCKER COMPOSE YAML JTU bestanden ophalen
-            curl -s -o /home/$SUDO_USER/yaml/docker-compose/nextcloud/docker-compose.yml https://raw.githubusercontent.com/jatutert/docker-compose-yaml/main/docker-compose-nextcloud-vagrant.yml
-            curl -s -o /home/$SUDO_USER/yaml/docker-compose/odoo/docker-compose.yml https://raw.githubusercontent.com/jatutert/docker-compose-yaml/main/docker-compose-odoo-vagrant.yml  
+            curl -s -o /home/$USER/yaml/docker-compose/nextcloud/docker-compose.yml https://raw.githubusercontent.com/jatutert/demos/main/Docker-Compose/YAML/NextCloud/docker-compose-nextcloud-vagrant.yml
+            curl -s -o /home/$USER/yaml/docker-compose/odoo/docker-compose.yml https://raw.githubusercontent.com/jatutert/demos/main/Docker-Compose/YAML/Odoo/docker-compose-odoo-vagrant.yml 
             # DOCKER COMPOSE YAML awesome compose YAML bestanden ophalen
-            curl -s -o /home/$SUDO_USER/yaml/docker-compose/prometheus-grafana/prometheus-grafana.yml https://raw.githubusercontent.com/docker/awesome-compose/master/prometheus-grafana/compose.yaml
-            curl -s -o /home/$SUDO_USER/yaml/docker-compose/nextcloud/nextcloud-redis-mariadb.yml https://raw.githubusercontent.com/docker/awesome-compose/master/nextcloud-redis-mariadb/compose.yaml
-            curl -s -o /home/$SUDO_USER/yaml/docker-compose/nginx/nginx-flask-mysql.yml https://raw.githubusercontent.com/docker/awesome-compose/master/nginx-flask-mysql/compose.yaml
-            curl -s -o /home/$SUDO_USER/yaml/docker-compose/nginx/nginx-flask-mongo.yml https://raw.githubusercontent.com/docker/awesome-compose/master/nginx-flask-mongo/compose.yaml
-            curl -s -o /home/$SUDO_USER/yaml/docker-compose/wordpress/wordpress-mysql.yml https://raw.githubusercontent.com/docker/awesome-compose/master/wordpress-mysql/compose.yaml
+            curl -s -o /home/$USER/yaml/docker-compose/prometheus-grafana/prometheus-grafana.yml https://raw.githubusercontent.com/docker/awesome-compose/master/prometheus-grafana/compose.yaml
+            curl -s -o /home/$USER/yaml/docker-compose/nextcloud/nextcloud-redis-mariadb.yml https://raw.githubusercontent.com/docker/awesome-compose/master/nextcloud-redis-mariadb/compose.yaml
+            curl -s -o /home/$USER/yaml/docker-compose/nginx/nginx-flask-mysql.yml https://raw.githubusercontent.com/docker/awesome-compose/master/nginx-flask-mysql/compose.yaml
+            curl -s -o /home/$USER/yaml/docker-compose/nginx/nginx-flask-mongo.yml https://raw.githubusercontent.com/docker/awesome-compose/master/nginx-flask-mongo/compose.yaml
+            curl -s -o /home/$USER/yaml/docker-compose/wordpress/wordpress-mysql.yml https://raw.githubusercontent.com/docker/awesome-compose/master/wordpress-mysql/compose.yaml
             ;;
         5)
             # Kubernetes MiniKube 
