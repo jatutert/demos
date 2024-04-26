@@ -1,0 +1,15 @@
+#
+# Docker DEMO Virtualbox by John Tutert
+# Netwerk Configuratie 
+# Vagrant box generic/ubuntu22.04 
+# Versie 26 april 2024
+#
+network:
+  ethernets:
+    eth0:
+      dhcp4: true
+      dhcp6: false
+    eth1:
+      dhcp4: true     
+      dhcp6: false
+  version: 2

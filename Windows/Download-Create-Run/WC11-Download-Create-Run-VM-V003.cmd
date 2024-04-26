@@ -49,38 +49,49 @@
 :: https://go.microsoft.com/fwlink/p/?linkid=2196266&clcid=0x409&culture=en-us&country=us
 ::
 ::
+:: 
+if exist %USERPROFILE%\Downloads\WinDev2404Eval.VirtualBox.zip (
+   @del %USERPROFILE%\Downloads\WinDev2404Eval.VirtualBox.zip
+)
+::
+if exist %USERPROFILE%\Downloads\WinDev2404Eval.ova (
+   @del %USERPROFILE%\Downloads\WinDev2404Eval.ova
+)
+::
+if exist %USERPROFILE%\Downloads\WinDev2404Eval.ovf (
+   @del %USERPROFILE%\Downloads\WinDev2404Eval.ovf
+)
+::
+::
+@echo Downloaden Virtuele Machine bij Microsoft
+@echo Dit duurt enige minuten ... 
 :: Foutmelding No CAs were found in 'C:\ProgramData/ssl/ca-bundle.pem'
 :: Omvang 23 GB 23 201 160 423 ZIP BESTAND 
-if not exist %USERPROFILE%\Downloads\WinDev2404Eval.VirtualBox.zip (
-   @echo Downloaden Virtuele Machine bij Microsoft
-   @echo Dit duurt enige minuten ... 
-   @wget2 -O %USERPROFILE%\Downloads\WinDev2404Eval.VirtualBox.zip https://aka.ms/windev_VM_virtualbox >nul 2>&1
-) 
+@wget2 -O %USERPROFILE%\Downloads\WinDev2404Eval.VirtualBox.zip https://aka.ms/windev_VM_virtualbox >nul 2>&1
 ::
-:: Uitpakken ZIP Bestand
+:: #### Uitpakken ZIP Bestand
 :: Resultaat is OVA-bestand 
 @echo Uitpakken ZIP bestand naar OVA bestand 
 c:\PROGRA~1\7-Zip\7z x -bd -y -o"%USERPROFILE%\Downloads" "%USERPROFILE%\Downloads"\WinDev2404Eval.VirtualBox.zip >nul 2>&1
 ::
-::
-:: Verwijderen ZIP om ruimte te sparen 
+:: #### Verwijderen ZIP om ruimte te sparen 
 @TIMEOUT /T 60 /NOBREAK
 @del %USERPROFILE%\Downloads\WinDev2404Eval.VirtualBox.zip
 ::
-::
-:: Uitpakken OVA Bestand
+:: ##### Uitpakken OVA Bestand
 :: Resultaat is VMDK en OVF bestand 
 :: Naam VMDK is WinDev2404Eval-disk001.VMDK
 @echo Uitpakken OVA bestand naar VMDK bestand 
 @c:\PROGRA~1\7-Zip\7z x -bd -y -o"%USERPROFILE%\Downloads" "%USERPROFILE%\Downloads"\WinDev2404Eval.ova
 ::
-::
-:: Verwijderen OVA om ruimte te sparen 
+:: #### Verwijderen OVA om ruimte te sparen 
 :: Resultaat is VMDK en OVF bestand 
 @TIMEOUT /T 60 /NOBREAK
 @del %USERPROFILE%\Downloads\WinDev2404Eval.ova
+@del %USERPROFILE%\Downloads\WinDev2404Eval.ovf
 ::
-
+::
+::
 :: Conversie VHD naar VDI
 :: Oracle VM Virtualbox doet ook automatische registratie van zowel VMDK als VDI in Medium lijst
 :: @VBoxManage.exe clonemedium disk --format=VDI "D:\Virtual-Machines\Templates\VirtualDisks\Windows\WC11E-VHLK-Trial.VHDX" D:\Virtual-Machines\Templates\VirtualDisks\Windows\WC11E-VHLK-Trial.vdi
@@ -116,7 +127,7 @@ c:\PROGRA~1\7-Zip\7z x -bd -y -o"%USERPROFILE%\Downloads" "%USERPROFILE%\Downloa
 :: 
 :: Overzetten VMDK naar VM Directory
 @echo Overzetten VMDK bestand naar locatie Virtuele Machine 
-copy "%USERPROFILE%\Downloads\WinDev2404Eval-disk001.vmdk" "D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\WC11E-T-001\WC11E-T-001.vmdk"
+@copy "%USERPROFILE%\Downloads\WinDev2404Eval-disk001.vmdk" "D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\WC11E-T-001\WC11E-T-001.vmdk"
 ::
 :: Virtual Hardisk voorzien van nieuwe UUID
 @echo Aanpassen UUID van VMDK om uniek te maken ... 
