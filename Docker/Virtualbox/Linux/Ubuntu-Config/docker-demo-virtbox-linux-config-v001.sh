@@ -357,19 +357,24 @@ if [ $(id -u) -ne 0 ]; then
     exit 1
 fi
 #
-echo 'Configuratie DOCKER omgeving op' $NAME $VERSION 'gestart ...'
 # Functie verder Ubuntu repo uitvoeren
+echo Stap 1 van 6 Ubuntu Repository aanpassen
 change_ubuntu_repo
 # Functie Bijwerken Ubuntu uitvoeren 
+echo Stap 2 van 6 Ubuntu bijwerken
 ubuntu_update
 # Functie maak directories uitvoeren 
+echo Stap 3 van 6 Directories maken 
 maak_directories
 # Functie maak Scripts
+echo Stap 4 van 6 DEMO scripts maken 
 maak_docker_scripts
 maak_compose_scripts
 # Functie Installeren DOCKER en DOCKER COMPOSE
+echo Stap 5 van 6 Docker Installeren 
 install_docker
-# Functie 
+# Functie
+echo Stap 6 van 6 DEMO voorbeelden maken  
 maak_docker_voorbeelden
 maak_compose_voorbeelden
 #
