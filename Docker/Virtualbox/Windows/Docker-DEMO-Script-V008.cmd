@@ -2,23 +2,31 @@
 ::
 ::
 :: DOCKER Virtualbox Demo Configuration Script
-:: Version 0.0.5
+:: Version 0.0.8
 :: 
-:: Date 26 april 2024
+:: Date 27 april 2024
 :: Author John Tutert
 ::
 :: 
 :: 
-@ECHO OFF
-@CLS
+@echo off
+@cls
 ::
 ::
 ::
 ::
-@ECHO DOCKER Virtualbox Demo Configuration Script ALPHA Version ONLY FOR TESTING 
-@ECHO Windows and Ubuntu Linux
-@ECHO By John Tutert 
-@ECHO. 
+@echo Docker and Docker Composes Demo Auto Configurator 
+@echo. 
+@echo Oracle VM Virtualbox hypervisor
+@echo Virtual machine uses Vagrant Ubuntu 22.04 LTS (generic/ubuntu2204)
+@echo.
+@echo Version 0.0.8
+@echo April 27 2024
+@echo. 
+@echo Developed by John Tutert
+@echo.
+@echo For Personal and/or Education use only !  
+@echo. 
 ::
 ::
 ::
@@ -57,14 +65,39 @@ SET DOCKER_DEMO_VIRTMACH="D:\Virtual-Machines\Oracle-VM-Virtualbox\Linux\Docker-
 ::
 @ECHO Controle Benodigheden voor DOCKER DEMO omgeving 
 ::
+::
+:: [IBM/HashiCorp Vagrant]
+vagrant version >nul 2>&1
+if %errorlevel% neq 0 (
+    :: Vagrant is NIET geïnstalleerd, installeer het
+    @echo Hashicorp Vagrant is NOT installed ! 
+	@echo Starting install ... 
+	@winget install --id Hashicorp.Vagrant --accept-package-agreements --accept-source-agreements >nul 2>&1
+	@echo Hasicorp Vagrant installation done ... 
+	@echo Please restart script ! 
+	@pause
+	@exit /B 0
+) else (
+    :: Vagrant is geïnstalleerd, werk het bij
+    :: winget upgrade --id Hashicorp.Vagrant --accept-package-agreements --accept-source-agreements >nul 2>&1
+	@echo Hashicorp Vagrant is present ! Let's carry on .. 
+)
+::
+::
 :: [Oracle VM Virtualbox]
 winget list -e --id Oracle.VirtualBox >nul 2>&1
 if %errorlevel% neq 0 (
     :: Oracle.Virtualbox is NIET geïnstalleerd, installeer het
-    winget install --id Oracle.VirtualBox --accept-package-agreements --accept-source-agreements >nul 2>&1
+    @echo Oracle VM Virtualbox is NOT installed ! 
+	@echo Starting install ... 
+	@winget install --id Oracle.VirtualBox --accept-package-agreements --accept-source-agreements >nul 2>&1
+	@echo please restart script !
+	@pause
+	@exit /B 0 
 ) else (
     :: Oracle.Virtualbox  is geïnstalleerd, werk het bij
-    winget upgrade --id Oracle.VirtualBox --accept-package-agreements --accept-source-agreements >nul 2>&1
+    @echo Oracle VM Virtualbox is present ! 
+	@winget upgrade --id Oracle.VirtualBox --accept-package-agreements --accept-source-agreements >nul 2>&1
 )
 ::
 ::
@@ -102,40 +135,43 @@ if not exist C:\cygwin64\bin\sed.exe (
 ::
 :: #### VAGRANT BOXES #####
 ::
-@echo Vagrant Box Ubuntu2204 bijwerken ... 
 :: Vagrant box ubuntu 2204 LTS download
+@echo Add Vagrant Box generic/ubuntu2204 ...
 @vagrant box add generic/ubuntu2204 --clean --provider virtualbox >nul 2>&1
 :: Vagrant box ubuntu 2204 LTS updaten
+@echo Vagrant box update ...
 @vagrant box update >nul 2>&1
 :: Vagrant box ubuntu 2204 LTS opschonen
+@echo Vagrant box prune ...
 @vagrant box prune >nul 2>&1
 ::  
 :: #### Opruimen #####
 :: 
 :: Verwijderen HOSTS bestand met poort 3000
+@copy %USERPROFILE%\.ssh\known_hosts %USERPROFILE%\.ssh\known_hosts_docker_demo.bck
 @del %USERPROFILE%\.ssh\known_hosts
 :: Bestand zonder port 3000 maken 
-@copy %USERPROFILE%\.ssh\known_hosts.vagrant %USERPROFILE%\.ssh\known_hosts
+:: @copy %USERPROFILE%\.ssh\known_hosts.vagrant %USERPROFILE%\.ssh\known_hosts
 ::
 :: ## Stoppen eventueel draaiende virtuele machines  
 @echo Stoppen eventueel draaiende virtuele machine 
-@VBoxManage -q controlvm ulx-s-2204-d-srvr poweroff >nul 2>&1
+@%VIRTBOX_VBOXMAN%\VBoxManage -q controlvm ulx-s-2204-d-srvr poweroff >nul 2>&1
 :: 
 :: ## Verwijderen Virtuele machines
 @echo Verwijderen eventueel aanwezige virtuele machine 
-@VBoxManage -q unregistervm ulx-s-2204-d-srvr --delete-all >nul 2>&1
+@%VIRTBOX_VBOXMAN%\VBoxManage -q unregistervm ulx-s-2204-d-srvr --delete-all >nul 2>&1
 :: 
 :: ## Schoonmaken Oracle VM Virtualbox Medium lijst om foutmelding UUID te voorkomen 
 @echo Schoonmaken Oracle VM Virtualbox Medium lijst
 :: Template directory VMDK
-@VBoxManage closemedium disk %DOCKER_DEMO_HDU_TEMPLATE_DIR%\%DOCKER_DEMO_VDMK_TEMPLATE_FILE% >nul 2>&1
+@%VIRTBOX_VBOXMAN%\VBoxManage closemedium disk %DOCKER_DEMO_HDU_TEMPLATE_DIR%\%DOCKER_DEMO_VDMK_TEMPLATE_FILE% >nul 2>&1
 :: Template directory VDI
-@VBoxManage closemedium disk %DOCKER_DEMO_HDU_TEMPLATE_DIR%\%DOCKER_DEMO_VDI_TEMPLATE_FILE% >nul 2>&1
+@%VIRTBOX_VBOXMAN%\VBoxManage closemedium disk %DOCKER_DEMO_HDU_TEMPLATE_DIR%\%DOCKER_DEMO_VDI_TEMPLATE_FILE% >nul 2>&1
 :: Vagrant VMDK 
-@VBoxManage closemedium disk %DOCKER_DEMO_VAGRANT_HDU_TEMPLATE_DIR%\%DOCKER_DEMO_VDMK_TEMPLATE_FILE% >nul 2>&1
+@%VIRTBOX_VBOXMAN%\VBoxManage closemedium disk %DOCKER_DEMO_VAGRANT_HDU_TEMPLATE_DIR%\%DOCKER_DEMO_VDMK_TEMPLATE_FILE% >nul 2>&1
 :: Virtuele machine 
 :: Geeft foutmelding omdat virtuele machine niet meer bestaat 
-@VBoxManage closemedium disk %DOCKER_DEMO_VIRTMACH%\Controller\%DOCKER_DEMO_VDI_TEMPLATE_FILE% >nul 2>&1
+@%VIRTBOX_VBOXMAN%\VBoxManage closemedium disk %DOCKER_DEMO_VIRTMACH%\Controller\ulx-s-2204-d-srvr\%DOCKER_DEMO_VDI_TEMPLATE_FILE% >nul 2>&1
 ::
 ::
 :: #### Conversie bestaande Vagrant Generic/Ubuntu 22.04 Virtual harddisk van VMDK naar VDI ####
@@ -153,51 +189,46 @@ if not exist C:\cygwin64\bin\sed.exe (
 :: #### Registratie DOCKER Controller ulx-s-2204-d-srvr in Virtualbox ####
 ::
 @ECHO Aanmaken Virtuele Machines in Oracle VM VirtualBOX ...
-@VBoxManage createvm --name "ulx-s-2204-d-srvr" --basefolder "%DOCKER_DEMO_VIRTMACH%\Controller" --default --ostype "Ubuntu22_LTS_64" --register >nul 2>&1
+@%VIRTBOX_VBOXMAN%\VBoxManage createvm --name "ulx-s-2204-d-srvr" --basefolder "%DOCKER_DEMO_VIRTMACH%\Controller" --default --ostype "Ubuntu22_LTS_64" --register >nul 2>&1
 ::
 :: #### Aanpassen DOCKER Controller Virtualbox Virtuele Machine ####
 :: 
 @ECHO Configuratie Virtuele Machines in Oracle VM VirtualBOX ...
 ::
-@VBoxManage -q modifyvm ulx-s-2204-d-srvr --description="Ubuntu 22.04 LTS (Vagrant) DOCKER demo"
+@%VIRTBOX_VBOXMAN%\VBoxManage -q modifyvm ulx-s-2204-d-srvr --description="Ubuntu 22.04 LTS (generic/ubuntu2204) DOCKER demo"
 :: EFI uitzetten 
-@VBoxManage -q modifyvm ulx-s-2204-d-srvr --firmware=bios
-@VBoxManage -q modifyvm ulx-s-2204-d-srvr --cpus=2
-@VBoxManage -q modifyvm ulx-s-2204-d-srvr --memory=8192
-@VBoxManage -q modifyvm ulx-s-2204-d-srvr --vram 256
-@VBoxManage -q modifyvm ulx-s-2204-d-srvr --boot1=disk
-@VBoxManage -q modifyvm ulx-s-2204-d-srvr --boot2=dvd
-@VBoxManage -q modifyvm ulx-s-2204-d-srvr --boot3=none
-@VBoxManage -q modifyvm ulx-s-2204-d-srvr --boot4=none
-@VBoxManage -q modifyvm ulx-s-2204-d-srvr --audio-enabled=off
-@VBoxManage -q modifyvm ulx-s-2204-d-srvr --clipboard-mode=bidirectional --drag-and-drop=bidirectional
-@VBoxManage -q modifyvm ulx-s-2204-d-srvr --nic2=hostonly --nictype2=82540EM --nic-promisc2=allow-all --cableconnected2=on --hostonlyadapter2="VirtualBox Host-Only Ethernet Adapter"
-:: VBoxManage -q sharedfolder add WS19DC-T-001 --name="downloads" --hostpath="%USERPROFILE%\Downloads" --automount --auto-mount-point="/home/ubuntu/downloads"
-@VBoxManage -q sharedfolder remove ulx-s-2204-d-srvr --name="downloads" >nul 2>&1
-@VBoxManage -q sharedfolder add ulx-s-2204-d-srvr --name="downloads" --hostpath="%USERPROFILE%\Downloads" --automount --auto-mount-point="/home/%DOCKER_DEMO_LNX_USER%/downloads"
+@%VIRTBOX_VBOXMAN%\VBoxManage -q modifyvm ulx-s-2204-d-srvr --firmware=bios
+@%VIRTBOX_VBOXMAN%\VBoxManage -q modifyvm ulx-s-2204-d-srvr --cpus=2
+@%VIRTBOX_VBOXMAN%\VBoxManage -q modifyvm ulx-s-2204-d-srvr --memory=8192
+@%VIRTBOX_VBOXMAN%\VBoxManage -q modifyvm ulx-s-2204-d-srvr --vram 256
+@%VIRTBOX_VBOXMAN%\VBoxManage -q modifyvm ulx-s-2204-d-srvr --boot1=disk
+@%VIRTBOX_VBOXMAN%\VBoxManage -q modifyvm ulx-s-2204-d-srvr --boot2=dvd
+@%VIRTBOX_VBOXMAN%\VBoxManage -q modifyvm ulx-s-2204-d-srvr --boot3=none
+@%VIRTBOX_VBOXMAN%\VBoxManage -q modifyvm ulx-s-2204-d-srvr --boot4=none
+@%VIRTBOX_VBOXMAN%\VBoxManage -q modifyvm ulx-s-2204-d-srvr --audio-enabled=off
+@%VIRTBOX_VBOXMAN%\VBoxManage -q modifyvm ulx-s-2204-d-srvr --clipboard-mode=bidirectional --drag-and-drop=bidirectional
+@%VIRTBOX_VBOXMAN%\VBoxManage -q modifyvm ulx-s-2204-d-srvr --nic2=hostonly --nictype2=82540EM --nic-promisc2=allow-all --cableconnected2=on --hostonlyadapter2="VirtualBox Host-Only Ethernet Adapter"
+@%VIRTBOX_VBOXMAN%\VBoxManage -q sharedfolder remove ulx-s-2204-d-srvr --name="downloads" >nul 2>&1
+@%VIRTBOX_VBOXMAN%\VBoxManage -q sharedfolder add ulx-s-2204-d-srvr --name="downloads" --hostpath="%USERPROFILE%\Downloads" --automount --auto-mount-point="/home/%DOCKER_DEMO_LNX_USER%/downloads"
 ::
 :: #### Toevoegen DOCKER Controller Virtualbox Virtuele Machine Harddisk #####
 :: 
 :: ## Overzetten VMDK naar virtuele machine directory
-copy "%DOCKER_DEMO_VAGRANT_HDU_TEMPLATE_DIR%\%DOCKER_DEMO_VDMK_TEMPLATE_FILE%" "%DOCKER_DEMO_VIRTMACH%\Controller\ulx-s-2204-d-srvr"
+@echo Overzetten Vagrant VMDK naar VM Directory
+@copy "%DOCKER_DEMO_VAGRANT_HDU_TEMPLATE_DIR%\%DOCKER_DEMO_VDMK_TEMPLATE_FILE%" "%DOCKER_DEMO_VIRTMACH%\Controller\ulx-s-2204-d-srvr"
 ::
 :: ## Virtual Hardisk voorzien van nieuwe UUID
-@VBoxManage internalcommands sethduuid %DOCKER_DEMO_VIRTMACH%\Controller\ulx-s-2204-d-srvr\%DOCKER_DEMO_VDMK_TEMPLATE_FILE% >nul 2>&1
+@%VIRTBOX_VBOXMAN%\VBoxManage internalcommands sethduuid %DOCKER_DEMO_VIRTMACH%\Controller\ulx-s-2204-d-srvr\%DOCKER_DEMO_VDMK_TEMPLATE_FILE% >nul 2>&1
 ::
-:: :: ## Verwijderen VDI
-:: del "%DOCKER_DEMO_HDU_TEMPLATE_DIR%\%DOCKER_DEMO_VDI_TEMPLATE_FILE%"
-:: @VBoxManage closemedium disk %DOCKER_DEMO_HDU_TEMPLATE_DIR%\%DOCKER_DEMO_VDI_TEMPLATE_FILE%
-:: 
-:: VM Aanpassen zodat VDI wordt gebruikt 
-@VBoxManage storageattach "ulx-s-2204-d-srvr" --storagectl "SATA" --port 0 --device 0 --type hdd --medium %DOCKER_DEMO_VIRTMACH%\Controller\ulx-s-2204-d-srvr\%DOCKER_DEMO_VDMK_TEMPLATE_FILE%
+:: ## VM Aanpassen zodat VDI wordt gebruikt 
+@%VIRTBOX_VBOXMAN%\VBoxManage storageattach "ulx-s-2204-d-srvr" --storagectl "SATA" --port 0 --device 0 --type hdd --medium %DOCKER_DEMO_VIRTMACH%\Controller\ulx-s-2204-d-srvr\%DOCKER_DEMO_VDMK_TEMPLATE_FILE%
 ::
 ::
-:: Virtuele Machine Starten 
-:: ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: #### Virtuele Machine Starten ####
 ::
-@ECHO Starten Virtuele Machines ... LAUNCH ...
+@echo Starten Virtuele Machines ... LAUNCH ...
 :: Starten DOCKER Controller ulx-s-2204-d-srvr
-@VBoxManage -q --nologo startvm ulx-s-2204-d-srvr --type=gui
+@%VIRTBOX_VBOXMAN%\VBoxManage -q --nologo startvm ulx-s-2204-d-srvr --type=gui
 :: @TIMEOUT /T 180 /NOBREAK
 @echo 3 minuten wachten op start van de VM ... 
 @sleep 180
@@ -207,7 +238,7 @@ copy "%DOCKER_DEMO_VAGRANT_HDU_TEMPLATE_DIR%\%DOCKER_DEMO_VDMK_TEMPLATE_FILE%" "
 ::
 @ECHO Configuratie PortForwarding op NAT interface ...
 :: DOCKER Controller ulx-s-2204-d-srvr
-@VBoxManage -q controlvm ulx-s-2204-d-srvr natpf1 guestssh,tcp,,3000,,22
+@%VIRTBOX_VBOXMAN%\VBoxManage -q controlvm ulx-s-2204-d-srvr natpf1 guestssh,tcp,,3000,,22
 ::
 ::
 :: RSA sleutel genereren zonder verdere vragen aan de gebruiker 
@@ -227,8 +258,6 @@ copy "%DOCKER_DEMO_VAGRANT_HDU_TEMPLATE_DIR%\%DOCKER_DEMO_VDMK_TEMPLATE_FILE%" "
 ::
 :: Er wordt gevraagd om wachtwoord 
 :: https://superuser.com/questions/1747549/alternative-to-ssh-copy-id-on-windows
-@ECHO Overzetten RSA sleutel naar Virtuele Machine ...
-@ECHO Gebruikersnaam en Wachtwoord : ubuntu
 ::
 ::
 ::
@@ -245,7 +274,8 @@ copy "%DOCKER_DEMO_VAGRANT_HDU_TEMPLATE_DIR%\%DOCKER_DEMO_VDMK_TEMPLATE_FILE%" "
 :: 
 :: 
 :: 
-@VBoxManage guestcontrol ulx-s-2204-d-srvr copyto --username=vagrant --password=vagrant --target-directory=/home/vagrant/.ssh/authorized_keys %USERPROFILE%\.ssh\id_rsa.pub
+@echo Overzetten RSA sleutel naar Virtuele Machine ...
+@%VIRTBOX_VBOXMAN%\VBoxManage guestcontrol ulx-s-2204-d-srvr copyto --username=vagrant --password=vagrant --target-directory=/home/vagrant/.ssh/authorized_keys %USERPROFILE%\.ssh\id_rsa.pub
 ::
 ::
 ::
@@ -275,8 +305,8 @@ copy "%DOCKER_DEMO_VAGRANT_HDU_TEMPLATE_DIR%\%DOCKER_DEMO_VDMK_TEMPLATE_FILE%" "
 :: #### 1e keer SSH en AutoUpgrade Uitzetten Om Lock te voorkomen ####
 :: https://linuxhint.com/enable-disable-unattended-upgrades-ubuntu/
 ::
-@echo Ubuntu AutoUpgrade UITZETTEN in alle Virtuele Machines
-ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 -o StrictHostKeyChecking=no sudo sed 's@"1"@"0"@' -i /etc/apt/apt.conf.d/20auto-upgrades
+@echo Ubuntu AutoUpgrade UITZETTEN ...
+@ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 -o StrictHostKeyChecking=no sudo sed 's@"1"@"0"@' -i /etc/apt/apt.conf.d/20auto-upgrades
 :: 
 ::
 ::
@@ -284,26 +314,26 @@ ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 -o StrictHostKeyCheck
 :: Netwerkkaart ETH1: activeren 
 ::
 ::
-ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo curl -o /etc/netplan/00-installer-config.yaml https://raw.githubusercontent.com/jatutert/demos/main/Docker/Virtualbox/Linux/Netplan/00-installer-config.yaml
-ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo netplan apply
+@ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo curl -o /etc/netplan/00-installer-config.yaml https://raw.githubusercontent.com/jatutert/demos/main/Docker/Virtualbox/Linux/Netplan/00-installer-config.yaml
+@ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo netplan apply
 ::
 ::
 ::
 :: 
 :: Aanpassen hostname zonder herstart Verandering is zichtbaar na uitloggen en dan weer inloggen 
-ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo hostnamectl set-hostname ulx-s-2204-d-srvr
+@ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo hostnamectl set-hostname ulx-s-2204-d-srvr
 ::
 ::
 ::
 ::
 :: #### Aanpassen Ubuntu Repository 
-ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo sed 's@mirrors.edge.kernel.org@nl.archive.ubuntu.com@' -i /etc/apt/sources.list
+@ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo sed 's@mirrors.edge.kernel.org@nl.archive.ubuntu.com@' -i /etc/apt/sources.list
 ::
 ::
 ::
 :: 
 :: #### Updaten Ubuntu Repository
-ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo apt update -qq > /dev/null 2>&1
+ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 "sudo apt update -qq" >nul 2>&1
 ::
 ::
 ::
@@ -318,32 +348,47 @@ ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo apt update -qq >
 ::
 ::
 :: #### Installatie Docker 
-ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo apt install docker.io 
-ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo snap install docker 
+@echo Installatie Docker met APT
+ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo apt install docker.io -y
+:: 
+@echo Installatie Docker met SNAP 
+@ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo snap install docker 
 ::
 :: #### Groep docker aanmaken 
-ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo groupadd docker
+@ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo groupadd docker
 :: 
 :: #### Toevoegen gebruiker vagrant aan groep docker
-ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo usermod -a -G docker vagrant
+@ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo usermod -a -G docker vagrant
 :: 
 ::
 ::
 ::
-:: Downloaden Ubuntu configuratiescript
+:: Downloaden Ubuntu MultiPass configuratiescript by JA Tutert vanaf GitHub 
 @ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 curl -o /home/vagrant/ubuntu-dckr-demo-config-V002.sh https://raw.githubusercontent.com/jatutert/demos/main/Docker/Multipass/Ubuntu-Linux-Shell-Scripts/ubuntu-dckr-demo-config-V002.sh
 ::
 :: Uitvoerbaar maken Ubuntu configuratiescript
 @ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo chmod +x /home/vagrant/ubuntu-dckr-demo-config-V002.sh
 :: 
 :: Uitvoeren Ubuntu configuratiescript
+@echo Uitvoeren Ubuntu configuratiescript gestart ... 
 @ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo /home/vagrant/ubuntu-dckr-demo-config-V002.sh
 ::
 ::
 ::
+:: Installatie Docker Compose Plugin 
+:: https://gcore.com/learning/how-to-install-docker-compose-on-ubuntu/ 
 ::
+ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 "mkdir -p ~/.docker/cli-plugins/"
+ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 "curl -SL https://github.com/docker/compose/releases/download/v2.26.1/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose"
+ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 "chmod +x ~/.docker/cli-plugins/docker-compose"
+::
+::  
 :: 
-
+@echo Ga naar virtuele machine
+@echo via
+@echo @ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000
+::
+::
 ::
 :: Thats all folks
 EXIT 0  

@@ -278,34 +278,34 @@ copy "%DOCKER_DEMO_VAGRANT_HDU_TEMPLATE_DIR%\%DOCKER_DEMO_VDMK_TEMPLATE_FILE%" "
 @echo Ubuntu AutoUpgrade UITZETTEN in alle Virtuele Machines
 ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 -o StrictHostKeyChecking=no sudo sed 's@"1"@"0"@' -i /etc/apt/apt.conf.d/20auto-upgrades
 :: 
-
-
-
-
-
 ::
-:: Netwerkkaart enp0s8: activeren 
 ::
-:: VAGRANT VM: 
-:: ETH0 staat aan 
-:: ETH1 staat uit
-:: Ombouwen van enp0s8 naar ETH1 
-ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo curl -o /etc/netplan/00-installer-config.yaml https://raw.githubusercontent.com/jatutert/demos/main/Ansible/Virtualbox/Linux/Netplan/00-installer-config.yaml
+::
+:: Netwerkkaart ETH1: activeren 
+::
+::
+ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo curl -o /etc/netplan/00-installer-config.yaml https://raw.githubusercontent.com/jatutert/demos/main/Docker/Virtualbox/Linux/Netplan/00-installer-config.yaml
 ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo netplan apply
 ::
+::
+::
+:: 
 :: Aanpassen hostname zonder herstart Verandering is zichtbaar na uitloggen en dan weer inloggen 
 ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo hostnamectl set-hostname ulx-s-2204-d-srvr
-
-
-
-
-
+::
+::
+::
 ::
 :: #### Aanpassen Ubuntu Repository 
 ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo sed 's@mirrors.edge.kernel.org@nl.archive.ubuntu.com@' -i /etc/apt/sources.list
+::
+::
+::
 :: 
 :: #### Updaten Ubuntu Repository
 ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo apt update -qq > /dev/null 2>&1
+::
+::
 ::
 ::
 :: :: Installeren Virtualbox Guest Additions Na afloop reboot noodzakelijk om te activeren 
@@ -316,43 +316,30 @@ ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo apt update -qq >
 :: ssh -i %USERPROFILE%\.ssh\id_rsa ubuntu@127.0.0.1 -p 2222 sudo adduser ubuntu vboxsf > /dev/null 2>&1
 ::
 ::
-:: :: Installatie cURL in DOCKER Controller ulx-s-2204-d-srvr VM 
-:: ssh -i %USERPROFILE%\.ssh\id_rsa ubuntu@127.0.0.1 -p 2222 sudo snap install curl > /dev/null 2>&1
-:: 
-::
 ::
 :: #### Installatie Docker 
+@echo Installatie Docker met APT
+ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo apt install docker.io 
+@echo Installatie Docker met SNAP 
 ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo snap install docker 
+::
+:: #### Groep docker aanmaken 
+ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo groupadd docker
+:: 
 :: #### Toevoegen gebruiker vagrant aan groep docker
-:: Gaat niet goed omdat groep docker niet bestaat 
 ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo usermod -a -G docker vagrant
 :: 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ::
 ::
-
+::
 :: Downloaden Ubuntu configuratiescript
-:: ssh -i %USERPROFILE%\.ssh\id_rsa ubuntu@127.0.0.1 -p 2222 curl -o /home/ubuntu/ubuntu-DOCKER-demo-config-latest.sh https://raw.githubusercontent.com/jatutert/demos/main/DOCKER/Virtualbox/Linux/Bash-Script/ubuntu-DOCKER-demo-config-latest.sh
+@ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 curl -o /home/vagrant/ubuntu-dckr-demo-config-V002.sh https://raw.githubusercontent.com/jatutert/demos/main/Docker/Multipass/Ubuntu-Linux-Shell-Scripts/ubuntu-dckr-demo-config-V002.sh
 ::
 :: Uitvoerbaar maken Ubuntu configuratiescript
-:: ssh ubuntu@127.0.0.1 -p 2222 -l ubuntu sudo chmod +x /home/ubuntu/ubuntu-DOCKER-demo-config-latest.sh
+@ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo chmod +x /home/vagrant/ubuntu-dckr-demo-config-V002.sh
 :: 
 :: Uitvoeren Ubuntu configuratiescript
-:: ssh ubuntu@127.0.0.1 -p 2222 -l ubuntu sudo /home/ubuntu/ubuntu-DOCKER-demo-config-latest.sh
+@ssh -i %USERPROFILE%\.ssh\id_rsa vagrant@127.0.0.1 -p 3000 sudo /home/vagrant/ubuntu-dckr-demo-config-V002.sh
 ::
 ::
 ::
