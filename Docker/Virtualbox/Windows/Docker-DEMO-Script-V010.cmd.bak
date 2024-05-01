@@ -20,8 +20,8 @@
 @echo Oracle VM Virtualbox hypervisor
 @echo Virtual machine uses Vagrant Ubuntu 22.04 LTS (generic/ubuntu2204)
 @echo.
-@echo Version 0.0.9
-@echo April 29 2024
+@echo Version 0.0.10
+@echo Mei 01 2024
 @echo. 
 @echo Developed by John Tutert
 @echo.
@@ -71,6 +71,8 @@ set DOCKER_DEMO_VM_DIRECTORY="D:\Virtual-Machines\Oracle-VM-Virtualbox\Linux\Doc
 set DOCKER_DEMO_VM_TYPE=controller
 ::	Hostname
 set DOCKER_DEMO_VM_HOSTNAME=ulx-s-2204-d-srvr
+::	Poort SSH
+set DOCKER_DEMO_VM_SSH_PORT=3000
 ::
 ::
 :: Controle Benodigheden voor dit Script
@@ -151,7 +153,7 @@ if not exist C:\cygwin64\bin\sed.exe (
 :: 	Vagrant box ubuntu 2204 LTS download
 @echo Add Vagrant Box generic/ubuntu2204 ...
 @vagrant box add generic/ubuntu2204 --clean --provider virtualbox >nul 2>&1
-@vagrant box list -i generic/ubuntu2204
+@vagrant box list -i generic/ubuntu2204 >nul 2>&1
 :: 	Vagrant box ubuntu 2204 LTS updaten
 @echo Vagrant box update ...
 @vagrant box update >nul 2>&1
@@ -248,7 +250,7 @@ if not exist C:\cygwin64\bin\sed.exe (
 ::
 @echo Starten Virtuele Machines ... LAUNCH ...
 :: Starten DOCKER Controller ulx-s-2204-d-srvr
-@VBoxManage -q --nologo startvm %DOCKER_DEMO_VM_HOSTNAME% --type=gui
+@VBoxManage -q --nologo startvm %DOCKER_DEMO_VM_HOSTNAME% --type=gui >nul 2>&1
 :: @TIMEOUT /T 180 /NOBREAK
 @echo 3 minuten wachten op start van de VM ... 
 @sleep 180
@@ -326,22 +328,22 @@ if not exist C:\cygwin64\bin\sed.exe (
 :: https://linuxhint.com/enable-disable-unattended-upgrades-ubuntu/
 ::
 @echo Ubuntu AutoUpgrade UITZETTEN ...
-@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p 3000 -o StrictHostKeyChecking=no sudo sed 's@"1"@"0"@' -i /etc/apt/apt.conf.d/20auto-upgrades
+@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% -o StrictHostKeyChecking=no sudo sed 's@"1"@"0"@' -i /etc/apt/apt.conf.d/20auto-upgrades
 :: 
 ::	#### Configuratie eth1 nic 
 ::
 @echo Netwerkkaart eth1 activeren ... 
-@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p 3000 "sudo curl -o /etc/netplan/00-installer-config.yaml https://raw.githubusercontent.com/jatutert/demos/main/Docker/Virtualbox/Linux/Netplan/00-installer-config.yaml"
-@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p 3000 "sudo netplan apply"
+@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% "sudo curl -s -o /etc/netplan/00-installer-config.yaml https://raw.githubusercontent.com/jatutert/demos/main/Docker/Virtualbox/Linux/Netplan/00-installer-config.yaml"
+@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% "sudo netplan apply"
 :: 
 ::	#### Aanpassen hostname zonder herstart Verandering is zichtbaar na uitloggen en dan weer inloggen 
-@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p 3000 sudo hostnamectl set-hostname ulx-s-2204-d-srvr
+@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% "sudo hostnamectl set-hostname ulx-s-2204-d-srvr"
 ::
 :: #### Aanpassen Ubuntu Repository 
-@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p 3000 sudo sed 's@mirrors.edge.kernel.org@nl.archive.ubuntu.com@' -i /etc/apt/sources.list
+@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% sudo sed 's@mirrors.edge.kernel.org@nl.archive.ubuntu.com@' -i /etc/apt/sources.list
 :: 
 :: #### Updaten Ubuntu Repository
-ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p 3000 "sudo apt update -qq" >nul 2>&1
+ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% "sudo apt update -qq" >nul 2>&1
 ::
 ::
 ::
@@ -357,32 +359,32 @@ ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p 300
 ::
 :: #### Installatie Docker 
 @echo Installatie Docker met APT
-ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p 3000 "sudo apt install docker.io -y"
+ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% "sudo apt install docker.io -y"
 @echo Installatie Docker met SNAP 
-@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p 3000 "sudo snap install docker"
+@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% "sudo snap install docker"
 ::
 :: #### Groep docker aanmaken 
-@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p 3000 "sudo groupadd docker"
+@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% "sudo groupadd docker"
 :: 
 :: #### Toevoegen gebruiker vagrant aan groep docker
-@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p 3000 sudo usermod -a -G docker %DOCKER_DEMO_VAGRANT_LNX_USER%
+@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% sudo usermod -a -G docker %DOCKER_DEMO_VAGRANT_LNX_USER%
 ::
 :: #### Downloaden Ubuntu MultiPass configuratiescript by JA Tutert vanaf GitHub 
-@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p 3000 "curl -s -o /home/vagrant/ubuntu-dckr-demo-config-V002.sh https://raw.githubusercontent.com/jatutert/demos/main/Docker/Multipass/Ubuntu-Linux-Shell-Scripts/ubuntu-dckr-demo-config-V002.sh"
+@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% "curl -s -o /home/vagrant/ubuntu-dckr-demo-config-V002.sh https://raw.githubusercontent.com/jatutert/demos/main/Docker/Multipass/Ubuntu-Linux-Shell-Scripts/ubuntu-dckr-demo-config-V002.sh"
 ::
 :: #### Uitvoerbaar maken Ubuntu configuratiescript
-@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p 3000 "sudo chmod +x /home/vagrant/ubuntu-dckr-demo-config-V002.sh"
+@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% "sudo chmod +x /home/vagrant/ubuntu-dckr-demo-config-V002.sh"
 :: 
 :: #### Uitvoeren Ubuntu configuratiescript
 @echo Uitvoeren Ubuntu configuratiescript gestart ... 
-@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p 3000 "sudo /home/vagrant/ubuntu-dckr-demo-config-V002.sh"
+@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% "sudo /home/vagrant/ubuntu-dckr-demo-config-V002.sh"
 ::
 :: ####	Installatie Docker Compose Plugin 
 :: 		https://gcore.com/learning/how-to-install-docker-compose-on-ubuntu/ 
 ::
-ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p 3000 "mkdir -p ~/.docker/cli-plugins/"
-ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p 3000 "curl -SL https://github.com/docker/compose/releases/download/v2.26.1/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose"
-ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p 3000 "chmod +x ~/.docker/cli-plugins/docker-compose"
+ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% "mkdir -p ~/.docker/cli-plugins/"
+ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% "curl -SL https://github.com/docker/compose/releases/download/v2.26.1/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose"
+ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% "chmod +x ~/.docker/cli-plugins/docker-compose"
 ::
 ::  
 :: 

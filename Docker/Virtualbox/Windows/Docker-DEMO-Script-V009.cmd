@@ -331,7 +331,7 @@ if not exist C:\cygwin64\bin\sed.exe (
 ::	#### Configuratie eth1 nic 
 ::
 @echo Netwerkkaart eth1 activeren ... 
-@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p 3000 "sudo curl -o /etc/netplan/00-installer-config.yaml https://raw.githubusercontent.com/jatutert/demos/main/Docker/Virtualbox/Linux/Netplan/00-installer-config.yaml"
+@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p 3000 "sudo curl -s -o /etc/netplan/00-installer-config.yaml https://raw.githubusercontent.com/jatutert/demos/main/Docker/Virtualbox/Linux/Netplan/00-installer-config.yaml"
 @ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p 3000 "sudo netplan apply"
 :: 
 ::	#### Aanpassen hostname zonder herstart Verandering is zichtbaar na uitloggen en dan weer inloggen 
@@ -368,7 +368,7 @@ ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p 300
 @ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p 3000 sudo usermod -a -G docker %DOCKER_DEMO_VAGRANT_LNX_USER%
 ::
 :: #### Downloaden Ubuntu MultiPass configuratiescript by JA Tutert vanaf GitHub 
-@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p 3000 "curl -o /home/vagrant/ubuntu-dckr-demo-config-V002.sh https://raw.githubusercontent.com/jatutert/demos/main/Docker/Multipass/Ubuntu-Linux-Shell-Scripts/ubuntu-dckr-demo-config-V002.sh"
+@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p 3000 "curl -s -o /home/vagrant/ubuntu-dckr-demo-config-V002.sh https://raw.githubusercontent.com/jatutert/demos/main/Docker/Multipass/Ubuntu-Linux-Shell-Scripts/ubuntu-dckr-demo-config-V002.sh"
 ::
 :: #### Uitvoerbaar maken Ubuntu configuratiescript
 @ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p 3000 "sudo chmod +x /home/vagrant/ubuntu-dckr-demo-config-V002.sh"
