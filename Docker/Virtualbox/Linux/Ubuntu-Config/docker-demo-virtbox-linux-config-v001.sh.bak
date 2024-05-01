@@ -358,23 +358,23 @@ if [ $(id -u) -ne 0 ]; then
 fi
 #
 # Functie verder Ubuntu repo uitvoeren
-echo Ubuntu Repository aanpassen
+echo Stap 1 van 6 Ubuntu Repository aanpassen
 change_ubuntu_repo
 # Functie Bijwerken Ubuntu uitvoeren 
-echo Ubuntu bijwerken
+echo Stap 2 van 6 Ubuntu bijwerken
 ubuntu_update
 # Functie maak directories uitvoeren 
-echo Directories maken 
+echo Stap 3 van 6 Directories maken 
 maak_directories
 # Functie maak Scripts
-echo DEMO scripts maken 
+echo Stap 4 van 6 DEMO scripts maken 
 maak_docker_scripts
 maak_compose_scripts
 # Functie Installeren DOCKER en DOCKER COMPOSE
-echo Docker Installeren 
+echo Stap 5 van 6 Docker Installeren 
 install_docker
 # Functie
-echo DEMO voorbeelden maken  
+echo Stap 6 van 6 DEMO voorbeelden maken  
 maak_docker_voorbeelden
 maak_compose_voorbeelden
 #
