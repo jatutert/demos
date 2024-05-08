@@ -42,7 +42,6 @@ VERSION_CODENAME=$(grep -oP '(?<=^VERSION_CODENAME=).+' /etc/os-release | tr -d 
 # Function Change Repo Ubuntu 
 #
 function change_ubuntu_repo () {
-    clear
     echo "Aanpassen Ubuntu Repository"
     if grep -q "mirrors.edge.kernel.org" /etc/apt/sources.list; then
         sed 's@mirrors.edge.kernel.org@nl.archive.ubuntu.com@' -i /etc/apt/sources.list
@@ -66,7 +65,8 @@ function change_ubuntu_repo () {
 function ubuntu_update () {
     apt update -qq
     apt upgrade -qq -y > /dev/null 2>&1
-    apt autoremove -qq -y
+    apt -f install
+	apt autoremove -qq -y
     timedatectl set-timezone Europe/Amsterdam
 } 
 #

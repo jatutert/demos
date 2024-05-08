@@ -65,7 +65,10 @@ function change_ubuntu_repo () {
 function ubuntu_update () {
     apt update -qq
     apt upgrade -qq -y > /dev/null 2>&1
-    apt autoremove -qq -y
+    # Checking for Broken Dependencies: To check for and fix broken dependencies
+	apt -f install
+	# Cleaning up Unused Dependencies: After removing packages, unused dependencies may remain on your system. Clean them up with the following command.
+	apt autoremove -qq -y
     timedatectl set-timezone Europe/Amsterdam
 } 
 #
