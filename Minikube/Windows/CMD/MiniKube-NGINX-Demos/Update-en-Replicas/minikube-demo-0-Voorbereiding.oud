@@ -1,0 +1,52 @@
+::	DEMO Kubernetes / Minikube
+::	Gemaakt door John Tutert
+::	2023
+::
+::	Stap 0	Voorbereiding demo 
+::
+@echo off 
+@CLS
+::
+::	Opschonen
+::
+:: rmdir %HOMEPATH%\minikube-demo /S /Q 
+::
+::	Aanmaken Directory structuur 
+:: 
+:: mkdir %HOMEPATH%\minikube-demo
+:: 
+:: mkdir %HOMEPATH%\minikube-demo\nginx
+:: [1] Creating and exploring an nginx deployment
+:: mkdir %HOMEPATH%\minikube-demo\nginx\1-deployment 
+:: [2] Updating the deployment
+:: mkdir %HOMEPATH%\minikube-demo\nginx\2-deployment-update 
+:: [3] Scaling the application by increasing the replica count
+:: mkdir %HOMEPATH%\minikube-demo\nginx\3-deployment-scale  
+::
+::	Downloaden YAML Bestanden 
+::
+:: [1] Creating and exploring an nginx deployment
+:: curl -s -o %HOMEPATH%\minikube-demo\nginx\1-deployment\deployment.yml https://raw.githubusercontent.com/kubernetes/website/main/content/en/examples/application/deployment.yaml
+:: [2] Updating the deployment
+:: curl -s -o %HOMEPATH%\minikube-demo\nginx\2-deployment-update\deployment-update.yml https://raw.githubusercontent.com/kubernetes/website/main/content/en/examples/application/deployment-update.yaml
+:: [3] Scaling the application by increasing the replica count
+:: curl -s -o %HOMEPATH%\minikube-demo\nginx\3-deployment-scale\deployment-scale.yml https://raw.githubusercontent.com/kubernetes/website/main/content/en/examples/application/deployment-scale.yaml
+::
+:: Stoppen eventueel actieve minikube 
+@ECHO Stoppen eventueel actieve minikube 
+@minikube stop
+:: Verwijdere eventueel aanwezige omgeving 
+@ECHO Verwijderen eventueel aanwezige omgevingen
+@minikube delete
+::	Configuratie Instellen
+::	Provider is VMware Workstation PRO / VM krijgt 8 GB intern geheugen met 4 vCPU 
+@ECHO Configuratie Minikube
+@minikube config set memory 8192
+@minikube config set cpus 4 
+@minikube config set driver vmware
+:: minikube config set driver virtualbox
+:: minikube start --no-vtx-check
+:: 
+@CLS
+@ECHO Starten Minikube 
+@minikube start

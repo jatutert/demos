@@ -1,0 +1,1 @@
+VBoxManage convertfromraw D:\Installatie-Catalogus\ISO\Besturingssystemen\Windows\10-10-11\10.10-Windows-10\22H2-19045\Regulier\Consumer-Editions-Home-Eudcation-PRO\EN-US\en-us_windows_10_consumer_editions_version_22h2_updated_may_2023_x64_dvd_8ae93bf4.iso Windows10.vhd --format VHD --variant Standard

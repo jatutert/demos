@@ -1,0 +1,1 @@
+diskpart /s naamscript.txt

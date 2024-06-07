@@ -1,0 +1,20 @@
+Zie
+https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/diskpart-scripts-and-examples
+
+
+create vdisk file="%USERPROFILE%\Downloads\W10-Edu.VHD" MAXIMUM=61440 TYPE EXPANDABLE
+select vdisk file="%USERPROFILE%\Downloads\W10-Edu.VHD"
+attach vdisk
+list disk
+select disk 2
+create par pri
+select par 1
+format fs=ntfs quick
+active
+assign
+
+
+
+
+
+detach

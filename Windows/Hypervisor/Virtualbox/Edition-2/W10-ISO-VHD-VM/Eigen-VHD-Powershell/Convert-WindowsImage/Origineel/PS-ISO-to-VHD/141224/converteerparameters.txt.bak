@@ -1,0 +1,12 @@
+$convertParams = @{
+SourcePath = '.\windows.iso'
+# CacheSource
+VHDPath = '.\windows10.vhd'
+# WorkingDirectory
+# TempDirectory
+SizeBytes = 40GB
+VHDFormat = 'VHD'
+DiskLayout = 'UEFI'
+UnattendPath = '.\autouattend.xml'
+Edition = 'Education'
+}

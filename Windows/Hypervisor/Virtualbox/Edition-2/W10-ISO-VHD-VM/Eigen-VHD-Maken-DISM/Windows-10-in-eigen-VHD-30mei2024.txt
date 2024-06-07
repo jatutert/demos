@@ -1,0 +1,107 @@
+
+zie
+https://jatutert.blogspot.com/search?updated-max=2010-05-12T18:34:00%2B02:00&max-results=15&start=45&by-date=false
+
+
+https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/boot-to-vhd--native-boot--add-a-virtual-hard-disk-to-the-boot-menu?view=windows-11
+
+
+
+1. Open Windows Terminal
+2. start Diskpart en geef de volgende commando's 
+diskpart
+create vdisk file="%USERPROFILE%\Downloads\W10-Edu.VHD" MAXIMUM=61440 TYPE EXPANDABLE
+select vdisk file="%USERPROFILE%\Downloads\W10-Edu.VHD"
+attach vdisk
+list disk
+select disk 2
+
+  Cre Par Pri Offset=1024 Size=665 Id=27
+  Format Quick Fs=ntfs Label=WinRE
+  Cre Par Pri Size=100
+  Format Quick Fs=ntfs Label=Boot
+  Active
+  Cre Par Pri
+  Format Quick Fs=ntfs Label=System
+
+
+create par pri
+select par 1
+format fs=ntfs quick
+active
+assign
+
+Dit wordt schijf E: 
+
+3. Koppel ISO bestand met behulp van Windows verkenner
+Dit wordt schijf F: 
+
+4. Open nieuw tabblad in Windows terminal 
+dism /Get-ImageInfo /Imagefile:f:\sources\install.wim
+dism /Apply-Image /ImageFile:F:\Sources\install.wim /index:4 /ApplyDir:E:\
+
+
+5.
+
+Testen:
+https://superuser.com/questions/1561711/cannot-make-vhd-bootable
+
+# Create WinRE partition:
+  Cre Par Pri Offset=1024 Size=665 Id=27
+  Format Quick Fs=ntfs Label=WinRE
+
+# Create Boot partition:
+  Cre Par Pri Size=100
+  Format Quick Fs=ntfs Label=Boot
+  Active
+
+# Create System partition:
+  Cre Par Pri
+  Format Quick Fs=ntfs Label=System
+
+# Verify:
+  Lis Par
+  Lis Vol
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/bcdboot-command-line-options-techref-di?view=windows-11
+
+
+The following example copies BCD files that support booting on either a UEFI-based or a BIOS-based 
+computer from the C:\Windows folder to a USB flash drive that was assigned the volume letter S:
+bcdboot C:\Windows /s S: /f ALL 
+
+
+bcdboot C:\windows /s E: /f BIOS
+
+
+V:\
+cd v:\windows\system32
+bcdboot v:\windows /s S: /f UEFI
+bcdboot C:\windows /s E: /f UEFI
+
+V:
+cd v:\windows\system32
+bcdboot v:\windows /s S: /f BIOS
+
+
+5. Ontkoppel ISO bestand via UITWERPEN
+
+6. Ga terug naar diskpart sessie om vhd te ontkoppelen 
+
+detach vdisk
+
+7.  Converteer VHD naar VMDK
+"C:\Program Files\StarWind Software\StarWind V2V Converter\V2V_ConverterConsole.exe" convert in_file_name="%USERPROFILE%\Downloads\WS19-DC-Trial.vhd" out_file_name="%USERPROFILE%\Downloads\WS19-DC-Trial.vmdk" out_file_type=ft_vmdk_ws_growable
