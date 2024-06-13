@@ -1,1 +1,0 @@
-Powershell -file .\Maak-W10-Edu-VHD-uit-ISO-V004.ps1
