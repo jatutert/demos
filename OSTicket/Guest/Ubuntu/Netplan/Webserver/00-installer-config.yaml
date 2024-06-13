@@ -1,8 +1,29 @@
-# This is the network config written by 'subiquity'
+#
+# Saxion HBOICT
+#
+# Introductie Infrastructuren 
+# Infrastructuur en ServiceManagement 
+# 
+# WEB Server
+#
+# Nameserver 192.168.200.254 Windows Server 2019 as Router 
+# Nameservers 145.2.14.10 145.2.14.11 Saxion DNS EduRoam
+# Nameservers 8.8.88 8.8.4.4 Google 
+#
+#
+# Created by John Tutert
+# For Personal or Educational use only
+#
+#
 network:
   ethernets:
-    enp0s3:
-      dhcp4: true
-    enp0s8:
+    ens33:
+      dhcp4: false
+      addresses: 
+      - 192.168.200.11/24
+      gateway4: 192.168.200.254
+      nameservers:
+          addresses: [192.168.200.254, 145.2.14.10, 145.2.14.11, 8.8.8.8, 8.8.4.4]
+    ens34:
       dhcp4: true     
   version: 2
