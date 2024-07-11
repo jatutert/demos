@@ -1,26 +1,6 @@
-<!--*************************************************
-
-
-Windows 10 Education Answer File
-
-
-Installation Notes
-Location: 
-Notes: Enter your comments here...
-
-Gemaakt 30 juni 2024 door John Tutert
-
-Autounattend gemaakt met Schneegans website 
-Comments aangepast 
-
-
-https://schneegans.de/windows/unattend-generator/?LanguageMode=Unattended&UILanguage=en-US&UserLocale=nl-NL&KeyboardLayout=0409%3A00020409&GeoLocation=176&ProcessorArchitecture=amd64&ComputerNameMode=Random&TimeZoneMode=Explicit&TimeZone=W.+Europe+Standard+Time&PartitionMode=Unattended&PartitionLayout=GPT&EspSize=300&RecoveryMode=Partition&RecoverySize=1000&WindowsEditionMode=Unattended&WindowsEdition=education&UserAccountMode=Unattended&AccountName0=Admin&AccountPassword0=password&AccountGroup0=Administrators&AccountName1=User&AccountPassword1=password&AccountGroup1=Users&AccountName2=labadmin&AccountPassword2=%21%40WACHTwoord%23%24&AccountGroup2=Administrators&AutoLogonMode=None&PasswordExpirationMode=Unlimited&LockoutMode=Disabled&DisableSystemRestore=true&AllowPowerShellScripts=true&NoAutoRebootWithLoggedOnUsers=true&WifiMode=Skip&ExpressSettings=DisableAll&Remove3DViewer=true&RemoveCortana=true&RemoveOffice365=true&RemoveOneDrive=true&RemovePaint3D=true&RemoveSolitaire=true&RemoveXboxApps=true&WdacMode=Skip
-
-
-**************************************************-->
-
 <?xml version="1.0" encoding="utf-8"?>
 <unattend xmlns="urn:schemas-microsoft-com:unattend" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State">
+	<!--https://schneegans.de/windows/unattend-generator/?LanguageMode=Unattended&UILanguage=en-US&UserLocale=nl-NL&KeyboardLayout=0409%3A00020409&GeoLocation=176&ProcessorArchitecture=amd64&ComputerNameMode=Random&TimeZoneMode=Explicit&TimeZone=W.+Europe+Standard+Time&PartitionMode=Unattended&PartitionLayout=GPT&EspSize=300&RecoveryMode=Partition&RecoverySize=1000&WindowsEditionMode=Unattended&WindowsEdition=education&UserAccountMode=Unattended&AccountName0=Admin&AccountPassword0=password&AccountGroup0=Administrators&AccountName1=User&AccountPassword1=password&AccountGroup1=Users&AccountName2=labadmin&AccountPassword2=%21%40WACHTwoord%23%24&AccountGroup2=Administrators&AutoLogonMode=None&PasswordExpirationMode=Unlimited&LockoutMode=Disabled&DisableSystemRestore=true&AllowPowerShellScripts=true&NoAutoRebootWithLoggedOnUsers=true&WifiMode=Skip&ExpressSettings=DisableAll&Remove3DViewer=true&RemoveCortana=true&RemoveOffice365=true&RemoveOneDrive=true&RemovePaint3D=true&RemoveSolitaire=true&RemoveXboxApps=true&WdacMode=Skip-->
 	<settings pass="offlineServicing"></settings>
 	<settings pass="windowsPE">
 		<component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">

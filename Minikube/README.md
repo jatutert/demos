@@ -5,6 +5,7 @@ So you need a demonstration enviroment. But you don't want to do everything manu
 This repository has several scripted demonsration environments. 
 Some are still in alpha version and other ones are more advanced !
 
-## OSTicket
+## Minikube
 
-Runs on Ubuntu 22.04 LTS Virtual Machines within Oracle VM VirtualBOX
+Runs on Ubuntu 22.04 LTS or Windows 10/11 
+

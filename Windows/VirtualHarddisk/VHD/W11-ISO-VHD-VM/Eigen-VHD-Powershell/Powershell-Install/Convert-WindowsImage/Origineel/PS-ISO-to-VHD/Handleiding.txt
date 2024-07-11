@@ -1,0 +1,7 @@
+https://github.com/brahimmachkouri/wim2vhdx
+
+1. ISO in folder zetten van script
+2. Powershell starten in Admin modus
+3. Set-ExecutionPolicy Unrestricted -Scope LocalMachine`
+4. Toevoegen regel aan script (einde):
+Convert-WindowsImage -SourcePath .\fr_windows_10_consumer_editions_version_1903_x64_dvd_04158601.iso -Edition Education -WorkingDirectory $pwd -VHDFormat VHDX -SizeBytes 150GB -VHDPath .\Windows10_Bootable.vhdx

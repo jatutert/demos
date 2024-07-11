@@ -2,6 +2,22 @@
 ::	Windows 10 Education Virtual Machine Creator
 ::
 ::	Werkt alleen op laptop CND0475SYS 
+
+@echo off
+@cls
+@echo. 
+@echo Windows 10 22H2 Education Virtual Machine Creator
+@echo.
+@echo Oracle VM Virtualbox is used as Hypervisor
+@echo.
+@echo ALPHA Version (only for testing purposes) 
+@echo. 
+@echo Created june 10 2024 
+@echo.
+@echo By John Tutert 
+@echo.
+@echo Only for personal and/or educational use ! 
+@echo. 
 ::
 ::	[0]	Omgeving
 ::	[1] ISO Download
@@ -9,8 +25,8 @@
 ::	[3] Create Virtual Machine
 ::
 ::	Script
-::	Version 002
-::	07 juni 2024
+::	Version 002 (7 juni 2024) 
+::	Aangepast 10 juni 2024
 ::
 ::	John Tutert
 ::
@@ -36,7 +52,8 @@
 ::
 ::	Resultaat EN-US-W10-Edu-22H2.VHD
 ::
-@echo Maken VHD-bestand gestart mbv Powershell Hyper-ConvertImage versie 10.2 
+@echo Maken VHD-bestand gestart mbv Powershell Hyper-ConvertImage versie 10.2
+@echo AutoUnattend Scheegans versie 001 wordt gebruikt ...  
 ::
 ::	Schneegans autoattend versie 001 wordt gebruikt
 ::
@@ -53,7 +70,7 @@
 @VBoxManage -q createvm --name "WC10O-T-001" --basefolder "D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client" --default --ostype "Windows10_64" --register
 ::
 :: Aanpassingen doen aan VM
-@VBoxManage -q modifyvm WC10O-T-001 --description="Windows 10 Education TEST VM"
+@VBoxManage -q modifyvm WC10O-T-001 --description="Windows 10 Education Autounattend Schneegans V001"
 @VBoxManage -q modifyvm WC10O-T-001 --firmware=efi64
 @VBoxManage -q modifyvm WC10O-T-001 --bios-logo-fade-in=off
 @VBoxManage -q modifyvm WC10O-T-001 --bios-logo-fade-out=off
@@ -84,8 +101,13 @@
 :: STarten VM
 @VBoxManage -q startvm WC10O-T-001 --type=gui
 ::
-:: Virtualbox Guest Additions bijwerken
-@VBoxManage -q guestcontrol "WC10O-T-001" updatega 
+:: 	Virtualbox Guest Additions bijwerken
+::
+::	Gaat fout omdat gelijk na start wordt gedaan 
+::	Moet eerst wachten totdat installatie is afgerond
+::	Wachttijd inbouwen
+::
+:: @VBoxManage -q guestcontrol "WC10O-T-001" updatega 
 ::
 ::
 ::	That's all folks ! 

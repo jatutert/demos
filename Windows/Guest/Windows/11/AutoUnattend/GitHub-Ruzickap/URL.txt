@@ -1,0 +1,1 @@
+https://github.com/ruzickap/packer-templates/blob/main/http/windows-2022/Autounattend.xml
