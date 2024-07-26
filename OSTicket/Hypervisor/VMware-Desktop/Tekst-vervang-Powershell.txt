@@ -1,0 +1,15 @@
+PowerShell Replace Text in File
+The PowerShell replace can also be used to replace text in a file. Here is the guide:
+
+Use the Get-Content command to read a file (txt on the C drive for example). The command should be Get-Content -Path ‘C:file.txt’. Only when the file content is read, you can operate it.
+Use the replace operator to replace text. The command should be (Get-Content C:file.txt) -replace “old”, “new”.
+Use the Set-Content command to write the text to the file. The command should be Set-Content -Path ‘C:file.txt’.
+In general, through the above 3 steps, you can replace text in a file via the PowerShell replace function.  
+
+https://www.partitionwizard.com/partitionmanager/powershell-replace.html
+
+
+ # Copy and edit Autounattend.xml
+        $unattendedContent = Get-Content -Path $unattendedPath -Raw
+        $unattendedContent = $unattendedContent.Replace('var-username', $studentName).Replace('var-pc-name', $studentNumber).Replace('varLanguage', $varLanguage).Replace('varKeyboard', $varKeyboard)
+        Set-Content -Path "$($DriveLetter):\Windows\Panther\unattend.xml" -Value $unattendedContent

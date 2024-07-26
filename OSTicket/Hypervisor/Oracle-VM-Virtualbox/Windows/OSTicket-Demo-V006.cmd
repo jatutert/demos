@@ -3,9 +3,9 @@
 ::
 ::
 :: OSTicket Virtualbox Demo Configuration Script
-:: Version 0.0.4
+:: Version 0.0.6
 :: 
-:: Date May 10 2024
+:: Date July 18 2024
 :: Author John Tutert
 ::
 ::
@@ -20,7 +20,7 @@
 @echo. 
 @echo Hpervisor: Oracle VM Virtualbox
 @echo Vagrant Box: Vagrant generic/ubuntu2204
-@echo Operating Systems virtual machine: Ubuntu 22.04 LTS
+@echo Operating Systems virtual machine: Ubuntu 24.04 LTS
 @echo. 
 @echo Developed by John Tutert
 @echo.
@@ -28,46 +28,39 @@
 @echo. 
 ::
 @rem :::: Definitie variabelen voor dit script
-@echo #### Definitie variabelen voor dit script ... 
 ::
 @rem :: Variabelen voor VAGRANT
+@echo Definitie variabelen voor HashiCorp Vagrant ...
 ::
-@rem :: Linux Gebruiker
+@rem 	Linux Gebruiker
 set OSTICKET_DEMO_VAGRANT_LNX_USER=vagrant
-:: 	Versienummer Vagrant box 
-set OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VER=4.3.12
-:: 	Locatie Vagrant Box harddisk template
-set OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VM_DIR="%USERPROFILE%\.vagrant.d\boxes\generic-VAGRANTSLASH-ubuntu2204\%OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VER%\amd64\vmware_desktop"
-set OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VB_DIR="%USERPROFILE%\.vagrant.d\boxes\generic-VAGRANTSLASH-ubuntu2204\%OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VER%\amd64\virtualbox"
-:: 	Naam virtuele harddisk VDMK template 
-set OSTICKET_DEMO_VAGRANT_HDU_VB_VMDK=generic-ubuntu2204-virtualbox-x64-disk001.vmdk
+@rem 	Versienummer Vagrant box 
+set OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VER=2404.0.2405
+@rem 	Locatie Vagrant Box harddisk template
+set OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VM_DIR="%USERPROFILE%\.vagrant.d\boxes\gusztavvargadr/ubuntu-server-2404-lts\%OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VER%\amd64\vmware_desktop"
+set OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VB_DIR="%USERPROFILE%\.vagrant.d\boxes\gusztavvargadr/ubuntu-server-2404-lts\%OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VER%\amd64\virtualbox"
+@rem	Naam virtuele harddisk VDMK template 
+set OSTICKET_DEMO_VAGRANT_HDU_VB_VMDK=packer-20240610-092843-disk001.vmdk
 set OSTICKET_DEMO_VAGRANT_HDU_VB_VDI=generic-ubuntu2204-virtualbox-x64-disk001.vdi
 set OSTICKET_DEMO_VAGRANT_HDU_VM_VMDK=generic-ubuntu2204-vmware-x64.vmdk
 ::
 ::	:: PATH aanvullen voor Oracle VM Virtualbox
+@echo Check aanwezigheid van Oracle VM Virtualbox in PATH variable 
 ::
-:: 	Locatie Oracle VM Virtualbox VboxManage
+@VBoxManage --version >nul 2>&1
 ::
-:: Oud
+::	Onderstaande lus WERKT NIET
+::	Foutmelding
+::	\VMware\VMware
 ::
-:: set VIRTBOX_VBOXMAN="C:\Program Files\Oracle\VirtualBox\"
-:: setx PATH "%PATH%;C:\Program Files\Oracle\VirtualBox\"
-::
-:: Nieuw
-::
-:: set pathEnv=%PATH%
-:: set vboxPath="C:\Program Files\Oracle\VirtualBox\"
-:: 
-:: Controleer of de map van VirtualBox in de `%PATH%`-variabele voorkomt
-:: if "%pathEnv:~0,%vboxPath:~0%" == "%vboxPath%" (
-::   echo VirtualBox-map is reeds aanwezig in de `%PATH%`-variabele.
-:: ) else (
-::  echo VirtualBox-map is niet aanwezig in de `%PATH%`-variabele.
-::  rem Voeg de map van VirtualBox toe aan de `%PATH%`-variabele (optioneel)
-::  set newPathEnv=%pathEnv%;%vboxPath%
-::  setx PATH "%newPathEnv%"
-::  echo VirtualBox-map toegevoegd aan de `%PATH%`-variabele. Herstart de computer om de wijzigingen door te voeren.
-:: )
+::	if %errorlevel% neq 0 (
+::		set pathEnv=%PATH%
+::		set vboxPath="C:\Program Files\Oracle\VirtualBox\"
+::		set newPathEnv=%pathEnv%;%vboxPath%
+::		setx PATH "%newPathEnv%"
+::	) else (
+::		echo Oracle VM Virtualbox VBoxManage is present ! Let's carry on .. >nul 2>&1
+::	)
 ::
 ::
 :: :: Varibelen voor Oracle VM Virtualbox 
@@ -82,19 +75,18 @@ set VIRT_MACHINES_TEMPLATE_DIRECTORY="D:\Virtual-Machines\Templates\VirtualDisks
 ::
 ::
 :: ## Virtual machine
+@echo Definitie variabelen voor virtuele machines ... 
 ::
 :: 	Locatie waar virtuele machine opgeslagen moeten worden 
 set OSTICKET_DEMO_VM_DIRECTORY="D:\Virtual-Machines\Oracle-VM-Virtualbox\Linux\OSTicket-Demo"
-:: 	Type virtuele machine 
+@rem	Type virtuele machine 
 set DOCKER_DEMO_VM_TYPE=controller
-::	Hostname
-set OSTICKET_DEMO_WEBSRV_HOSTNAME=ulx-s-2204-ostkt-wbsrv
-set OSTICKET_DEMO_DBSRV_HOSTNAME=ulx-s-2204-ostkt-dbsrv
-:: set OSTICKET_DEMO_VM_H11_HOSTNAME=ulx-s-2204-a-h-011
-::	Poort SSH
+@rem	Hostname
+set OSTICKET_DEMO_WEBSRV_HOSTNAME=u24-lts-s-wsrv-001
+set OSTICKET_DEMO_DBSRV_HOSTNAME=u24-lts-s-dbms-001
+@rem	Poort SSH
 set OSTICKET_DEMO_VM_CNTRL_SSH_PORT=3001
 set OSTICKET_DEMO_VM_H10_SSH_PORT=3002
-:: set OSTICKET_DEMO_VM_H11_SSH_PORT=3003
 ::
 ::
 :: :::: Controle Benodigheden voor dit Script
@@ -116,7 +108,7 @@ if %errorlevel% neq 0 (
 ) else (
     :: Vagrant is geïnstalleerd, werk het bij
     :: winget upgrade --id Hashicorp.Vagrant --accept-package-agreements --accept-source-agreements >nul 2>&1
-	echo Hashicorp Vagrant is present ! Let's carry on .. 
+	echo Hashicorp Vagrant is present ! Let's carry on .. >nul 2>&1
 )
 ::
 ::
@@ -132,7 +124,7 @@ if %errorlevel% neq 0 (
 	@exit /B 0 
 ) else (
     :: Oracle.Virtualbox  is geïnstalleerd, werk het bij
-    echo Oracle VM Virtualbox is present ! 
+    echo Oracle VM Virtualbox is present ! >nul 2>&1
 	winget upgrade --id Oracle.VirtualBox --accept-package-agreements --accept-source-agreements >nul 2>&1
 )
 ::
@@ -148,48 +140,49 @@ if %errorlevel% neq 0 (
 )
 ::
 ::
-:: [cURL.cURL] 
-winget list -e --id cURL.cURL >nul 2>&1
-if %errorlevel% neq 0 (
-    :: cURL.cURL is NIET geïnstalleerd, installeer het
-    winget install --id cURL.cURL --accept-package-agreements --accept-source-agreements >nul 2>&1
-) else (
-    :: cURL.cURL is geïnstalleerd, werk het bij
-    winget upgrade --id cURL.cURL --accept-package-agreements --accept-source-agreements >nul 2>&1
-)
+::	:: [cURL.cURL] 
+::	winget list -e --id cURL.cURL >nul 2>&1
+::	if %errorlevel% neq 0 (
+::		:: cURL.cURL is NIET geïnstalleerd, installeer het
+::	    winget install --id cURL.cURL --accept-package-agreements --accept-source-agreements >nul 2>&1
+::	) else (
+::		:: cURL.cURL is geïnstalleerd, werk het bij
+::		winget upgrade --id cURL.cURL --accept-package-agreements --accept-source-agreements >nul 2>&1
+::	)
 ::
 ::
-:: [CYGWIN]
+::	:: [CYGWIN]
 :: 
-if not exist C:\cygwin64\bin\sed.exe (
-    del %USERPROFILE%\Downloads\setup-x86_64.exe
-    curl -s -o %USERPROFILE%\Downloads\setup-x86_64.exe https://www.cygwin.com/setup-x86_64.exe
-    :: https://www.cygwin.com/faq/faq.html#faq.setup.cli
-    start /D %HOMEPATH% /I /B /MAX %USERPROFILE%\Downloads\setup-x86_64.exe --quiet-mode --download --local-install --no-verify --local-package-dir "%USERPROFILE%\Downloads" --root "C:\cygwin64"
-)
+::	if not exist C:\cygwin64\bin\sed.exe (
+::		del %USERPROFILE%\Downloads\setup-x86_64.exe
+::		curl -s -o %USERPROFILE%\Downloads\setup-x86_64.exe https://www.cygwin.com/setup-x86_64.exe
+::		:: https://www.cygwin.com/faq/faq.html#faq.setup.cli
+::		start /D %HOMEPATH% /I /B /MAX %USERPROFILE%\Downloads\setup-x86_64.exe --quiet-mode --download --local-install --no-verify --local-package-dir "%USERPROFILE%\Downloads" --root "C:\cygwin64"
+::		)
 ::
 ::
-:: [sshpass]
+::	:: [sshpass]
 ::
-@del /F %userprofile%\sshpass.exe
-@wget2 -O %userprofile%\sshpass.exe https://github.com/xhcoding/sshpass-win32/releases/download/v1.0.1/sshpass.exe
+::	@del /F %userprofile%\sshpass.exe
+::	@wget2 -O %userprofile%\sshpass.exe https://github.com/xhcoding/sshpass-win32/releases/download/v1.0.1/sshpass.exe
 ::
+::
+@echo #### Make Vagrant ready for use
 ::
 ::	:::: VAGRANT BOXES downloaden en bijwerken 
 ::
-:: 	Vagrant box ubuntu 2204 LTS download
-@echo #### Make Vagrant ready for use
+:: 	Vagrant box ubuntu 2404 LTS download
 :: 	Toevoegen generic/ubuntu2204 box versie 4.3.12 indien niet aanwezig  
 ::	https://developer.hashicorp.com/vagrant/docs/cli/box#box-add
-@vagrant box add generic/ubuntu2204 --box-version %OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VER% --clean --provider virtualbox >nul 2>&1
-@vagrant box add generic/ubuntu2204 --box-version %OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VER% --clean --provider vmware_desktop >nul 2>&1
+@vagrant box add gusztavvargadr/ubuntu-server-2404-lts --box-version %OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VER% --clean --provider virtualbox >nul 2>&1
+:: @vagrant box add gusztavvargadr/ubuntu-server-2404-lts --box-version %OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VER% --clean --provider vmware_desktop >nul 2>&1
 :: 
 :: 	@vagrant box list -i generic/ubuntu2204 >nul 2>&1
 ::
-:: 	Vagrant box ubuntu 2204 LTS updaten
-@vagrant box update --box generic/ubuntu2204 --provider virtualbox >nul 2>&1
-@vagrant box update --box generic/ubuntu2204 --provider vmware_desktop >nul 2>&1
-:: 	Vagrant box ubuntu 2204 LTS opschonen
+:: 	Vagrant box ubuntu 2404 LTS updaten
+@vagrant box update --box gusztavvargadr/ubuntu-server-2404-lts --provider virtualbox >nul 2>&1
+:: @vagrant box update --box gusztavvargadr/ubuntu-server-2404-lts --provider vmware_desktop >nul 2>&1
+:: 	Vagrant box ubuntu 2404 LTS opschonen
 @vagrant box prune >nul 2>&1
 ::  
 :: 	:::: Opruimen voordat we kunnen starten 
@@ -206,10 +199,12 @@ if not exist C:\cygwin64\bin\sed.exe (
 @VBoxManage -q unregistervm %OSTICKET_DEMO_WEBSRV_HOSTNAME% --delete-all >nul 2>&1
 @VBoxManage -q unregistervm %OSTICKET_DEMO_DBSRV_HOSTNAME% --delete-all >nul 2>&1
 :: 
-:: ## Schoonmaken Oracle VM Virtualbox Medium lijst om foutmelding UUID te voorkomen 
-:: @echo #### Schoonmaken Oracle VM Virtualbox Medium lijst
-:: Template directory VMDK
-:: @VBoxManage closemedium disk %VIRT_MACHINES_TEMPLATE_DIRECTORY%\%OSTICKET_DEMO_VAGRANT_HDU_VB_VMDK% >nul 2>&1
+::	::::	Schoonmaken medium list Oracle VM Virtualbox
+::
+:: 	::		Template directory VMDK
+@VBoxManage closemedium disk %VIRT_MACHINES_TEMPLATE_DIRECTORY%\%OSTICKET_DEMO_VAGRANT_HDU_VB_VMDK% >nul 2>&1
+::
+::
 :: Template directory VDI
 :: @VBoxManage closemedium disk %VIRT_MACHINES_TEMPLATE_DIRECTORY%\%OSTICKET_DEMO_VDI_TEMPLATE_FILE% >nul 2>&1
 :: Vagrant VMDK 
@@ -234,6 +229,9 @@ if not exist C:\cygwin64\bin\sed.exe (
 ::
 :: :::: Aanmaken virtuele machines in Oracle VM Virtualbox 
 ::
+::	VBoxManage list ostypes voor opvragen lijst ostypes virtualbox 
+::	Versie 24 is nog niet beschikbaar dus laten we op versie 22 staan 
+::
 @VBoxManage createvm --name "%OSTICKET_DEMO_WEBSRV_HOSTNAME%" --basefolder "%OSTICKET_DEMO_VM_DIRECTORY%" --default --ostype "Ubuntu22_LTS_64" --register >nul 2>&1
 @VBoxManage createvm --name "%OSTICKET_DEMO_DBSRV_HOSTNAME%" --basefolder "%OSTICKET_DEMO_VM_DIRECTORY%" --default --ostype "Ubuntu22_LTS_64" --register >nul 2>&1
 ::
@@ -241,9 +239,9 @@ if not exist C:\cygwin64\bin\sed.exe (
 ::
 :: :: Webserver
 ::
-@VBoxManage -q modifyvm %OSTICKET_DEMO_WEBSRV_HOSTNAME% --description="Ubuntu 22.04 LTS (generic/ubuntu2204) OSTicket Webserver"
+@VBoxManage -q modifyvm %OSTICKET_DEMO_WEBSRV_HOSTNAME% --description="Ubuntu 24.04 LTS (gusztavvargadr/ubuntu-server-2404-lts) OSTicket Webserver"
 :: EFI uitzetten 
-@VBoxManage -q modifyvm %OSTICKET_DEMO_WEBSRV_HOSTNAME% --firmware=bios
+@VBoxManage -q modifyvm %OSTICKET_DEMO_WEBSRV_HOSTNAME% --firmware=efi64
 @VBoxManage -q modifyvm %OSTICKET_DEMO_WEBSRV_HOSTNAME% --cpus=2
 @VBoxManage -q modifyvm %OSTICKET_DEMO_WEBSRV_HOSTNAME% --memory=2048
 @VBoxManage -q modifyvm %OSTICKET_DEMO_WEBSRV_HOSTNAME% --vram 256
@@ -259,9 +257,9 @@ if not exist C:\cygwin64\bin\sed.exe (
 ::
 :: :: DBMS Server
 ::
-@VBoxManage -q modifyvm %OSTICKET_DEMO_DBSRV_HOSTNAME% --description="Ubuntu 22.04 LTS (generic/ubuntu2204) OSTicket DBMS"
+@VBoxManage -q modifyvm %OSTICKET_DEMO_DBSRV_HOSTNAME% --description="Ubuntu 24.04 LTS (gusztavvargadr/ubuntu-server-2404-lts) OSTicket DBMS"
 :: EFI uitzetten 
-@VBoxManage -q modifyvm %OSTICKET_DEMO_DBSRV_HOSTNAME% --firmware=bios
+@VBoxManage -q modifyvm %OSTICKET_DEMO_DBSRV_HOSTNAME% --firmware=efi64
 @VBoxManage -q modifyvm %OSTICKET_DEMO_DBSRV_HOSTNAME% --cpus=2
 @VBoxManage -q modifyvm %OSTICKET_DEMO_DBSRV_HOSTNAME% --memory=2048
 @VBoxManage -q modifyvm %OSTICKET_DEMO_DBSRV_HOSTNAME% --vram 256
@@ -277,20 +275,23 @@ if not exist C:\cygwin64\bin\sed.exe (
 ::
 ::
 :: :::: Nieuwe virtuele machines voorzien van virtuele harde schijven
+@echo Virtuele machines voorzien van virtuele harddisks ... 
 :: 
 :: :: Clone maken van Vagrant generic/ubuntu2204 vmdk bestand naar vdi bestand 
 ::
-@VBoxManage.exe clonemedium disk --format=VDI %OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VB_DIR%\%OSTICKET_DEMO_VAGRANT_HDU_VB_VMDK% %OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VB_DIR%\%OSTICKET_DEMO_WEBSRV_HOSTNAME%.VDI
-@VBoxManage.exe clonemedium disk --format=VDI %OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VB_DIR%\%OSTICKET_DEMO_VAGRANT_HDU_VB_VMDK% %OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VB_DIR%\%OSTICKET_DEMO_DBSRV_HOSTNAME%.VDI
+@VBoxManage.exe clonemedium disk --format=VDI %OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VB_DIR%\%OSTICKET_DEMO_VAGRANT_HDU_VB_VMDK% %OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VB_DIR%\%OSTICKET_DEMO_WEBSRV_HOSTNAME%.VDI >nul 2>&1
+@VBoxManage.exe clonemedium disk --format=VDI %OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VB_DIR%\%OSTICKET_DEMO_VAGRANT_HDU_VB_VMDK% %OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VB_DIR%\%OSTICKET_DEMO_DBSRV_HOSTNAME%.VDI >nul 2>&1
 ::
 :: :: Overzetten nieuwe VDI virtuele harde schijven naar directories van de virtuele machines 
 ::
 :: Webserver
-@copy /Y %OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VB_DIR%\%OSTICKET_DEMO_WEBSRV_HOSTNAME%.VDI "%OSTICKET_DEMO_VM_DIRECTORY%\%OSTICKET_DEMO_WEBSRV_HOSTNAME%"
-@del %OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VB_DIR%\%OSTICKET_DEMO_WEBSRV_HOSTNAME%.VDI 
+@copy /Y %OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VB_DIR%\%OSTICKET_DEMO_WEBSRV_HOSTNAME%.VDI "%OSTICKET_DEMO_VM_DIRECTORY%\%OSTICKET_DEMO_WEBSRV_HOSTNAME%" >nul 2>&1
+:: @del %OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VB_DIR%\%OSTICKET_DEMO_WEBSRV_HOSTNAME%.VDI 
+@@VBoxManage closemedium disk %OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VB_DIR%\%OSTICKET_DEMO_WEBSRV_HOSTNAME%.VDI --delete >nul 2>&1
 :: DBMS server
-@copy /Y %OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VM_DIR%\%OSTICKET_DEMO_DBSRV_HOSTNAME%.VDI "%OSTICKET_DEMO_VM_DIRECTORY%\%OSTICKET_DEMO_DBSRV_HOSTNAME%"
-@del %OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VM_DIR%\%OSTICKET_DEMO_DBSRV_HOSTNAME%.VDI
+@copy /Y %OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VB_DIR%\%OSTICKET_DEMO_DBSRV_HOSTNAME%.VDI "%OSTICKET_DEMO_VM_DIRECTORY%\%OSTICKET_DEMO_DBSRV_HOSTNAME%" >nul 2>&1
+:: @del %OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VM_DIR%\%OSTICKET_DEMO_DBSRV_HOSTNAME%.VDI
+@@VBoxManage closemedium disk %OSTICKET_DEMO_VAGRANT_HDU_TEMPLATE_VB_DIR%\%OSTICKET_DEMO_DBSRV_HOSTNAME%.VDI --delete >nul 2>&1
 ::
 :: ## Virtual Hardisk voorzien van nieuwe UUID
 :: 
@@ -313,13 +314,16 @@ if not exist C:\cygwin64\bin\sed.exe (
 ::
 @echo #### Starten OSTicket DEMO virtuele machines 
 :: 
-@VBoxManage -q --nologo startvm %OSTICKET_DEMO_WEBSRV_HOSTNAME% --type=gui >nul 2>&1
-@echo 3 minuten voordat tweede vm wordt gestart
+@echo 3 Minuten wachten totdat Oracle VM Virtualbox zover is ... 
 sleep 180
+@VBoxManage -q --nologo startvm %OSTICKET_DEMO_WEBSRV_HOSTNAME% --type=gui >nul 2>&1
+::
+@echo 4 Minuten wachten op start van webserver virtuele machine   
+sleep 240
 @VBoxManage -q --nologo startvm %OSTICKET_DEMO_DBSRV_HOSTNAME% --type=gui >nul 2>&1
-:: @TIMEOUT /T 180 /NOBREAK
-@echo 3 minuten wachten op start van de VM ... 
-@sleep 180
+::
+@echo 3 minuten wachten op start van DBMS server virtuele machine  
+sleep 180
 ::
 ::
 ::
@@ -366,68 +370,93 @@ sleep 180
 ::     [--timeout=msec] [--unix2dos] [--unquoted-args] [--username=username] [--verbose] <-- [argument...] >
 ::
 :: 
-
-
+::
+::
 :: 
-@echo #### Overzetten RSA sleutel naar Virtuele Machine ...
+::	:::: 	RSA keys overzetten naar virtuele machine 
 @VBoxManage guestcontrol %OSTICKET_DEMO_WEBSRV_HOSTNAME% copyto --username=%OSTICKET_DEMO_VAGRANT_LNX_USER% --password=%OSTICKET_DEMO_VAGRANT_LNX_USER% --target-directory=/home/%OSTICKET_DEMO_VAGRANT_LNX_USER%/.ssh/authorized_keys %USERPROFILE%\.ssh\id_rsa.pub
 @VBoxManage guestcontrol %OSTICKET_DEMO_DBSRV_HOSTNAME% copyto --username=%OSTICKET_DEMO_VAGRANT_LNX_USER% --password=%OSTICKET_DEMO_VAGRANT_LNX_USER% --target-directory=/home/%OSTICKET_DEMO_VAGRANT_LNX_USER%/.ssh/authorized_keys %USERPROFILE%\.ssh\id_rsa.pub
 :: 
 ::
-@echo Ubuntu AutoUpgrade UITZETTEN ...
-ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_CNTRL_SSH_PORT% -o StrictHostKeyChecking=no sudo sed 's@"1"@"0"@' -i /etc/apt/apt.conf.d/20auto-upgrades
-ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_H10_SSH_PORT% -o StrictHostKeyChecking=no sudo sed 's@"1"@"0"@' -i /etc/apt/apt.conf.d/20auto-upgrades
+::	:::: 	Ubuntu autoupgrade uitzetten in virtuele machine
+::
+::	NIET MEER NODIG IN VERSIE 24.04 of zit ergens anders
+:: 	@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_CNTRL_SSH_PORT% -o StrictHostKeyChecking=no sudo sed 's@"1"@"0"@' -i /etc/apt/apt.conf.d/20auto-upgrades
+::	@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_H10_SSH_PORT% -o StrictHostKeyChecking=no sudo sed 's@"1"@"0"@' -i /etc/apt/apt.conf.d/20auto-upgrades
 :: 
 ::
-::	#### Configuratie DNS ivm EduRoam
+::	::::	Configuratie DNS ivm EduRoam
 ::
-@echo Aanpassen DNS configuratie ivm EduRoam 
+::	Webserver
 @ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_CNTRL_SSH_PORT% sudo sed "s@4.2.2.1@145.76.2.75@" -i /etc/netplan/01-netcfg.yaml
 @ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_CNTRL_SSH_PORT% sudo sed "s@4.2.2.2@145.76.2.85@" -i /etc/netplan/01-netcfg.yaml
 @ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_CNTRL_SSH_PORT% sudo sed "s@208.67.220.220@145.2.14.10, 8.8.8.8, 8.8.4.4@" -i /etc/netplan/01-netcfg.yaml
 @ssh -i  %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_CNTRL_SSH_PORT% sudo netplan apply
-::
-@echo Aanpassen DNS configuratie ivm EduRoam 
+::	DBMS server
 @ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_H10_SSH_PORT% sudo sed "s@4.2.2.1@145.76.2.75@" -i /etc/netplan/01-netcfg.yaml
 @ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_H10_SSH_PORT% sudo sed "s@4.2.2.2@145.76.2.85@" -i /etc/netplan/01-netcfg.yaml
 @ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_H10_SSH_PORT% sudo sed "s@208.67.220.220@145.2.14.10, 8.8.8.8, 8.8.4.4@" -i /etc/netplan/01-netcfg.yaml
 @ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_H10_SSH_PORT% sudo netplan apply
 ::
-::	#### Configuratie eth1 nic 
+::	::::	Configuratie ETH1 netwerkkaart in virtuele machine 
 ::
-@echo Netwerkkaart eth1 activeren ... 
+::	Webserver
 @ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_CNTRL_SSH_PORT% "sudo curl -s -o /etc/netplan/00-installer-config.yaml https://raw.githubusercontent.com/jatutert/demos/main/Docker/Virtualbox/Linux/Netplan/00-installer-config.yaml"
 @ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_CNTRL_SSH_PORT% "sudo netplan apply"
 :: 
-@echo Netwerkkaart eth1 activeren ... 
+::	DBMS server
 @ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_H10_SSH_PORT% "sudo curl -s -o /etc/netplan/00-installer-config.yaml https://raw.githubusercontent.com/jatutert/demos/main/Docker/Virtualbox/Linux/Netplan/00-installer-config.yaml"
 @ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_H10_SSH_PORT% "sudo netplan apply"
 :: 
-::	#### Aanpassen hostname zonder herstart Verandering is zichtbaar na uitloggen en dan weer inloggen 
+::	::::	Aanpassen hostname zonder herstart Verandering is zichtbaar na uitloggen en dan weer inloggen 
 @ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_CNTRL_SSH_PORT% sudo hostnamectl set-hostname %OSTICKET_DEMO_WEBSRV_HOSTNAME%
 @ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_H10_SSH_PORT% sudo hostnamectl set-hostname %OSTICKET_DEMO_DBSRV_HOSTNAME%
 ::
-:: #### Aanpassen Ubuntu Repository 
+::	::::	Aanpassen Ubuntu Repository 
 @ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_CNTRL_SSH_PORT% sudo sed 's@mirrors.edge.kernel.org@nl.archive.ubuntu.com@' -i /etc/apt/sources.list
 @ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_H10_SSH_PORT% sudo sed 's@mirrors.edge.kernel.org@nl.archive.ubuntu.com@' -i /etc/apt/sources.list
 :: 
-:: #### Updaten Ubuntu Repository
-@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_CNTRL_SSH_PORT% "sudo apt-get update -qq" >nul 2>&1
-@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_H10_SSH_PORT% "sudo apt-get update -qq" >nul 2>&1
+::	::::	Updaten Ubuntu Repository
+@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_CNTRL_SSH_PORT% "sudo apt update -qq" >nul 2>&1
+:: @ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_CNTRL_SSH_PORT% "sudo apt-get update -qq" >nul 2>&1
+@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_H10_SSH_PORT% "sudo apt update -qq" >nul 2>&1
+:: @ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_H10_SSH_PORT% "sudo apt-get update -qq" >nul 2>&1
 ::
-:: #### Upgraden Ubuntu
-@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_CNTRL_SSH_PORT% "sudo apt-get upgrade -y "
-@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_H10_SSH_PORT% "sudo apt-get upgrade -y "
+::	::::	Upgraden Ubuntu
+@echo Ubuntu 22.04 LTS Bijwerken ... 
+@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_CNTRL_SSH_PORT% "sudo apt upgrade -y "
+@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_H10_SSH_PORT% "sudo apt upgrade -y "
 ::
-:: #### Ubuntu Verwijderen overbodige zaken
-@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_CNTRL_SSH_PORT% "sudo apt-get autoremove -y "
-@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_H10_SSH_PORT% "sudo apt-get autoremove -y"
+::	::::	Ubuntu Verwijderen overbodige zaken
+@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_CNTRL_SSH_PORT% "sudo apt autoremove -y"
+@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_H10_SSH_PORT% "sudo apt autoremove -y"
 ::
-:: #### Downloaden Introductie Infrastructuren scripts vanaf github 
-@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_CNTRL_SSH_PORT% "curl -s -o /home/vagrant/install-mysqlserver.sh https://raw.githubusercontent.com/jatutert/demos/main/Docker/Virtualbox/Linux/Ubuntu-Config/docker-demo-virtbox-linux-config-v001.sh"
-@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_H10_SSH_PORT% "curl -s -o /home/vagrant/install-webserver-UB22.sh https://raw.githubusercontent.com/jatutert/demos/main/Docker/Virtualbox/Linux/Ubuntu-Config/docker-demo-virtbox-linux-config-v001.sh"
+::	::::	SNAP bijwerken
+@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_CNTRL_SSH_PORT% "sudo snap refresh"
+@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_H10_SSH_PORT% "sudo snap refresh"
 ::
-:: #### Uitvoerbaar maken Introductie Infrastructuren scripts
+::	::::	Curl bijwerken
+@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_CNTRL_SSH_PORT% "sudo snap install curl --channel=latest"
+@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_H10_SSH_PORT% "sudo snap install curl --channel=latest"
+::
+::	::::	Installatie Cockpit binnen Ubuntu
+@echo Installatie Cockpit binnen Ubuntu .. Later te benaderen via poort 9090
+@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_CNTRL_SSH_PORT% "sudo apt-get install cockpit -y"
+@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_CNTRL_SSH_PORT% "sudo systemctl enable --now cockpit.socket"
+@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_H10_SSH_PORT% "sudo apt-get install cockpit -y"
+@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_H10_SSH_PORT% "sudo systemctl enable --now cockpit.socket"
+::
+::	::::	Downloaden Ubuntu Config script vanaf Github JA Tutert
+@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_CNTRL_SSH_PORT% "sudo curl -s -o /home/vagrant/ubuntu-config-latest.sh https://raw.githubusercontent.com/jatutert/Ubuntu-Config/main/ubuntu-config-latest.sh"
+@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_CNTRL_SSH_PORT% "sudo chmod +x /home/vagrant/ubuntu-config-latest.sh"
+@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_H10_SSH_PORT% "sudo curl -s -o /home/vagrant/ubuntu-config-latest.sh https://raw.githubusercontent.com/jatutert/Ubuntu-Config/main/ubuntu-config-latest.sh"
+@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_H10_SSH_PORT% "sudo chmod +x /home/vagrant/ubuntu-config-latest.sh"
+::
+::	::::	Downloaden Introductie Infrastructuren scripts vanaf github 
+@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_CNTRL_SSH_PORT% "curl -s -o /home/vagrant/install-mysqlserver.sh https://raw.githubusercontent.com/jatutert/demos/main/OSTicket/Ubuntu/install-mysqlserver.sh"
+@ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_H10_SSH_PORT% "curl -s -o /home/vagrant/install-webserver-UB22.sh https://raw.githubusercontent.com/jatutert/demos/main/OSTicket/Ubuntu/install-webserver-UB22.sh"
+::
+::	::::	Uitvoerbaar maken Introductie Infrastructuren scripts
 @ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_CNTRL_SSH_PORT% "sudo chmod +x /home/vagrant/install-mysqlserver.sh"
 @ssh -i %USERPROFILE%\.ssh\id_rsa %OSTICKET_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %OSTICKET_DEMO_VM_H10_SSH_PORT% "sudo chmod +x /home/vagrant/install-webserver-UB22.sh"
 :: 
