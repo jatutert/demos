@@ -1,0 +1,102 @@
+# 
+#
+# Ansible Demo Inventory bestand
+# Vagrant Omgeving
+# 
+# Versie 12 Augustus 2024
+# Gemaakt door John Tutert
+# 
+#
+#
+# 
+# #################################################################
+# wachtwoord sudo voor ansible 
+# #################################################################
+#
+#
+#
+#
+[ansibledemo]
+#
+#
+# Ubuntu 2204 DEMO
+#
+ulx-s-2204-l-a-[010:011] ansible_sudo_pass=vagrant
+#
+# Uubntu 2404 DEMO
+#
+u24-lts-s-iacas-[001:002] ansible_sudo_pass=vagrant
+#
+#
+#
+#
+# ###################################################################
+# Overzicht van alle servers binnen de demo
+# ###################################################################
+#
+#
+#
+#
+[demoservers]
+#
+# 
+# https://stackoverflow.com/questions/33280244/ssh-error-permission-denied-publickey-password-in-ansible
+# Voorkomen van permission denied door ssh pass en user
+# 
+# Ubuntu 2204 demo
+#
+ulx-s-2204-l-a-[010:011] ansible_ssh_pass=vagrant ansible_ssh_user=vagrant 
+#
+# Ubuntu 2404 demo 
+#
+u24-lts-s-iacas-[001:002] ansible_ssh_pass=vagrant ansible_ssh_user=vagrant 
+#
+
+# ########################################################################
+# Overzicht van alle servers in Nederland
+# ########################################################################
+#
+#
+#
+#
+[netherlands]
+#
+#
+# Ubuntu 2204 demo
+#
+ulx-s-2204-l-a-[010:011]
+#
+# Ubuntu 2404 demo 
+#
+u24-lts-s-iacas-[001:002]
+#
+
+# ########################################################################
+# Overzicht van alle servers in Duitsland
+# ######################################################################## 
+#
+#
+#
+#
+[germany]
+#
+#
+#
+#
+# ulx-s-2204-l-a-011
+
+
+# ##########################################################################
+# Overzicht van alle servers in Europa 
+# ##########################################################################
+#
+#
+#
+#
+[europe:children]
+#
+#
+#
+#
+netherlands
+germany
