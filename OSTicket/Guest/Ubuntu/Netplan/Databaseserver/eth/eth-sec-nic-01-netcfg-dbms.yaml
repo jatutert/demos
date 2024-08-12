@@ -6,9 +6,9 @@
 # 
 # DBMS
 #
-# Nameserver 192.168.200.254 Windows Server 2019 as Router 
+# Nameserver  192.168.200.254         Windows Server 2019 as Router 
 # Nameservers 145.2.14.10 145.2.14.11 Saxion DNS EduRoam
-# Nameservers 8.8.88 8.8.4.4 Google 
+# Nameservers 8.8.88 8.8.4.4          Google 
 #
 #
 # Created by John Tutert
@@ -19,6 +19,8 @@ network:
   ethernets:
     eth0:
       dhcp4: true     
+      nameservers:
+          addresses: [145.2.14.10, 145.2.14.11, 8.8.8.8, 8.8.4.4]
     eth1:
       dhcp4: false
       addresses: 
