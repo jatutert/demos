@@ -2,7 +2,7 @@
 # Saxion HBOICT
 #
 # Introductie Infrastructuren 
-# Infrastructuur en ServiceManagement 
+# OICT05 Infrastructuur en ServiceManagement 
 # 
 # DBMS
 #
@@ -14,31 +14,49 @@
 # Created by John Tutert
 # For Personal or Educational use only
 #
-# 12 augustus 2024
+# 14 augustus 2024
 #
 #
 network:
-  ethernets:
+    version: 2
+    renderer: networkd
+    ethernets:
+    #
+    # NAT
+    #
     eth0:
         dhcp4: true
         nameservers:
             addresses:
-            - 145.2.14.10 
-            - 145.2.14.11 
+            # Saxion
+            - 145.2.14.10
+            - 145.2.14.11
+            # Google
             - 8.8.8.8
             - 8.8.4.4
+    #
+    # Introductie Infrastructuren 
+    #
+    # Host-Only
+    # VMNet3
+    #
     eth1:
         dhcp4: false
         addresses:
             - 192.168.200.12/24
         routes: 
-            - to: default 
-        via:  192.168.200.254
+            # - to: 0.0.0.0/0
+            - to: default
+              via: 192.168.200.254
+              # on-link: true
+              # metric: 100
         nameservers:
-            addresses: 
+            addresses:
+            # Windows Server 2022 as Router
             - 192.168.200.254
+            # Saxion
             - 145.2.14.10
             - 145.2.14.11
+            # Google
             - 8.8.8.8
             - 8.8.4.4
-  version: 2
