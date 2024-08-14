@@ -9,25 +9,45 @@
 #
 # DOCKER Controller
 #
-# Versie 12 augustus 2024
+# Versie 14 augustus 2024
 #
 # Gemaakt door John Tutert
 # 
 # For Personal and educational use only 
 #
 network:
-  ethernets:
-    eth0:
-      dhcp4: true
-      dhcp6: false
-      nameservers:
-          addresses: [145.2.14.10, 145.2.14.11, 8.8.8.8, 8.8.4.4]
-    eth1:
-      dhcp4: false
-      addresses: 
-      - 10.1.10.70/24
-      gateway4: 10.1.10.1
-      nameservers:
-          addresses: [10.1.10.1, 145.2.14.10, 145.2.14.11, 8.8.8.8, 8.8.4.4]
-      dhcp6: false
-  version: 2
+    version: 2
+    renderer: networkd
+    ethernets:
+        eth0:
+            dhcp4: true
+            dhcp6: false
+            nameservers:
+                addresses:
+                # Saxion
+                - 145.2.14.10
+                - 145.2.14.11
+                # Google
+                - 8.8.8.8
+                - 8.8.4.4
+        eth1:
+            dhcp4: false
+            addresses: 
+                - 10.1.10.70/24
+            routes: 
+                # - to: 0.0.0.0/0
+                - to: default
+                  via: 10.1.10.1
+                # on-link: true
+                # metric: 100
+            nameservers:
+                addresses:
+                # VMWare Workstation
+                - 10.1.10.1
+                # Saxion
+                - 145.2.14.10
+                - 145.2.14.11
+                # Google
+                - 8.8.8.8
+                - 8.8.4.4
+            dhcp6: false

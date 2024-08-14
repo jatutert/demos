@@ -1,0 +1,46 @@
+version: '3.9'
+services:
+  osticket_db:
+    image: mariadb:11.3-jammy
+    container_name: OsTicket_DB
+    security_opt:
+      - no-new-privileges:true
+      - seccomp:unconfined
+      - apparmor:unconfined
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_USER=some_user
+      - MYSQL_PASSWORD=some_password
+      - MYSQL_DATABASE=my_database_name
+    volumes:
+      - /volume1/docker/osticket:/var/lib/mysql:rw
+    restart: on-failure:5
+ 
+  osticket:
+    image: devinsolutions/osticket:latest
+    container_name: OsTicket
+    ports:
+      - 6784:80
+    depends_on:
+      - osticket_db
+    environment:
+       MYSQL_USER: some_user
+       MYSQL_PASSWORD: some_password
+       MYSQL_DATABASE: my_database_name
+       MYSQL_HOST: osticket_db
+       INSTALL_SECRET: MariushostingMariushostingMari13
+       INSTALL_URL: https://osticket.yourname.synology.me
+       INSTALL_NAME: Marius Helpdesk
+       ADMIN_USERNAME: marius
+       ADMIN_PASSWORD: mariushosting
+       ADMIN_FIRSTNAME: Marius
+       ADMIN_LASTNAME: Lixandru
+       ADMIN_EMAIL: yourown@email
+       CRON_INTERVAL: 1
+       SMTP_USER: Your-own-gmail-address
+       SMTP_PASSWORD: Your-own-app-password
+       SMTP_HOST: smtp.gmail.com
+       SMTP_PORT: 587
+       SMTP_FROM: Your-own-gmail-address
+       SMTP_TLS: 1
+    restart: on-failure:5
