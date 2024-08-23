@@ -1,0 +1,30 @@
+#
+# Dockerfile gemaakt door John Tutert
+# 23 augustus 2024
+# 
+# Werkt met VMware VCTL 23 aug 2024 
+# Nog niet getest met Docker in Linux VM 
+#
+
+FROM alpine:3.5
+
+# Installeer de benodige zaken 
+RUN apk update
+RUN apk add py2-pip -q
+RUN apk add py2-flask -q
+# RUN apk add curl -q
+RUN apk add wget -q
+
+# Maak directories
+RUN mkdir -p /usr/src/app
+RUN mkdir -p /usr/src/app/templates 
+
+# Bestanden van Github halen
+RUN wget --no-check-certificate -O /usr/src/app/app.py https://raw.githubusercontent.com/jatutert/demos/main/Docker/Dockerfiles/FLASK/app.py
+RUN wget --no-check-certificate -O /usr/src/app/templates/index.html https://raw.githubusercontent.com/jatutert/demos/main/Docker/Dockerfiles/FLASK/index.html
+
+# tell the port number the container should expose
+EXPOSE 5000
+
+# run the application
+CMD ["python", "/usr/src/app/app.py"]
