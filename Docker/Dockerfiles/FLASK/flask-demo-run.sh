@@ -8,11 +8,31 @@
 #
 # For Personal or educational use only 
 #
-docker run -p 9001:5000 -d --name website-one flask-demo:v100
-docker run -p 9002:5000 -d --name website-two flask-demo:v100
-docker run -p 9003:5000 -d --name website-three flask-demo:v100
-docker run -p 9004:5000 -d --name website-four flask-demo:v100
-docker run -p 9005:5000 -d --name website-five flask-demo:v100
+if [ $(id -u) -eq 0 ]; then
+   echo "This script NOT be started with sudo !"
+   exit 1
+fi 
+#
+docker stop website-one
+docker rm website-one --force
+#
+docker stop website-two
+docker rm website-two --force
+#
+docker stop website-three
+docker rm website-three --force
+#
+docker stop website-four
+docker rm website-four --force
+#
+docker stop website-five
+docker rm website-five --force
+#
+docker run -p 9001:5000 -d --name website-one   flask-demo:latest
+docker run -p 9002:5000 -d --name website-two   flask-demo:latest
+docker run -p 9003:5000 -d --name website-three flask-demo:latest
+docker run -p 9004:5000 -d --name website-four  flask-demo:latest
+docker run -p 9005:5000 -d --name website-five  flask-demo:latest
 #
 # meerdere talen demo 
 # docker run -p 9001:5000 -d --name flask-demo-de flask-demo-de:v100

@@ -8,7 +8,15 @@
 #
 # For Personal or educational use only 
 #
-docker build -f /home/vagrant/docker/flask-demo/flask-demo-dkr-file -t flask-demo:v100 .
+#
+if [ $(id -u) -eq 0 ]; then
+   echo "This script NOT be started with sudo !"
+   exit 1
+fi 
+#
+docker rmi flask-demo:latest
+#
+docker build -f /home/$USER/docker/flask-demo/flask-demo-dkr-file -t flask-demo:latest .
 # docker build -f ./flask-demo-dkr-file -t flask-demo:v100 .
 #
 #
