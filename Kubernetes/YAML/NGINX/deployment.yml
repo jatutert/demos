@@ -1,26 +1,57 @@
 #
+#
+# Kubernetes demo stap 1
 # 
+# Maken Deployment
+#
+#
 # Te downloaden vanaf
 # https://raw.githubusercontent.com/kubernetes/website/main/content/en/examples/controllers/nginx-deployment.yaml
-# 
 # Versie is website is nieuwer dan dit bestand
+#
+# Toelichtingen in dit bestand op basis van 
+# https://medium.com/@mrdevsecops/kubernetes-deployment-yaml-walkthrough-267cc5b5dfe2
 # 
+#
+# The version of the Kubernetes API you're using to create the object.
 apiVersion: apps/v1
+# This is the type of Kubernetes object. In this case, we’re creating a deployment.
+# ################################### DEPLOYMENT #####################################################
 kind: Deployment
+# The metadata houses information that describes the object briefly
+# The information in the metadata usually contains the name you want to give the object 
+# (deployment in our case), the labels, and the annotation.
+# name the object is the only mandatory field and the remaining are optional
+#
+# The metadata field includes the name of the deployment and labels for identifying it.
 metadata:
-  name: nginx-deployment
+    name: nginx-deployment
+# First, the replicas that define the number pod of instances that deploy and should keep alive.
+# Next, we use a label selector to tell the deployment which pods are part of the deployment.
+# This essentially says all the pods matching these labels are grouped in our deployment.
+# After that, we have the template object. 
+# It’s essentially a pod template packed inside our deployment spec.
+# When the deployment creates pods, it will create them using this template!
+# For this example, we are deploying a replicate with two pods of the instance with an nginx docker image.
 spec:
-  selector:
-    matchLabels:
-      app: nginx
-  replicas: 2 # tells deployment to run 2 pods matching the template
-  template:
-    metadata:
-      labels:
-        app: nginx
+    # Defines how to identify pods managed by the deployment
+    selector:
+        matchLabels:
+            app: nginx
+    # ##################################### REPLICAS ################################################
+    # Maak 2 pods zoals opgegeven onder template 
+    replicas: 2
+    # ##################################### POD #####################################################
+    # The template section contains the actual template for the pod
+    # This section defines the metadata that each pod will have with the specs (container definition)
+    # Describes the pods, including the containers, their images, and other configuration settings.
+    template:
+        metadata:
+            labels:
+                app: nginx
     spec:
-      containers:
-      - name: nginx
-        image: nginx:1.14.2
-        ports:
-        - containerPort: 80
+        containers:
+        - name: nginx
+          image: nginx:1.14.2
+          ports:
+          - containerPort: 80

@@ -1,0 +1,21 @@
+# Door hostPort op 0 te zetten, laat je Kubernetes een willekeurige vrije poort toewijzen aan elke container
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-demo
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: flask-demo
+  template:
+    metadata:
+      labels:
+        app: flask-demo
+    spec:
+      containers:
+      - name: flask-demo
+        image: flask-demo:latest
+        ports:
+        - containerPort: 5000
+          hostPort: 0
