@@ -7,4 +7,11 @@ Some are still in alpha version and other ones are more advanced !
 
 ## OSTicket
 
-Runs on Ubuntu 22.04 LTS Virtual Machines within Oracle VM VirtualBOX
+This demo environment that consists of two virtual machines. 
+The first virtual machine runs the web server. 
+The other virtual machine runs the database server. 
+
+This environment automatically creates the virtual machines mentioned above and provides these virtual machines with all the software. 
+However, the configuration of OSTicket still needs to be done manually. 
+It is planned to make this automatic in the future as well. 
+Unfortunately, I have not reached that point yet. 
