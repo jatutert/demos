@@ -44,5 +44,20 @@ exit
 
 ```shell
 minikube start --no-kubernetes
+```
+
+```shell
+minikube ssh "curl -o /home/docker/ubuntu-config-V3-latest.sh https://raw.githubusercontent.com/jatutert/Ubuntu-Config/main/ubuntu-config-V3-latest.sh"
+minikube ssh "sudo chmod +x /home/docker/ubuntu-config-V3-latest.sh"
+minikube ssh "sudo /home/docker/ubuntu-config-V3-latest.sh minikube"
+minikube ssh "/home/docker/docker/flask-demo/flask-image-build.sh"
+minikube ssh "/home/docker/docker/flask-demo/flask-demo-run.sh"
+minikube ip
 minikube ssh
+```
+
+```shell
+minikube stop
+minikube delete
+exit
 ```
