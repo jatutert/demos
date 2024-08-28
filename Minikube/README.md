@@ -21,3 +21,28 @@ In the background, Minikube does use a virtual machine.
 This virtual machine can run on Oracle Virtualbox but also on VMware Workstation Pro. 
 The Windows folder mainly contains command files for controlling Minikube to give demos. 
 
+```shell
+winget install --id Kubernetes.minikube
+winget install -e --id Kubernetes.kubectl
+exit
+```
+
+```shell
+Setx MINIKUBE_IN_STYLE "false"
+Setx MINIKUBE_HOME "The directory you want the virtual machine be created"
+exit
+```
+
+```shell
+minikube config set memory 8192
+minikube config set cpus 4 
+minikube config set driver vmware 
+minikube config set WantBetaUpdateNotification true
+minikube config set WantVirtualBoxDriverWarning false
+exit
+```
+
+```shell
+minikube start --no-kubernetes
+minikube ssh
+```
