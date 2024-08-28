@@ -2,7 +2,11 @@
 
 Sometimes you need/want to demonstrate e.g. Docker to your students or another person. 
 So you need a demonstration enviroment. But you don't want to do everything manually. 
-This repository has several scripted demonstration environments. 
+
+This repository contains files that are used to create an environment within a virtuele machine for demonstration. 
+You don't have to take any action. The configuration script uses these files within the virtual machine. 
+The only action you have to take is spinning up the virtual machine and then start the script. 
+This is described below. 
 
 ## [Step 0]
 
