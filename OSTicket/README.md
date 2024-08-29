@@ -18,9 +18,24 @@ Unfortunately, I have not reached that point yet.
 
 ### Starting the virtual machines
 
+Sizing for the Linux Virtual machines: 
+S = 2 GB RAM
+L = 4 GB RAM
+XL = 8 GB RAM 
+
+Below an example how to start the XL version of the virtual machines (e.g. U24-LTS-S-WSRV-XL-001)
+Change XL to L or S for smaller size (e.g. U24-LTS-S-WSRV-S-001)
+
 ```shell
-vagrant up U24-LTS-S-DBMS-XL-001 U24-LTS-S-WSRV-XL-001 --parallel --timestamp
-vagrant up W11-ENT-D-OSTKT-CLNT W22-STD-S-OSTKT-RTR --parallel --timestamp
+vagrant up U24-LTS-S-DBMS-XL-001 
+vagrant up U24-LTS-S-WSRV-XL-001
+```
+
+Starting the Windows virtual machines 
+
+```shell
+vagrant up W11-ENT-D-OSTKT-CLNT 
+vagrant up W22-STD-S-OSTKT-RTR 
 ```
 
 ### Configuring the Linux virtual machines 
@@ -32,14 +47,22 @@ vagrant ssh U24-LTS-S-WSRV-XL-001 --command "sudo /home/vagrant/ubuntu-config-V3
 
 ### Give demonstration to your public (e.g. students) 
 
+S = 2 GB RAM
+L = 4 GB RAM
+XL = 8 GB RAM 
+
+Below an example how to SSH to the XL version of the virtual machines (e.g. U24-LTS-S-WSRV-XL-001)
+Change XL to L or S for smaller size (e.g. U24-LTS-S-WSRV-S-001)
+The size must be the same size as defined at the starting of the virtual machine. 
+
 Database Server
 ```shell
-vagrant ssh U24-LTS-S-DBMS-001
+vagrant ssh U24-LTS-S-DBMS-XL-001
 ```
 
 Webserver
 ```shell
-vagrant ssh U24-LTS-S-WSRV-001
+vagrant ssh U24-LTS-S-WSRV-XL-001
 ```
 
 Windows 11 
@@ -51,5 +74,19 @@ Windows Server 2022 Standard
 ```shell
 vagrant ssh W22-STD-S-OSTKT-RTR
 ```
+
+## License / Copyright / Trademarks 
+> - Vagrant by Hashicorp Inc. (hashicorp.com) 
+> - Virtualbox by Oracle Corporation (oracle.com) 
+> - VMware by VMware Company (vmware.com) / Broadcom (broadcom.com) 
+> - Windows by Microsoft Corporation (microsoft.com)
+
+Everything I describe is intended for personal or educational use. In my case, that is primarily educational use. 
+
+All references to and quotations from external sources are licensed and/or copyright the respective owners. 
+I make no claim to ownership of these sources. 
+References to and quotations from these sources have been used on the basis of assumption of reasonableness and fair use. 
+To my knowledge, no copyright or other rights have been infringed. 
+If it is believed that references to and/or quotations from certain external sources violate any rules, rights or interests, please contact.
 
 
