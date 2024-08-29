@@ -21,17 +21,24 @@ In the background, Minikube does use a virtual machine.
 This virtual machine can run on Oracle Virtualbox but also on VMware Workstation Pro. 
 The Windows folder mainly contains command files for controlling Minikube to give demos. 
 
+### Installation
+
 ```shell
 winget install --id Kubernetes.minikube
 winget install -e --id Kubernetes.kubectl
+winget install --id cURL.cURL
 exit
 ```
+The terminal MUST be closed to load the environment settings. Please don't skip the exit step. 
+
+### Configuration 
 
 ```shell
 Setx MINIKUBE_IN_STYLE "false"
 Setx MINIKUBE_HOME "The directory you want the virtual machine be created"
 exit
 ```
+The terminal MUST be closed to load the environment settings. Please don't skip the exit step. 
 
 ```shell
 minikube config set memory 8192
@@ -41,20 +48,66 @@ minikube config set WantBetaUpdateNotification true
 minikube config set WantVirtualBoxDriverWarning false
 exit
 ```
+Above are my configuration settings for memory and cpu. Change whatever you like best ! 
+
+### Starting 
+
+Starting Minikube with only Docker running inside the virtual machine:
 
 ```shell
 minikube start --no-kubernetes
 ```
 
+Starting Mininkube with Docker and Kubernetes running inside the virtual machine:
+
+```shell
+minikube start
+```
+
+### Setting up the demo environment within the virtual machine with docker 
+
+Download script and run the script within the virtual machine 
 ```shell
 minikube ssh "curl -o /home/docker/ubuntu-config-V3-latest.sh https://raw.githubusercontent.com/jatutert/Ubuntu-Config/main/ubuntu-config-V3-latest.sh"
 minikube ssh "sudo chmod +x /home/docker/ubuntu-config-V3-latest.sh"
 minikube ssh "sudo /home/docker/ubuntu-config-V3-latest.sh minikube"
+```
+
+Building custom image for demonstration
+```shell
 minikube ssh "/home/docker/docker/flask-demo/flask-image-build.sh"
 minikube ssh "/home/docker/docker/flask-demo/flask-demo-run.sh"
 minikube ip
+```
+### Entering the virtual machine
+
+If you want to use Docker, then you need to get inside the virtual machine. 
+This can be done via SSH
+
+```shell
 minikube ssh
 ```
+
+### Demo Kubernetes
+
+Download YAML files 
+```shell
+curl -o %HOMEDRIVE%\Downloads\deployment.yml https://raw.githubusercontent.com/jatutert/demos/main/Kubernetes/YAML/NGINX/deployment.yml
+curl -o %HOMEDRIVE%\Downloads\deployment-update.yml https://raw.githubusercontent.com/jatutert/demos/main/Kubernetes/YAML/NGINX/deployment-update.yml
+curl -o %HOMEDRIVE%\Downloads\deployment-scale.yml https://raw.githubusercontent.com/jatutert/demos/main/Kubernetes/YAML/NGINX/deployment-scale.yml
+```
+
+Give demonstration
+```shell
+kubectl apply -f %HOMEDRIVE%\Downloads\deployment.yml
+kubectl expose deployment nginx-deployment --type="NodePort" --port 80
+kubectl describe deployment nginx-deployment
+kubectl apply -f %HOMEDRIVE%\Downloads\deployment-update.yml
+kubectl get pods -l app=nginx
+kubectl apply -f %HOMEDRIVE%\Downloads\deployment-scale.yml
+kubectl get pods -l app=nginx
+```
+### Shutting down
 
 ```shell
 minikube stop
