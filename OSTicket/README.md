@@ -19,9 +19,9 @@ Unfortunately, I have not reached that point yet.
 ### Starting the virtual machines
 
 Sizing for the Linux Virtual machines: 
-S = 2 GB RAM
-L = 4 GB RAM
-XL = 8 GB RAM 
+S = 2 GB RAM.
+L = 4 GB RAM.
+XL = 8 GB RAM. 
 
 Below an example how to start the XL version of the virtual machines (e.g. U24-LTS-S-WSRV-XL-001)
 Change XL to L or S for smaller size (e.g. U24-LTS-S-WSRV-S-001)
@@ -47,9 +47,10 @@ vagrant ssh U24-LTS-S-WSRV-XL-001 --command "sudo /home/vagrant/ubuntu-config-V3
 
 ### Give demonstration to your public (e.g. students) 
 
-S = 2 GB RAM
-L = 4 GB RAM
-XL = 8 GB RAM 
+Sizing for the Linux Virtual machines: 
+S = 2 GB RAM.
+L = 4 GB RAM.
+XL = 8 GB RAM. 
 
 Below an example how to SSH to the XL version of the virtual machines (e.g. U24-LTS-S-WSRV-XL-001)
 Change XL to L or S for smaller size (e.g. U24-LTS-S-WSRV-S-001)
@@ -73,6 +74,43 @@ vagrant ssh W11-ENT-D-OSTKT-CLNT
 Windows Server 2022 Standard 
 ```shell
 vagrant ssh W22-STD-S-OSTKT-RTR
+```
+
+### Shutdown 
+
+For shutting down the virtual machines (e.g. at the end of the lesson) execute the steps below: 
+
+```shell
+vagrant halt U24-LTS-S-DBMS-XL-001
+vagrant halt U24-LTS-S-WSRV-XL-001
+vagrant halt W11-ENT-D-OSTKT-CLNT
+vagrant halt W22-STD-S-OSTKT-RTR
+```
+
+### Restart
+
+For booting the virtual machines (e.g. new lesson or at home) execute the steps below: 
+
+```shell
+vagrant up U24-LTS-S-DBMS-XL-001
+vagrant up U24-LTS-S-WSRV-XL-001
+vagrant up W11-ENT-D-OSTKT-CLNT
+vagrant up W22-STD-S-OSTKT-RTR
+```
+
+### Remove
+
+For complete removal of the virtual machines execute the steps below: 
+
+```shell
+vagrant halt U24-LTS-S-DBMS-XL-001
+vagrant halt U24-LTS-S-WSRV-XL-001
+vagrant halt W11-ENT-D-OSTKT-CLNT
+vagrant halt W22-STD-S-OSTKT-RTR
+vagrant destroy U24-LTS-S-DBMS-XL-001 --force
+vagrant destroy U24-LTS-S-WSRV-XL-001 --force
+vagrant destroy W11-ENT-D-OSTKT-CLNT --force
+vagrant destroy W22-STD-S-OSTKT-RTR --force 
 ```
 
 ## License / Copyright / Trademarks 
