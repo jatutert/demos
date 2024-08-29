@@ -15,3 +15,41 @@ This environment automatically creates the virtual machines mentioned above and 
 However, the configuration of OSTicket still needs to be done manually. 
 It is planned to make this automatic in the future as well. 
 Unfortunately, I have not reached that point yet. 
+
+### Starting the virtual machines
+
+```shell
+vagrant up U24-LTS-S-DBMS-XL-001 U24-LTS-S-WSRV-XL-001 --parallel --timestamp
+vagrant up W11-ENT-D-OSTKT-CLNT W22-STD-S-OSTKT-RTR --parallel --timestamp
+```
+
+### Configuring the Linux virtual machines 
+
+```shell
+vagrant ssh U24-LTS-S-DBMS-XL-001 --command "sudo /home/vagrant/ubuntu-config-V3-latest.sh introinfra"
+vagrant ssh U24-LTS-S-WSRV-XL-001 --command "sudo /home/vagrant/ubuntu-config-V3-latest.sh introinfra" 
+```
+
+### Give demonstration to your public (e.g. students) 
+
+Database Server
+```shell
+vagrant ssh U24-LTS-S-DBMS-001
+```
+
+Webserver
+```shell
+vagrant ssh U24-LTS-S-WSRV-001
+```
+
+Windows 11 
+```shell
+vagrant ssh W11-ENT-D-OSTKT-CLNT
+```
+
+Windows Server 2022 Standard 
+```shell
+vagrant ssh W22-STD-S-OSTKT-RTR
+```
+
+
