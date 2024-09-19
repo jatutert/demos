@@ -12,11 +12,11 @@
 ::  
 :: Stoppen eventueel draaiende omgeving
 @echo STOP eventueel draaiende omgeving
-@minikube stop
+@minikube stop --all
 ::
 :: Verwijderen eventueel aanwezige omgeving
 @echo VERWIJDER eventueel aanwezige omgeving 
-@minikube delete
+@minikube delete --purge
 ::
 :: Omgevingsvariabelen instellen
 :: Geen emoji weergeven
@@ -33,8 +33,10 @@
 @minikube config set cpus 4 
 ::	@minikube config set driver virtualbox 
 @minikube config set driver vmware 
+@minikube config set WantUpdateNotification true
 @minikube config set WantBetaUpdateNotification true
 @minikube config set WantVirtualBoxDriverWarning false
+@minikube config view
 :: @minikube config view 
 ::
 :: Minikube starten voor alleen Download
@@ -50,8 +52,8 @@
 @minikube start --no-kubernetes
 :: 
 :: IP adres van Virtuele machine weergeven
-@echo Virtuele machine is bereikbaar op IP-adres
-@minikube ip
+:: @echo Virtuele machine is bereikbaar op IP-adres
+:: @minikube ip
 :: @minikube service list
 :: @minikube cache list
 :: @minikube image ls
@@ -59,7 +61,7 @@
 :: Configuratie Minikube VM
 :: Directories maken Scripts maken Docker Compose installatie 
 @echo Configuratie Minikube virtuele machine gestart ...
-@minikube ssh "curl -o /home/docker/ubuntu-config-V3-latest.sh https://raw.githubusercontent.com/jatutert/Ubuntu-Config/main/ubuntu-config-V3-latest.sh"
+@minikube ssh "curl -s -o /home/docker/ubuntu-config-V3-latest.sh https://raw.githubusercontent.com/jatutert/Ubuntu-Config/main/ubuntu-config-V3-latest.sh"
 @minikube ssh "sudo chmod +x /home/docker/ubuntu-config-V3-latest.sh"
 @minikube ssh "sudo /home/docker/ubuntu-config-V3-latest.sh minikube"
 ::
@@ -96,5 +98,9 @@ minikube ssh "/home/docker/docker/flask-demo/flask-demo-run.sh"
 :: @minikube ssh "docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest"
 ::
 :: @minikube ssh "/home/docker/docker/flask-demo/flask-image-build.sh"
-:: 
+::
+:: IP adres van Virtuele machine weergeven
+@echo Virtuele machine is bereikbaar op IP-adres
+@minikube ip
+::
 @minikube ssh
