@@ -27,8 +27,9 @@
 :: @echo Starten // DBMS // WebServer // 
 @echo Starten // DBMS //  
 @echo. 
-@vagrant up U24-LTS-S-DBMS-XL-001 
-:: @vagrant up U24-LTS-S-WSRV-XL-001
+@vagrant up U24-LTS-S-DBMS-L-001 
+::	@vagrant up U24-LTS-S-DBMS-XL-001 
+::	@vagrant up U24-LTS-S-WSRV-XL-001
 ::
 ::
 :: Empty Working Sets
@@ -67,7 +68,8 @@
 ::	@RAMMap.exe -Es
 ::	@RAMMap.exe -Em
 ::
-@echo vagrant ssh U24-LTS-S-DBMS-XL-001 voor database server
+::	@echo vagrant ssh U24-LTS-S-DBMS-XL-001 voor database server
+@echo vagrant ssh U24-LTS-S-DBMS-L-001 voor database server
 ::	@echo vagrant ssh U24-LTS-S-WSRV-001 voor webserver server
 ::	@echo vagrant ssh W11-ENT-D-OSTKT-CLNT voor client
 ::	@echo vagrant ssh W22-STD-S-OSTKT-RTR voor Router

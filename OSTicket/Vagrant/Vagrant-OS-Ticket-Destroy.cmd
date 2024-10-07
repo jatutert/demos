@@ -17,22 +17,28 @@
 @RAMMap.exe -Es
 ::
 :: Verwijderen DBMS
-@vagrant halt U24-LTS-S-DBMS-S-001
-@vagrant halt U24-LTS-S-DBMS-L-001
-@vagrant halt U24-LTS-S-DBMS-XL-001
+:: @vagrant halt U24-LTS-S-DBMS-S-001
+:: @vagrant halt U24-LTS-S-DBMS-L-001
+:: @vagrant halt U24-LTS-S-DBMS-XL-001
 ::
-@vagrant destroy U24-LTS-S-DBMS-S-001 --force
+:: @vagrant destroy U24-LTS-S-DBMS-S-001 --force
 @vagrant destroy U24-LTS-S-DBMS-L-001 --force
-@vagrant destroy U24-LTS-S-DBMS-XL-001 --force
+:: @vagrant destroy U24-LTS-S-DBMS-XL-001 --force
 ::
 :: Verwijderen Webserver
-@vagrant halt U24-LTS-S-WSRV-S-001
-@vagrant halt U24-LTS-S-WSRV-L-001
-@vagrant halt U24-LTS-S-WSRV-XL-001
+:: @vagrant halt U24-LTS-S-WSRV-S-001
+:: @vagrant halt U24-LTS-S-WSRV-L-001
+:: @vagrant halt U24-LTS-S-WSRV-XL-001
 ::
-@vagrant destroy U24-LTS-S-WSRV-S-001 --force
+:: @vagrant destroy U24-LTS-S-WSRV-S-001 --force
 @vagrant destroy U24-LTS-S-WSRV-L-001 --force
-@vagrant destroy U24-LTS-S-WSRV-XL-001 --force
+:: @vagrant destroy U24-LTS-S-WSRV-XL-001 --force
+::
+::
+vagrant destroy W10-ENT-D-OSTKT-CLNT --force
+::
+vagrant destroy W22-STD-S-OSTKT-RTR --force
+::
 ::
 :: Thats all folks
 ::
