@@ -25,9 +25,9 @@
 ::
 :: Starten Linux Virtuele Machines 
 :: @echo Starten // DBMS // WebServer // 
-@echo Starten // DBMS //  
+@echo Starten // WSRV //  
 @echo. 
-@vagrant up U24-LTS-S-DBMS-L-001 
+@vagrant up U24-LTS-S-WSRV-L-001 
 :: @vagrant up U24-LTS-S-WSRV-XL-001
 ::
 :: Empty Working Sets
@@ -53,7 +53,7 @@
 @echo Configuratie Virtuele machines ...
 @echo.
 ::	Configuratie DBMS
-@vagrant ssh U24-LTS-S-DBMS-L-001 --command "sudo /home/vagrant/ubuntu-config-V3-latest.sh introinfra" 
+@vagrant ssh U24-LTS-S-WSRV-L-001 --command "sudo /home/vagrant/ubuntu-config-V3-latest.sh introinfra" 
 ::
 ::	@RAMMap.exe -Ew
 ::	@RAMMap.exe -Es
@@ -70,7 +70,7 @@
 :: Empty Modified Page list 
 @RAMMap.exe -Em
 ::
-@echo vagrant ssh U24-LTS-S-DBMS-L-001 voor database server
+@echo vagrant ssh U24-LTS-S-WSRV-L-001 voor WEB server
 ::	@echo vagrant ssh U24-LTS-S-WSRV-001 voor webserver server
 ::	@echo vagrant ssh W11-ENT-D-OSTKT-CLNT voor client
 ::	@echo vagrant ssh W22-STD-S-OSTKT-RTR voor Router
