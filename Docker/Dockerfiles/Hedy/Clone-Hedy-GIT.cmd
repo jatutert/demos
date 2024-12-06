@@ -1,0 +1,1 @@
+git clone --depth 1 https://github.com/hedyorg/hedy.git "D:\OneDrive\OneDrive - Saxion\Repository-Playground\Development\GitHub-JATUTERT-Repositories\demos\Docker\Dockerfiles\Hedy"

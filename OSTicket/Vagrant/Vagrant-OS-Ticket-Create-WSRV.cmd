@@ -13,7 +13,7 @@
 @echo off
 @cls
 @echo.
-@echo Starten OSTicket Virtuele machines (DBMS)
+@echo Starten OSTicket Virtuele machines (WSRV)
 @echo. 
 ::
 :: Empty Working Sets

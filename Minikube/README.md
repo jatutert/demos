@@ -21,24 +21,25 @@ In the background, Minikube does use a virtual machine.
 This virtual machine can run on Oracle Virtualbox but also on VMware Workstation Pro. 
 The Windows folder mainly contains command files for controlling Minikube to give demos. 
 
-### Installation
+### [Step 1] Installation
 
 ```shell
-winget install --id Kubernetes.minikube
-winget install -e --id Kubernetes.kubectl
-winget install --id cURL.cURL
+winget update
+winget install --id Kubernetes.minikube --accept-package-agreements --accept-source-agreements
+winget install --id Kubernetes.kubectl --accept-package-agreements --accept-source-agreements 
+winget install --id cURL.cURL --accept-package-agreements --accept-source-agreements 
 exit
 ```
 The terminal MUST be closed to load the environment settings. Please don't skip the exit step. 
 
-### Configuration 
+### [Step 2] Configuration 
 
 Turn off emojij and colors in Minikube. 
 Define directory for virtual machine with Docker or Kubernetes.
 
 ```shell
-Setx MINIKUBE_IN_STYLE "false"
-Setx MINIKUBE_HOME "The directory you want the virtual machine to be stored e.g. C:\VirtualMachine\MiniKube\"
+Setx /M MINIKUBE_IN_STYLE "false"
+Setx /M MINIKUBE_HOME "The directory you want the virtual machine to be stored e.g. C:\VirtualMachine\MiniKube\"
 exit
 ```
 
@@ -53,25 +54,21 @@ minikube config set driver vmware
 minikube config set WantUpdateNotification true 
 minikube config set WantBetaUpdateNotification true
 minikube config set WantVirtualBoxDriverWarning false
+minikube config view
 exit
 ```
 Above are my configuration settings for memory and cpu. Change whatever you like best ! 
 
-### Starting 
+### [STEP 3] DOCKER DEMONSTRATION
+
+If you want to demonstrate only Docker and NO Kubernetes, then execute the following steps. 
+Move to STEP 3 Kubernetes demonstration if you want to demonstrate Kubernetes (NO Docker)
 
 Starting Minikube with only Docker running inside the virtual machine:
 
 ```shell
 minikube start --no-kubernetes
 ```
-
-Starting Mininkube with Docker and Kubernetes running inside the virtual machine:
-
-```shell
-minikube start
-```
-
-### Setting up the demo environment within the virtual machine with docker 
 
 Download script and run the script within the virtual machine 
 ```shell
@@ -86,7 +83,6 @@ minikube ssh "/home/docker/docker/flask-demo/flask-image-build.sh"
 minikube ssh "/home/docker/docker/flask-demo/flask-demo-run.sh"
 minikube ip
 ```
-### Entering the virtual machine
 
 If you want to use Docker, then you need to get inside the virtual machine. 
 This can be done via SSH
@@ -95,8 +91,15 @@ This can be done via SSH
 minikube ssh
 ```
 
-### Demonstration of Kubernetes using Minikube 
+### [STEP 3] KUBERNETES DEMONSTRATION
 
+If you want to demonstrate Kubernetes, then execute the following steps: 
+
+Starting Mininkube with Docker and Kubernetes running inside the virtual machine:
+
+```shell
+minikube start
+```
 Download example YAML files within the virtual machine 
 ```shell
 minikube ssh
@@ -115,6 +118,7 @@ kubectl get pods -l app=nginx
 kubectl apply -f %HOMEDRIVE%\Downloads\deployment-scale.yml
 kubectl get pods -l app=nginx
 ```
+
 ### Shutting down
 
 ```shell

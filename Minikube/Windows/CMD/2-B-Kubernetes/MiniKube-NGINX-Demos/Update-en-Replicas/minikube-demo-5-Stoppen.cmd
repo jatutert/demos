@@ -8,6 +8,9 @@
 @CLS
 @ECHO Stoppen eventueel actieve minikube 
 @minikube stop
-@ECHO Verwijderen eventueel aanwezige minikube virtuele machine 
-minikube delete
+::
+::	Opschonen alleen via Minikube Install en Config Script
+::
+:: @ECHO Verwijderen eventueel aanwezige minikube virtuele machine 
+:: minikube delete
 :: 
