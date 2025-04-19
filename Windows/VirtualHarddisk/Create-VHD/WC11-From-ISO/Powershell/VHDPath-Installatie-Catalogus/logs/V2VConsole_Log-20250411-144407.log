@@ -1,0 +1,14 @@
+The log file name: 'logs\V2VConsole_Log-20250411-144407.log' (PID 6692)
+4/11 14:44:07.388 3b14 Facility ???INFO: main: SetDllDirectory: C:\Program Files\StarWind Software\StarWind V2V Converter\lib
+4/11 14:44:07.388 3b14 Facility ???INFO: main: File Version: 9.0.1.444
+4/11 14:44:07.391 3b14 Facility ???INFO: main: Load language IDR_XML_ENGLISH
+4/11 14:44:07.391 3b14 Facility ???INFO: RunConsole: Version MajorVersion 10, MinorVersion 0, BuildNumber 22631
+4/11 14:44:07.392 3b14 Facility ???INFO: RunConsole: "C:\Program Files\StarWind Software\StarWind V2V Converter\V2V_ConverterConsole.exe"  convert in_file_name="D:\Installatie-Catalogus\VirtualDisks\Virtual-Harddisk-VHD\Windows\Windows-11\W11-Insider-EDU-27774.VHD" out_file_name="D:\Installatie-Catalogus\VirtualDisks\Virtual-Machine-Disk-Format-VMDK\Windows\Windows 11\W11-Insider-EDU-27774.VMDK" out_file_type=ft_vmdk_ws_growable
+4/11 14:44:07.393 3b14 Facility ???INFO: CCommandLineManager::AddParametersForConvertCommand: in_file_name=D:\Installatie-Catalogus\VirtualDisks\Virtual-Harddisk-VHD\Windows\Windows-11\W11-Insider-EDU-27774.VHD
+4/11 14:44:07.393 3b14 Facility ???INFO: CCommandLineManager::AddParametersForConvertCommand: out_file_name=D:\Installatie-Catalogus\VirtualDisks\Virtual-Machine-Disk-Format-VMDK\Windows\Windows 11\W11-Insider-EDU-27774.VMDK
+4/11 14:44:07.393 3b14 Facility ???INFO: CCommandLineManager::AddParametersForConvertCommand: out_file_type=ft_vmdk_ws_growable
+4/11 14:44:07.622 3b14 Facility ???INFO: VMwareFile::NewFile: sFileName - D:\Installatie-Catalogus\VirtualDisks\Virtual-Machine-Disk-Format-VMDK\Windows\Windows 11\W11-Insider-EDU-27774.VMDK
+4/11 14:44:07.622 3b14 Facility ???INFO: VMwareFile::NewFile: SectorType - 125829120
+4/11 14:44:07.622 3b14 Facility ???INFO: VMwareFile::NewFile: EVMDKCreateType - 0
+4/11 14:44:07.622 3b14 Facility ???INFO: VMwareFile::NewFile: EVMDKAdapterType - 0
+4/11 14:44:33.341 3b14 Facility ???INFO: RunConsole: Success

@@ -8,6 +8,7 @@ Some are still in alpha version and other ones are more advanced !
 ## Guest
 
 Main focus is the guest running on top of the hypervisor.
+The Hypervisor is NOT part of this. 
 
 ## Hypervisor
 
