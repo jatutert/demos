@@ -24,10 +24,10 @@ mkdir D:\Virtual-Machines\WSL\Ubuntu\2404\KBRN
 :: 
 ::	Installatie Docker
 wsl --install Ubuntu-24.04 --name U24-LTS-S-DCKR --location D:\Virtual-Machines\WSL\Ubuntu\2404\DCKR
-::	Installatie PodMan
-wsl --install Ubuntu-24.04 --name U24-LTS-S-PDMN --location D:\Virtual-Machines\WSL\Ubuntu\2404\PDMN
-::	Installatie Kubernetes (Minikube) 
-wsl --install Ubuntu-24.04 --name U24-LTS-S-KBRN --location D:\Virtual-Machines\WSL\Ubuntu\2404\KBRN
+::	::	Installatie PodMan
+::	wsl --install Ubuntu-24.04 --name U24-LTS-S-PDMN --location D:\Virtual-Machines\WSL\Ubuntu\2404\PDMN
+::	::	Installatie Kubernetes (Minikube) 
+::	wsl --install Ubuntu-24.04 --name U24-LTS-S-KBRN --location D:\Virtual-Machines\WSL\Ubuntu\2404\KBRN
 ::
 :: Toon overzicht van aanwezige distributies 
 wsl --list
