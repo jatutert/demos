@@ -1,7 +1,7 @@
 ::
 ::	DOCKER DEMO
 ::
-::	MINIKube Edition STEP 1
+::	MINIKube Edition Fase 1 (stap 1 tot en met stap 10) 
 ::
 ::	Minikube Installation Script from Windows Explorer
 ::

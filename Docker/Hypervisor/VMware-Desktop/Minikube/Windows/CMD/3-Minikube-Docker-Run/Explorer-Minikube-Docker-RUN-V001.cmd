@@ -1,7 +1,7 @@
 ::
 ::	DOCKER DEMO
 ::
-::	MINIKube Edition STEP 3
+::	MINIKube Edition Fase 3 (Stap 13 tot en met stap 18) 
 ::
 ::	Minikube Start Demo omgeving from Windows Explorer
 ::
@@ -62,6 +62,27 @@
 ::	=================================================================================================
 ::
 ::
+::	========================================== naslag ======================================
+::	Minikube starten voor alleen Download
+::	@minikube start --download-only
+::
+::	Check of alles in orde is
+::	@minikube start --dry-run
+::
+::	Opties
+::	@minikube start --no-vtx-check --no-kubernetes
+::	@minikube start --no-vtx-check --container-runtime=docker --no-kubernetes
+::
+:: IP adres van Virtuele machine weergeven
+:: @echo Virtuele machine is bereikbaar op IP-adres
+:: @minikube ip
+:: @minikube service list
+:: @minikube cache list
+:: @minikube image ls
+::
+::	===========================================================================================
+::
+::
 ::	:::::::: CONFIGURATIE LINUX VM ::::::::
 ::
 ::	Moet in dit script blijven omdat alleen voor Docker omgeving bedoeld is
@@ -76,18 +97,19 @@
 @echo [Stap 16] Ubuntu Config V3 Latest script uitvoeren met parameter minikube
 @minikube ssh "sudo /home/docker/ubuntu-config-V3-latest.sh minikube"
 ::
-::
-::	:::::::: DOCKER IMAGES MAKEN ::::::::
-::
+@echo [Stap 17] Flask demo image build binnen Minikube VM (Buildroot Linux) 
 minikube ssh "/home/docker/docker/flask-demo/flask-image-build.sh"
-minikube ssh "/home/docker/docker/flask-demo/flask-demo-run.sh"
-:: 
-::	:::::::: IP ADRES VM WEERGEVEN ::::::::
+minikube image ls
 ::
-@echo Virtuele machine is bereikbaar op IP-adres
-@minikube ip
+@echo [Stap 18] Flask demo image run binnen Minikube VM (Buildroot Linux) 
+minikube ssh "/home/docker/docker/flask-demo/flask-demo-run.sh"
+::
+:: @echo Virtuele machine is bereikbaar op IP-adres
+:: @minikube ip
 ::
 @echo Geef minikube ssh commando voor demo omgeving docker
 ::
 @pause
-::	That's ALL Folks
+::
+::	Thats ALL Folks
+::

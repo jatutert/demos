@@ -1,7 +1,7 @@
 ::
 ::	DOCKER DEMO
 ::
-::	MINIKube Edition STEP 2
+::	MINIKube Edition Fase 2 (Stap 10 tot en met Stap 12) (Stap 10 is herhaling) 
 ::
 ::	Minikube Configuratie Script from Windows Explorer
 ::
