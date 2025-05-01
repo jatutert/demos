@@ -13,6 +13,7 @@ if [ $(id -u) -eq 0 ]; then
    exit 1
 fi 
 #
+echo Verwijderen eventueel aanwezige Flask demo 
 docker stop website-one
 docker rm website-one --force
 #
@@ -28,6 +29,7 @@ docker rm website-four --force
 docker stop website-five
 docker rm website-five --force
 #
+echo Starten Flaks demo omgeving 
 docker run -p 9001:5000 -d --name website-one   flask-demo:latest
 docker run -p 9002:5000 -d --name website-two   flask-demo:latest
 docker run -p 9003:5000 -d --name website-three flask-demo:latest

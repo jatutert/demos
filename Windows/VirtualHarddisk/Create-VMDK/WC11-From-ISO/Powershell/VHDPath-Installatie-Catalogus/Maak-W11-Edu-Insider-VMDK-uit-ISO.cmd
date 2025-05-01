@@ -9,6 +9,10 @@
 ::	April 2025
 ::
 ::
+::	Changelog
+::	29apr25	Algemene bestandsnaam zowel VHD als VMDK ipv buildnumber
+
+::
 :: 	Echo Hardware Productkey
 ::	wmic path softwarelicensingservice get OA3xOriginalProductKey
 ::
@@ -34,7 +38,7 @@
 ::  [Stap 2] Converteren VHD naar VMDK (Gebruikt StarWind V2V Converter)
 ::  LET OP! Dit bestand komt in een ANDERE MAP dan VHD te staan
 ::  VHD verwijderen ??? na conversie om ruimte te besparen ???
-"C:\Program Files\StarWind Software\StarWind V2V Converter\V2V_ConverterConsole.exe" convert in_file_name="D:\Installatie-Catalogus\VirtualDisks\Virtual-Harddisk-VHD\Windows\Windows-11\W11-Insider-EDU-27774.VHD" out_file_name="D:\Installatie-Catalogus\VirtualDisks\Virtual-Machine-Disk-Format-VMDK\Windows\Windows 11\W11-Insider-EDU-27774.VMDK" out_file_type=ft_vmdk_ws_growable
+"C:\Program Files\StarWind Software\StarWind V2V Converter\V2V_ConverterConsole.exe" convert in_file_name="D:\Installatie-Catalogus\VirtualDisks\Virtual-Harddisk-VHD\Windows\Windows-11\W11-Education-Insider.VHD" out_file_name="D:\Installatie-Catalogus\VirtualDisks\Virtual-Machine-Disk-Format-VMDK\Windows\Windows 11\W11-Education-Insider.VMDK" out_file_type=ft_vmdk_ws_growable
 ::
 ::  [Stap x] Aanmaken virtuele machine in VMware Workstation Pro
 ::  Hiervoor is script aanwezig onder hypervisor 

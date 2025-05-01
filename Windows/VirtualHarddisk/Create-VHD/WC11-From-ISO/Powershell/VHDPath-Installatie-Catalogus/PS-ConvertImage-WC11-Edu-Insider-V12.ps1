@@ -22,8 +22,8 @@
 # Declareer de parameters voor de conversie
 #
 $ConvertParams = @{
-SourcePath = 'D:\Installatie-Catalogus\InstallatieMedia\Besturingssystemen\Microsoft\Windows\10-10-11\10.22-Windows-11\Windows-11-Insider\Canary-Channel-27xxxx\2025-Jan-16\Windows11_InsiderPreview_Client_x64_en-us_27774.ISO'
-VHDPath = 'D:\Installatie-Catalogus\VirtualDisks\Virtual-Harddisk-VHD\Windows\Windows-11\W11-Insider-EDU-27774.VHD'
+SourcePath = 'D:\Installatie-Catalogus\InstallatieMedia\Besturingssystemen\Microsoft\Windows\10-10-11\10.22-Windows-11\Consumer-Editions-Microsoft-Insider\Canary-Channel-27xxxx\2025-April-23\Windows11_InsiderPreview_Client_x64_en-us_27842.iso'
+VHDPath = 'D:\Installatie-Catalogus\VirtualDisks\Virtual-Harddisk-VHD\Windows\Windows-11\W11-Education-Insider.VHD'
 SizeBytes = 60GB
 VHDFormat = 'VHD' 
 DiskLayout = 'UEFI'

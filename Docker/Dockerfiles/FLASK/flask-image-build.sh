@@ -14,6 +14,7 @@ if [ $(id -u) -eq 0 ]; then
    exit 1
 fi 
 #
+echo Verwijderen eventueel aanwezige flash demo image
 docker rmi flask-demo:latest
 #
 docker build -f /home/$USER/docker/flask-demo/flask-demo-dkr-file -t flask-demo:latest .
