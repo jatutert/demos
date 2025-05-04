@@ -14,26 +14,37 @@ if [ $(id -u) -eq 0 ]; then
 fi 
 #
 echo Verwijderen eventueel aanwezige Flask demo 
-docker stop website-one
-docker rm website-one --force
 #
-docker stop website-two
-docker rm website-two --force
+echo Website One of Five
+docker stop website-one > /dev/null 2>&1
+docker rm website-one --force > /dev/null 2>&1
 #
-docker stop website-three
-docker rm website-three --force
+echo Website Two of Five
+docker stop website-two > /dev/null 2>&1
+docker rm website-two --force > /dev/null 2>&1
 #
-docker stop website-four
-docker rm website-four --force
+echo Website Three of Five
+docker stop website-three > /dev/null 2>&1
+docker rm website-three --force > /dev/null 2>&1
 #
-docker stop website-five
-docker rm website-five --force
+echo Website Four of Five
+docker stop website-four > /dev/null 2>&1
+docker rm website-four --force > /dev/null 2>&1
+#
+echo Website Five of Five
+docker stop website-five > /dev/null 2>&1
+docker rm website-five --force > /dev/null 2>&1
 #
 echo Starten Flaks demo omgeving 
+echo Website One of Five on Port 9001
 docker run -p 9001:5000 -d --name website-one   flask-demo:latest
+echo Website Two of Five on Port 9002
 docker run -p 9002:5000 -d --name website-two   flask-demo:latest
+echo Website Three of Five on Port 9003
 docker run -p 9003:5000 -d --name website-three flask-demo:latest
+echo Website Four of Five on Port 9004
 docker run -p 9004:5000 -d --name website-four  flask-demo:latest
+echo Website Five of Five on Port 9005
 docker run -p 9005:5000 -d --name website-five  flask-demo:latest
 #
 # meerdere talen demo 
@@ -56,4 +67,3 @@ echo "Website Four at port 9004" $ip_address
 # echo "Nederlands op poort 9004" $ip_address
 echo "Website Five at port 9005" $ip_address
 # echo "English op poort 9005" $ip_address
-

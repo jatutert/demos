@@ -18,6 +18,9 @@
 @echo off
 @cls
 ::
+@echo Docker Demo
+@echo Minikube Installation 
+::
 @echo [Stap 1] Administrator rechten check
 @NET SESSION >nul 2>&1
 @IF %ERRORLEVEL% EQU 0 (
