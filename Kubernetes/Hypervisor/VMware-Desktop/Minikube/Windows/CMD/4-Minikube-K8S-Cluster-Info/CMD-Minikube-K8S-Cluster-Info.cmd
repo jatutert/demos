@@ -34,26 +34,6 @@
 @cls
 ::
 ::
-::	========================================== naslag ======================================
-:: Minikube starten voor alleen Download
-:: @minikube start --download-only
-::
-:: Check of alles in orde is
-:: @minikube start --dry-run
-::
-::	========================================================================================
-:: 
-::
-::	:::::::: STARTEN ::::::::
-::
-@minikube start
-::
-::	======================================== opties ==========================================
-:: @minikube start --no-vtx-check --no-kubernetes
-:: @minikube start --no-vtx-check --container-runtime=docker --no-kubernetes
-::	===========================================================================================
-::
-::
 ::	======================================== naslag info opvragen ===============================
 :: IP adres van Virtuele machine weergeven
 :: @echo Virtuele machine is bereikbaar op IP-adres
@@ -77,4 +57,7 @@
 @kubectl get deployments 
 ::
 ::
-::	That's ALL Folks
+@pause
+::
+::	Thats ALL Folks
+::

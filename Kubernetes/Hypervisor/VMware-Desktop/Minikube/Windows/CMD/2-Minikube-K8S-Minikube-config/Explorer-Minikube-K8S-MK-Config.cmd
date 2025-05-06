@@ -1,5 +1,5 @@
 ::
-::	DOCKER DEMO
+::	Kubernetes / K8S DEMO
 ::
 ::	MINIKube Edition Fase 2 (Stap 10 tot en met Stap 12) (Stap 10 is herhaling) 
 ::
@@ -28,7 +28,6 @@
     @EXIT 1
 )
 ::
-::
 @echo [Stap 10] Omgevingsvariabelen Windows instellen voor Minikube [Herhaling]
 Setx /M MINIKUBE_IN_STYLE "false"
 Setx /M MINIKUBE_HOME "D:\Virtual-Machines\VMware-Workstation-PRO\Linux\Minikube"
@@ -36,10 +35,13 @@ Setx /M MINIKUBE_HOME "D:\Virtual-Machines\VMware-Workstation-PRO\Linux\Minikube
 ::
 @echo [Stap 11] Minikube parameter configuratie
 ::
+::	Hardware
 @minikube config set memory 8192
 @minikube config set cpus 4 
+::	Hypervisor
 ::	@minikube config set driver virtualbox 
-@minikube config set driver vmware 
+@minikube config set driver vmware
+::	Meldingen
 @minikube config set WantUpdateNotification true
 @minikube config set WantBetaUpdateNotification true
 @minikube config set WantVirtualBoxDriverWarning false
@@ -50,4 +52,7 @@ Setx /M MINIKUBE_HOME "D:\Virtual-Machines\VMware-Workstation-PRO\Linux\Minikube
 @pause
 ::
 ::	Sluiten terminal om omgevingsvariabelen te laden
-exit
+@exit
+::
+::	Thats all folks
+::

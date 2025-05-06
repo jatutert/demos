@@ -2,12 +2,15 @@
 ::	Docker Demo (VCTL) Start Script
 ::	Created by John Tutert for TutSOFT
 ::
-::	Version 1.1
+::	Version 1.2
 ::	
 ::
 ::	Changelog:
 ::	26okt24		Version 1.0		First Version
 ::	26apr25		Version 1.1		New Header
+::	05mei25		Version 1.2		Powershell Environment Username
+::
+::	Only for Personal and/or Educational Use
 ::
 ::	NIET gebruiken voor Kubernetes/Bind demo !
 ::	Voor deze demo zie map demo/kubernetes
@@ -29,7 +32,7 @@
 ::
 @echo.
 @echo.
-@echo Docker/VCTL Demo door John Tutert
+@echo Docker Demo (VCTL) door John Tutert
 @echo.
 @echo. 
 ::
@@ -45,23 +48,35 @@
 @rammap64 -Es
 @rammap64 -Et
 ::
-@echo [Stap 4] Verwijderen eventuele oude aanwezige VCTL omgeving voor deze gebruiker
+@echo [Stap 4] Verwijderen eventueel aanwezige VCTL omgeving voor huidige gebruiker
 @rmdir %USERPROFILE%\.vctl /S/Q
 ::
-@echo [Stap 5] VCTL Configureren 
+@echo [Stap 5] Verwijderen eventueel aanwezige Dockerfile in Downloads folder
+@del %USERPROFILE%\Downloads\flask-demo-dkr-file-V2
+::
+@echo [Stap 6] VCTL Configureren 
 @vctl system config --vm-mem 8g >nul 2>&1
 @vctl system config --vm-cpus 4 >nul 2>&1
 ::
 ::	Huidige Start Configuratie tonen op beeldscherm
 ::	@vctl system info
 ::
-@echo [Stap 6] VCTL Starten
+@echo [Stap 7] VCTL Starten
 @vctl system start
 ::
-@echo [Stap 7] Dockerfile downloaden
-@powershell Invoke-WebRequest -Uri "https://raw.githubusercontent.com/jatutert/demos/refs/heads/main/Docker/Dockerfiles/FLASK/flask-demo-dkr-file-V2" -OutFile "C:\Users\JTU03\Downloads\flask-demo-dkr-file-V2"
+@echo [Stap 8] Opschonen geheugen
+@rammap64 -Ew
+@rammap64 -Es
+@rammap64 -Et
 ::
-@echo [Stap 8] Docker Images Downloaden
+@rammap64 -Ew
+@rammap64 -Es
+@rammap64 -Et
+::
+@echo [Stap 9] Dockerfile downloaden
+@powershell Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/jatutert/demos/refs/heads/main/Docker/Dockerfiles/FLASK/flask-demo-dkr-file-V2' -OutFile "C:\Users\$env:USERNAME\Downloads\flask-demo-dkr-file-V2"
+::
+@echo [Stap 10] Docker Images Downloaden
 @echo.
 @echo Alpine
 @vctl pull alpine >nul 2>&1
@@ -71,6 +86,9 @@
 @vctl pull nginx >nul 2>&1
 @echo Apache 
 @vctl pull httpd >nul 2>&1
+::	@echo Node.JS op Alpine LTS versie 
+::	@vctl pull node:22-alpine >nul 2>&1
+::
 ::	@vctl pull portainer/portainer >nul 2>&1
 ::	@vctl pull portainer/agent >nul 2>&1
 ::	@vctl images

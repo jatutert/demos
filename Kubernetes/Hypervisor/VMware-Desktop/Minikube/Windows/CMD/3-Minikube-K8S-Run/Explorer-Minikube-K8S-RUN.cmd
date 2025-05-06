@@ -1,5 +1,5 @@
 ::
-::	DOCKER DEMO
+::	Minikube / K8S DEMO
 ::
 ::	MINIKube Edition Fase 3 (Stap 13 tot en met stap 18) 
 ::
@@ -43,8 +43,8 @@
 ::
 ::	:::::::: STARTEN ::::::::
 ::
-@echo [Stap 13] Minikube Starten met alleen Docker
-@minikube start --no-kubernetes
+@echo [Stap 13] Minikube Starten met zowel Docker als Kubernetes (K8S)
+@minikube start
 ::
 ::	======================================== opties ==========================================
 :: @minikube start --no-vtx-check --no-kubernetes
@@ -107,9 +107,12 @@ minikube ssh "/home/docker/docker/flask-demo/flask-demo-run.sh"
 :: @echo Virtuele machine is bereikbaar op IP-adres
 :: @minikube ip
 ::
-@echo Geef minikube ssh commando voor demo omgeving docker
+::	@echo Geef minikube ssh commando voor demo omgeving docker
 ::
 @pause
+::
+::
+@exit
 ::
 ::	Thats ALL Folks
 ::
