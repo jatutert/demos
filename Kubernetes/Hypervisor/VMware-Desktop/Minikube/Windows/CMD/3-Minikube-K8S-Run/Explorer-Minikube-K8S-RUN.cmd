@@ -44,7 +44,7 @@
 ::	:::::::: STARTEN ::::::::
 ::
 @echo [Stap 13] Minikube Starten met zowel Docker als Kubernetes (K8S)
-@minikube start
+@minikube start --kubernetes-version=stable --nodes=2 --cni=flannel
 ::
 ::	======================================== opties ==========================================
 :: @minikube start --no-vtx-check --no-kubernetes
@@ -88,20 +88,36 @@
 ::	Moet in dit script blijven omdat alleen voor Docker omgeving bedoeld is
 ::	Voor Kubernetes omgeving moet dit niet worden gedaan 
 ::
-@echo [Stap 14] Downloaden Ubuntu Config V3 Latest script vanaf GitHub
+@echo [Stap 14] Minikube Addons enable
+::
+::	https://kubevirt.io/quickstart_minikube/
+::	https://github.com/kubevirt/kubevirt
+::
+@minikube addons enable kubevirt
+::
+::	https://github.com/kubevirt/kubevirt
+::
+@echo [Stap 15] VirtCTL Downloaden
+@powershell Invoke-WebRequest -Uri 'https://github.com/kubevirt/kubevirt/releases/download/v1.5.1/virtctl-v1.5.1-windows-amd64.exe' -OutFile "C:\Users\$env:USERNAME\Downloads\virtctl-v1.5.1-windows-amd64.exe"
+::
+@echo [Stap 16] Installeren VirtCTL
+::
+::	NOG IMPLEMENTEREN
+::
+@echo [Stap 17] Downloaden Ubuntu Config V3 Latest script vanaf GitHub
 @minikube ssh "curl -s -o /home/docker/ubuntu-config-V3-latest.sh https://raw.githubusercontent.com/jatutert/Ubuntu-Config/main/ubuntu-config-V3-latest.sh"
 @echo. 
-@echo [Stap 15] Ubuntu Config V3 Latest script uitvoerbaar maken (chmod)
+@echo [Stap 18] Ubuntu Config V3 Latest script uitvoerbaar maken (chmod)
 @minikube ssh "sudo chmod +x /home/docker/ubuntu-config-V3-latest.sh"
 @echo.
-@echo [Stap 16] Ubuntu Config V3 Latest script uitvoeren met parameter minikube
+@echo [Stap 19] Ubuntu Config V3 Latest script uitvoeren met parameter minikube
 @minikube ssh "sudo /home/docker/ubuntu-config-V3-latest.sh minikube"
 ::
-@echo [Stap 17] Flask demo image build binnen Minikube VM (Buildroot Linux) 
+@echo [Stap 20] Flask demo image build binnen Minikube VM (Buildroot Linux) 
 minikube ssh "/home/docker/docker/flask-demo/flask-image-build.sh"
 minikube image ls
 ::
-@echo [Stap 18] Flask demo image run binnen Minikube VM (Buildroot Linux) 
+@echo [Stap 21] Flask demo image run binnen Minikube VM (Buildroot Linux) 
 minikube ssh "/home/docker/docker/flask-demo/flask-demo-run.sh"
 ::
 :: @echo Virtuele machine is bereikbaar op IP-adres
