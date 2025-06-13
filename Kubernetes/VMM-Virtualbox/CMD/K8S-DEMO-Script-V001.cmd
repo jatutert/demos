@@ -1,13 +1,18 @@
 ::
 ::
 ::
-:: DOCKER Virtualbox Demo Configuration Script
-:: Version 0.0.9
+:: Kubernetes Virtualbox Demo Configuration Script
+:: Version 0.0.12
 :: 
-:: Date 29 april 2024
+:: Date May 01 2024
 :: Author John Tutert
 ::
-:: 
+::
+::
+::		13 juni 2025
+::		Dit script is nog gelijk aan versie 14 van Docker Demo script virtualbox 
+::		Eerst zorgen dat dit werkt en hierna ombouwen zodat minikube wordt gebruikt op Docker in VM 
+::
 :: 
 @echo off
 @cls
@@ -15,13 +20,13 @@
 ::
 ::
 ::
-@echo Docker and Docker Composes Demo Auto Configurator 
+@echo Kubernetes Demo Auto Configurator 
 @echo. 
 @echo Oracle VM Virtualbox hypervisor
 @echo Virtual machine uses Vagrant Ubuntu 22.04 LTS (generic/ubuntu2204)
 @echo.
-@echo Version 0.0.10
-@echo Mei 01 2024
+@echo Version 0.0.12
+@echo May 01 2024
 @echo. 
 @echo Developed by John Tutert
 @echo.
@@ -34,7 +39,7 @@
 :: Variabelen Definitie
 :: ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
-@echo Definitie variabelen voor dit script ... 
+@echo #### Definitie variabelen voor dit script ... 
 ::
 ::
 :: ## VAGRANT
@@ -78,7 +83,7 @@ set DOCKER_DEMO_VM_SSH_PORT=3000
 :: Controle Benodigheden voor dit Script
 :: ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
-@echo Controle Benodigheden voor DOCKER DEMO omgeving 
+@echo #### Controle Benodigheden voor DOCKER DEMO omgeving 
 ::
 ::
 :: [IBM/HashiCorp Vagrant]
@@ -151,14 +156,12 @@ if not exist C:\cygwin64\bin\sed.exe (
 ::	#### VAGRANT BOXES #####
 ::
 :: 	Vagrant box ubuntu 2204 LTS download
-@echo Add Vagrant Box generic/ubuntu2204 ...
+@echo #### Make Vagrant ready for use 
 @vagrant box add generic/ubuntu2204 --clean --provider virtualbox >nul 2>&1
 @vagrant box list -i generic/ubuntu2204 >nul 2>&1
 :: 	Vagrant box ubuntu 2204 LTS updaten
-@echo Vagrant box update ...
 @vagrant box update >nul 2>&1
 :: 	Vagrant box ubuntu 2204 LTS opschonen
-@echo Vagrant box prune ...
 @vagrant box prune >nul 2>&1
 ::  
 :: 	#### Opruimen #####
@@ -171,15 +174,15 @@ if not exist C:\cygwin64\bin\sed.exe (
 ::
 ::
 :: ## Stoppen eventueel draaiende virtuele machines  
-@echo Stoppen eventueel draaiende virtuele machine 
+@echo #### Stoppen eventueel draaiende virtuele machine 
 @VBoxManage -q controlvm %DOCKER_DEMO_VM_HOSTNAME% poweroff >nul 2>&1
 :: 
 :: ## Verwijderen Virtuele machines
-@echo Verwijderen eventueel aanwezige virtuele machine 
+@echo #### Verwijderen eventueel aanwezige virtuele machine 
 @VBoxManage -q unregistervm %DOCKER_DEMO_VM_HOSTNAME% --delete-all >nul 2>&1
 :: 
 :: ## Schoonmaken Oracle VM Virtualbox Medium lijst om foutmelding UUID te voorkomen 
-@echo Schoonmaken Oracle VM Virtualbox Medium lijst
+@echo #### Schoonmaken Oracle VM Virtualbox Medium lijst
 :: 	Template directory VMDK
 @VBoxManage closemedium disk %VIRT_MACHINES_TEMPLATE_DIRECTORY%\%DOCKER_DEMO_VAGRANT_VMDK_FILE% >nul 2>&1
 :: 	Template directory VDI
@@ -204,7 +207,7 @@ if not exist C:\cygwin64\bin\sed.exe (
 ::
 :: #### Registratie DOCKER Controller ulx-s-2204-d-srvr in Virtualbox ####
 ::
-@echo Aanmaken Virtuele Machines in Oracle VM VirtualBOX ...
+@echo #### Aanmaken Virtuele Machines in Oracle VM VirtualBOX ...
 ::
 :: Gaat fout
 :: Kan niet overweg met %VIRTBOX_VBOXMAN%\VBoxManage
@@ -215,7 +218,7 @@ if not exist C:\cygwin64\bin\sed.exe (
 ::
 :: #### Aanpassen DOCKER Controller Virtualbox Virtuele Machine ####
 :: 
-@echo Configuratie Virtuele Machines in Oracle VM VirtualBOX ...
+@echo #### Configuratie Virtuele Machines in Oracle VM VirtualBOX ...
 ::
 @VBoxManage -q modifyvm %DOCKER_DEMO_VM_HOSTNAME% --description="Ubuntu 22.04 LTS (generic/ubuntu2204) DOCKER demo"
 :: EFI uitzetten 
@@ -236,7 +239,7 @@ if not exist C:\cygwin64\bin\sed.exe (
 :: #### Toevoegen DOCKER Controller Virtualbox Virtuele Machine Harddisk #####
 :: 
 :: ## Overzetten VMDK naar virtuele machine directory
-@echo Overzetten Vagrant VMDK naar VM Directory
+@echo #### Overzetten Vagrant VMDK naar VM Directory
 @copy "%DOCKER_DEMO_VAGRANT_HDU_TEMPLATE_DIR%\%DOCKER_DEMO_VAGRANT_VMDK_FILE%" "%DOCKER_DEMO_VM_DIRECTORY%\%DOCKER_DEMO_VM_TYPE%\%DOCKER_DEMO_VM_HOSTNAME%"
 ::
 :: ## Virtual Hardisk voorzien van nieuwe UUID
@@ -248,7 +251,7 @@ if not exist C:\cygwin64\bin\sed.exe (
 ::
 :: #### Virtuele Machine Starten ####
 ::
-@echo Starten Virtuele Machines ... LAUNCH ...
+@echo #### Starten Docker DEMO virtuele machine 
 :: Starten DOCKER Controller ulx-s-2204-d-srvr
 @VBoxManage -q --nologo startvm %DOCKER_DEMO_VM_HOSTNAME% --type=gui >nul 2>&1
 :: @TIMEOUT /T 180 /NOBREAK
@@ -258,7 +261,7 @@ if not exist C:\cygwin64\bin\sed.exe (
 :: Virtuele Machine PORT Forwarding Instellen 
 :: ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
-@ECHO Configuratie PortForwarding op NAT interface ...
+@ECHO #### Configuratie PortForwarding op NAT interface ...
 :: DOCKER Controller ulx-s-2204-d-srvr
 @VBoxManage -q controlvm %DOCKER_DEMO_VM_HOSTNAME% natpf1 guestssh,tcp,,3000,,22
 ::
@@ -296,7 +299,7 @@ if not exist C:\cygwin64\bin\sed.exe (
 :: 
 :: 
 :: 
-@echo Overzetten RSA sleutel naar Virtuele Machine ...
+@echo #### Overzetten RSA sleutel naar Virtuele Machine ...
 @VBoxManage guestcontrol %DOCKER_DEMO_VM_HOSTNAME% copyto --username=%DOCKER_DEMO_VAGRANT_LNX_USER% --password=%DOCKER_DEMO_VAGRANT_LNX_USER% --target-directory=/home/%DOCKER_DEMO_VAGRANT_LNX_USER%/.ssh/authorized_keys %USERPROFILE%\.ssh\id_rsa.pub
 ::
 ::
@@ -330,6 +333,16 @@ if not exist C:\cygwin64\bin\sed.exe (
 @echo Ubuntu AutoUpgrade UITZETTEN ...
 @ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% -o StrictHostKeyChecking=no sudo sed 's@"1"@"0"@' -i /etc/apt/apt.conf.d/20auto-upgrades
 :: 
+::
+::	#### Configuratie DNS ivm EduRoam
+::
+@echo Aanpassen DNS configuratie ivm EduRoam 
+@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% sudo sed "s@4.2.2.1@145.76.2.75@" -i /etc/netplan/01-netcfg.yaml
+@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% sudo sed "s@4.2.2.2@145.76.2.85@" -i /etc/netplan/01-netcfg.yaml
+@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% sudo sed "s@208.67.220.220@145.2.14.10, 8.8.8.8, 8.8.4.4@" -i /etc/netplan/01-netcfg.yaml
+@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% sudo netplan apply
+::
+::
 ::	#### Configuratie eth1 nic 
 ::
 @echo Netwerkkaart eth1 activeren ... 
@@ -359,7 +372,7 @@ ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DO
 ::
 :: #### Installatie Docker met APT
 @echo Installatie Docker met APT
-ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% "sudo apt install docker.io -y"
+@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% "sudo apt install docker.io -y"
 ::
 ::	#### Installatie Docker met SNAP
 ::	@echo Installatie Docker met SNAP 
@@ -372,14 +385,14 @@ ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DO
 @ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% sudo usermod -a -G docker %DOCKER_DEMO_VAGRANT_LNX_USER%
 ::
 :: #### Downloaden Ubuntu MultiPass configuratiescript by JA Tutert vanaf GitHub 
-@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% "curl -s -o /home/vagrant/ubuntu-dckr-demo-config-V002.sh https://raw.githubusercontent.com/jatutert/demos/main/Docker/Multipass/Ubuntu-Linux-Shell-Scripts/ubuntu-dckr-demo-config-V002.sh"
+@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% "curl -s -o /home/vagrant/ubuntu-dckr-demo-config.sh https://raw.githubusercontent.com/jatutert/demos/main/Docker/Virtualbox/Linux/Ubuntu-Config/docker-demo-virtbox-linux-config-v001.sh"
 ::
 :: #### Uitvoerbaar maken Ubuntu configuratiescript
-@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% "sudo chmod +x /home/vagrant/ubuntu-dckr-demo-config-V002.sh"
+@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% "sudo chmod +x /home/vagrant/ubuntu-dckr-demo-config.sh"
 :: 
 :: #### Uitvoeren Ubuntu configuratiescript
 @echo Uitvoeren Ubuntu configuratiescript gestart ... 
-@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% "sudo /home/vagrant/ubuntu-dckr-demo-config-V002.sh"
+@ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% "sudo /home/vagrant/ubuntu-dckr-demo-config.sh"
 ::
 :: ####	Installatie Docker Compose Plugin 
 :: 		https://gcore.com/learning/how-to-install-docker-compose-on-ubuntu/ 
@@ -388,7 +401,15 @@ ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DO
 ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% "curl -SL https://github.com/docker/compose/releases/download/v2.26.1/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose"
 ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% "chmod +x ~/.docker/cli-plugins/docker-compose"
 ::
-::  
+:: 
+::	#### Installatie Powershell
+::	https://ubuntuhandbook.org/index.php/2020/11/install-powershell-7-1-0-apt-ubuntu-20-04-18-04/
+::
+ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% wget -q https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb -O /home/vagrant/packages-microsoft-prod.deb
+ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% sudo dpkg -i /home/vagrant/packages-microsoft-prod.deb
+ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% sudo apt update -qq
+ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DOCKER_DEMO_VM_SSH_PORT% sudo apt install powershell -y
+::
 :: 
 @echo Ga naar virtuele machine
 @echo via
@@ -397,4 +418,4 @@ ssh -i %USERPROFILE%\.ssh\id_rsa %DOCKER_DEMO_VAGRANT_LNX_USER%@127.0.0.1 -p %DO
 ::
 ::
 :: Thats all folks
-EXIT 0  
+EXIT 1  
