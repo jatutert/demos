@@ -4,6 +4,11 @@
 ::
 ::	For Educational and/or Personal Use ! 
 ::
+::
+::	Dit is de script versie van de handleiding 2.1 Virtualisatie 2025-2026
+::	Gemaakt voor docenten
+::
+::
 @echo off
 @cls
 ::

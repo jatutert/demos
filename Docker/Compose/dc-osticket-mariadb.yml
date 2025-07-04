@@ -1,4 +1,7 @@
 version: '3.9'
+#
+# https://mariushosting.com/how-to-install-osticket-on-your-synology-nas/
+#
 services:
   osticket_db:
     image: mariadb:11.3-jammy
