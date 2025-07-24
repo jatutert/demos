@@ -6,7 +6,7 @@ metadata:
     app: wordpress
 spec:
   ports:
-    - port: 80
+    - port: 9222
   selector:
     app: wordpress
     tier: frontend
@@ -58,7 +58,7 @@ spec:
         - name: WORDPRESS_DB_USER
           value: wordpress
         ports:
-        - containerPort: 80
+        - containerPort: 9222
           name: wordpress
         volumeMounts:
         - name: wordpress-persistent-storage

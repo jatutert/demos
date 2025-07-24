@@ -1,0 +1,5 @@
+https://www.jamessturtevant.com/posts/Windows-Containers-on-Windows-10-without-Docker-using-Containerd/
+
+https://github.com/microsoft/Windows-Containers/issues/210
+
+https://lippertmarkus.com/2022/01/22/containerd-ctr-windows/

@@ -1,0 +1,67 @@
+# 
+# Ansible
+# Demo
+#
+# Inventory
+#
+# LUCT 4 vult de parameters in dit bestand met de juiste gegevens
+# 
+# Gemaakt door John Tutert
+# 
+# 
+# #################################################################
+# Password sudo voor ansible 
+# #################################################################
+#
+#
+[ansibledemo]
+#
+#
+machinenaam ansible_sudo_pass=wachtwoord
+#
+#
+# ###################################################################
+# Overzicht van alle servers binnen de demo
+# ###################################################################
+#
+#
+[demoservers]
+#
+# 
+# https://stackoverflow.com/questions/33280244/ssh-error-permission-denied-publickey-password-in-ansible
+# Voorkomen van permission denied door ssh pass en user
+# 
+#
+machinenaam ansible_ssh_pass=wachtwoord ansible_ssh_user=gebruikersnaam 
+#
+#
+# ########################################################################
+# Overzicht van alle servers in Nederland
+# ########################################################################
+#
+#
+[netherlands]
+#
+#
+machinenaam
+#
+#
+# ########################################################################
+# Overzicht van alle servers in Duitsland
+# ######################################################################## 
+#
+#
+[germany]
+#
+#
+#
+# ##########################################################################
+# Overzicht van alle servers in Europa 
+# ##########################################################################
+#
+#
+[europe:children]
+#
+#
+netherlands
+germany

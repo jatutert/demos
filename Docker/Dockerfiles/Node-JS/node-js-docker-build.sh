@@ -1,0 +1,1 @@
+docker build -f /home/$USER/demos/Docker/Dockerfiles/Node-JS/dockerfile -t nodejs-demo:latest .

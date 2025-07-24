@@ -6,7 +6,7 @@ metadata:
     app: wordpress
 spec:
   ports:
-    - port: 3306
+    - port: 9221
   selector:
     app: wordpress
     tier: mysql
@@ -63,7 +63,7 @@ spec:
               name: mysql-pass
               key: password
         ports:
-        - containerPort: 3306
+        - containerPort: 9221
           name: mysql
         volumeMounts:
         - name: mysql-persistent-storage

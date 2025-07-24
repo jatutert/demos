@@ -34,7 +34,7 @@ services:
         image: nextcloud:latest
         restart: always
         ports:
-            - 8888:80
+            - 9211:80
         depends_on:
             - db
         volumes:

@@ -39,7 +39,7 @@ set "VMTemplatePath=D:\Virtual-Machines\Templates\Linux\Ubuntu\Server\24-04-0-LT
 ::
 :: https://techdocs.broadcom.com/us/en/vmware-cis/desktop-hypervisors/workstation-pro/17-0/using-vmware-workstation-pro/using-the-vmrun-command-to-control-virtual-machines/running-vmrun-commands/syntax-of-vmrun-commands.html
 ::
-vmrun -T ws start "%vmPath%\Linux\Docker\U24-LTS-S-DKR-001.vmx"
+vmrun -T ws start "%vmPath%\Linux\Ubuntu\Docker\U24-LTS-S-DKR-001.vmx"
 
 @echo [Stap 3] Wachten op de start van de virtuele machine
 @sleep 180
