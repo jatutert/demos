@@ -1,3 +1,2 @@
 #! /bin/bash
-docker build –f /home/$SUDO_USER/docker/apache/ubtu-apache-dkr-file -t ubtu-apache:V100 .
-    
+docker build --file $PWD/ubtu-apache-dkr-file --tag ubtu-apache .

@@ -17,8 +17,7 @@ fi
 echo Verwijderen eventueel aanwezige flash demo image
 docker rmi flask-demo:latest
 #
-docker build -f /home/$USER/demos/Docker/Dockerfiles/Flask/flask-demo-dkr-file -t flask-demo:latest .
-# docker build -f $PWD/flask-demo-dkr-file-V2 -t flask-demo:v100 .
+docker build -f $PWD/flask-demo-dkr-file-V2 --tag flask-demo:latest .
 #
 #
 # Meerdere talen demo 

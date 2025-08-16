@@ -22,7 +22,7 @@
 @echo.
 @echo Created by John Tutert (TutSOFT)
 @echo.
-@echo LUCT 4 Debian 12 Minimal Edition (D12-00-BKW-M-OMV-001)
+@echo LUCT 4 Debian 12 Minimal Edition (D12-BKW-M-DEMO-001)
 @echo. 
 ::
 ::
@@ -83,7 +83,7 @@ if %errorlevel% neq 0 (
 :: https://techdocs.broadcom.com/us/en/vmware-cis/desktop-hypervisors/workstation-pro/17-0/using-vmware-workstation-pro/using-the-vmrun-command-to-control-virtual-machines/running-vmrun-commands/syntax-of-vmrun-commands.html
 ::
 @echo Stoppen eventueel draaiende virtuele machine
-@vmrun -T ws stop %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx >nul 2>&1
+@vmrun -T ws stop %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx >nul 2>&1
 ::
 ::
 ::	Let OP!
@@ -92,15 +92,15 @@ if %errorlevel% neq 0 (
 :: https://techdocs.broadcom.com/us/en/vmware-cis/desktop-hypervisors/workstation-pro/17-0/using-vmware-workstation-pro/using-the-vmrun-command-to-control-virtual-machines/running-vmrun-commands/syntax-of-vmrun-commands.html
 ::
 @echo Verwijderen eventueel aanwezige virtuele machine 
-@vmrun -T ws DeleteVM %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx >nul 2>&1
+@vmrun -T ws DeleteVM %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx >nul 2>&1
 ::
 @echo Verwijderen eventueel aanwezige uitgepakte Template bestanden
 @del %VMTemplatePath%\Debian_12.0.0_VMM_LinuxVMImages.COM.vmx >nul 2>&1
 @del %VMTemplatePath%\Debian_12.0.0_VMM_LinuxVMImages.COM.vmdk >nul 2>&1
 ::
 @echo Verwijderen eventueel overgebleven bestanden aanmaak virtuele machine
-@del %VMTemplatePath%\D12-00-BKW-M-OMV-001.vmx >nul 2>&1
-@del %VMTemplatePath%\D12-00-BKW-M-OMV-001.vmdk >nul 2>&1
+@del %VMTemplatePath%\D12-BKW-M-DEMO-001.vmx >nul 2>&1
+@del %VMTemplatePath%\D12-BKW-M-DEMO-001.vmdk >nul 2>&1
 ::
 ::
 ::	:::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -131,9 +131,9 @@ IF NOT EXIST "%VMTemplatePath%\LVI-D12-00-BKW-M-VMDK.7z" (
 ::
 ::
 @echo Hernoemen VMX-bestand naar nieuwe naam
-@rename %VMTemplatePath%\Debian_12.0.0_VMM_LinuxVMImages.COM.vmx D12-00-BKW-M-OMV-001.vmx
+@rename %VMTemplatePath%\Debian_12.0.0_VMM_LinuxVMImages.COM.vmx D12-BKW-M-DEMO-001.vmx
 @echo Hernoemen VMDK-bestand naar nieuwe naam
-@rename %VMTemplatePath%\Debian_12.0.0_VMM_LinuxVMImages.COM.vmdk D12-00-BKW-M-OMV-001.vmdk
+@rename %VMTemplatePath%\Debian_12.0.0_VMM_LinuxVMImages.COM.vmdk D12-BKW-M-DEMO-001.vmdk
 ::
 ::
 ::	:::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -152,72 +152,72 @@ IF NOT EXIST "%VMTemplatePath%\LVI-D12-00-BKW-M-VMDK.7z" (
 @mkdir %vmPath%\%VMDestinationPath%
 ::
 @echo Uitgepakte bestanden overzetten naar directory voor Virtuele Machine
-@copy %VMTemplatePath%\D12-00-BKW-M-OMV-001.* %vmPath%\%VMDestinationPath% >nul 2>&1
+@copy %VMTemplatePath%\D12-BKW-M-DEMO-001.* %vmPath%\%VMDestinationPath% >nul 2>&1
 ::
 @echo Aanpassen instellingen Virtuele Machine in het VMX-bestand (VMcli)
 ::
 ::	DisplayName van de virtuele machine aanpassen in de VMX via VMCli
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry displayName "D12-00-BKW-M-OMV-001"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry displayName "D12-BKW-M-DEMO-001"
 ::
 ::	Annotation van de virtuele machine aanpassen in de VMX via VMCli
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry annotation "Debian 12 Minimal Gebruiker: ubuntu Wachtwoord: ubuntu"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry annotation "Debian 12 Minimal Gebruiker: ubuntu Wachtwoord: ubuntu"
 ::
 ::	Hardware configuratie
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry numvcpus "4"
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry cpuid.coresPerSocket "2"
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry memsize "8192"
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry scsi0:0.fileName "D12-00-BKW-M-OMV-001.vmdk"
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry extendedConfigFile "D12-00-BKW-M-OMV-001.vmxf"
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry nvram "D12-00-BKW-M-OMV-001.nvram"
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry vmxstats.filename "D12-00-BKW-M-OMV-001.scoreboard"
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry sata0:1.fileName "D:\Installatie-Catalogus\InstallatieMedia\Besturingssystemen\Linux\Ubuntu\Server\24-04-LTS\ubuntu-24.04-live-server-amd64.iso"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry numvcpus "4"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry cpuid.coresPerSocket "2"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry memsize "8192"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry scsi0:0.fileName "D12-BKW-M-DEMO-001.vmdk"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry extendedConfigFile "D12-BKW-M-DEMO-001.vmxf"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry nvram "D12-BKW-M-DEMO-001.nvram"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry vmxstats.filename "D12-BKW-M-DEMO-001.scoreboard"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry sata0:1.fileName "D:\Installatie-Catalogus\InstallatieMedia\Besturingssystemen\Linux\Ubuntu\Server\24-04-LTS\ubuntu-24.04-live-server-amd64.iso"
 ::
 ::	Shared Folder op Always Enabled zetten 
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry isolation.tools.hgfs.disable "False"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry isolation.tools.hgfs.disable "False"
 ::	Shared Folder Downloads
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry sharedFolder0.present "True"
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry sharedFolder0.enabled "True"
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry sharedFolder0.readAccess "True"
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry sharedFolder0.writeAccess "True"
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry sharedFolder0.hostPath %USERPROFILE%"\Downloads"
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry sharedFolder0.guestName "windownloads"
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry sharedFolder0.expiration "never"
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry sharedFolder.maxNum "1"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry sharedFolder0.present "True"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry sharedFolder0.enabled "True"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry sharedFolder0.readAccess "True"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry sharedFolder0.writeAccess "True"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry sharedFolder0.hostPath %USERPROFILE%"\Downloads"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry sharedFolder0.guestName "windownloads"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry sharedFolder0.expiration "never"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry sharedFolder.maxNum "1"
 ::	Shared Folder OneDrive
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry sharedFolder1.present "True"
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry sharedFolder1.enabled "True"
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry sharedFolder1.readAccess "True"
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry sharedFolder1.writeAccess "True"
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry sharedFolder1.hostPath %USERPROFILE%"\OneDrive"
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry sharedFolder1.guestName "winonedrive"
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry sharedFolder1.expiration "never"
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry sharedFolder.maxNum "2"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry sharedFolder1.present "True"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry sharedFolder1.enabled "True"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry sharedFolder1.readAccess "True"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry sharedFolder1.writeAccess "True"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry sharedFolder1.hostPath %USERPROFILE%"\OneDrive"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry sharedFolder1.guestName "winonedrive"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry sharedFolder1.expiration "never"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry sharedFolder.maxNum "2"
 ::	Shared Folder Profile zodat oa SSH bestanden benaderd kunnen worden
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry sharedFolder2.present "True"
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry sharedFolder2.enabled "True"
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry sharedFolder2.readAccess "True"
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry sharedFolder2.writeAccess "False"
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry sharedFolder2.hostPath %USERPROFILE%
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry sharedFolder2.guestName "winuserprofile"
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry sharedFolder2.expiration "never"
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry sharedFolder.maxNum "3"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry sharedFolder2.present "True"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry sharedFolder2.enabled "True"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry sharedFolder2.readAccess "True"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry sharedFolder2.writeAccess "False"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry sharedFolder2.hostPath %USERPROFILE%
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry sharedFolder2.guestName "winuserprofile"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry sharedFolder2.expiration "never"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry sharedFolder.maxNum "3"
 ::	Tijd synchronisatie aanzetten tussen host en guest
-@vmcli %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx ConfigParams SetEntry tools.syncTime "TRUE"
+@vmcli %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx ConfigParams SetEntry tools.syncTime "TRUE"
 ::
 ::	:::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::	STAP 9 Verwijderen uitgepakte bestanden in template directory
 ::	:::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 @echo Verwijderen uitgepakte bestanden in template directory 
-@del %VMTemplatePath%\D12-00-BKW-M-OMV-001.vmx >nul 2>&1
-@del %VMTemplatePath%\D12-00-BKW-M-OMV-001.vmdk >nul 2>&1
+@del %VMTemplatePath%\D12-BKW-M-DEMO-001.vmx >nul 2>&1
+@del %VMTemplatePath%\D12-BKW-M-DEMO-001.vmdk >nul 2>&1
 ::
 ::	:::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::	STAP 10 Starten VMware Workstation Pro
 ::	:::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 @echo Nieuw proces starten en daarin nieuwe virtuele machine openen
-@start /B vmware -n %vmPath%\%VMDestinationPath%\D12-00-BKW-M-OMV-001.vmx 
+@start /B vmware -n %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx 
 ::
 ::
 ::

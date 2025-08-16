@@ -1,5 +1,6 @@
-# start with OS ubuntu
+# Gebruik Ubuntu Image
 FROM ubuntu:latest
+# Ubuntu Bijwerken
 RUN apt-get update 
 RUN apt-get -y upgrade
 # install apache2 in noninteractivemode 

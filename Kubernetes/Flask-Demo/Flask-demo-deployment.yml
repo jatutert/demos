@@ -17,5 +17,5 @@ spec:
       - name: flask-demo
         image: flask-demo:latest
         ports:
-        - containerPort: 9204
+        - containerPort: 9303
           hostPort: 0
