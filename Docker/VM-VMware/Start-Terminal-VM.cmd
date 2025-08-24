@@ -1,0 +1,1 @@
+wt -p "Ubuntu Demo VM"

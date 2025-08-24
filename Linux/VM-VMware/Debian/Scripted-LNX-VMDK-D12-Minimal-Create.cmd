@@ -220,7 +220,7 @@ IF NOT EXIST "%VMTemplatePath%\LVI-D12-00-BKW-M-VMDK.7z" (
 @start /B vmware -n %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx 
 ::
 ::
-::
+@start /B vmrun -T ws start %vmPath%\%VMDestinationPath%\D12-BKW-M-DEMO-001.vmx 
 ::
 :: ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::	Meerdere manieren om een VM te starten
