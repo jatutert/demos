@@ -128,15 +128,11 @@ for /f "tokens=1,* delims==" %%A in ('findstr /i "prefvmx.defaultVMPath" "%prefF
 7z >nul 2>&1
 if %errorlevel% neq 0 (
    @winget install --id M2Team.NanaZip --silent >%TEMP%\WinGet-NanaZip-Installatie.log
-) else (
-   echo 7z is aanwezig ... 
 )
 ::
 curl -V >nul 2>&1
 if %errorlevel% neq 0 (
    @winget install --id cURL.cURL --silent >%TEMP%\WinGet-cURL-Installatie.log
-) else (
-   echo cURL is aanwezig ...
 )
 ::
 ::
@@ -145,8 +141,11 @@ if %errorlevel% neq 0 (
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 :: Stoppen eventueel draaiend VMware Workstation PRo
-@echo Stoppen eventueel draaiende VMWare Workstation Pro
-@taskkill /IM vmware.exe /F
+tasklist /FI "IMAGENAME eq vmware.exe" | findstr "vmware.exe" > nul
+if %errorlevel% equ 0 (
+    echo VMware Workstation Pro wordt afgesloten
+    @taskkill /IM vmware.exe /F
+)
 ::
 :: https://techdocs.broadcom.com/us/en/vmware-cis/desktop-hypervisors/workstation-pro/17-0/using-vmware-workstation-pro/using-the-vmrun-command-to-control-virtual-machines/running-vmrun-commands/syntax-of-vmrun-commands.html
 ::
@@ -258,11 +257,12 @@ IF EXIST "%VMTemplatePath%\%LVI_Inside_ZIP_Filename%.vmdk" (
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 ::
-@echo Uitgepakte bestanden overzetten naar directory voor Virtuele Machine
+@echo VMX bestand uit Template directory overzetten naar locatie virtuele machine
 IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmx" (
     @copy %VMTemplatePath%\%VirtMachNaam%.vmx %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath% >nul 2>&1
 )
 ::
+@echo VMDK betand uit Template directory overzetten naar locatie virtuele machine 
 IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmdk" (
     @copy %VMTemplatePath%\%VirtMachNaam%.vmdk %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath% >nul 2>&1
 )
@@ -328,11 +328,12 @@ IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmdk" (
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 ::
-@echo Opruimen Template directory voor toekomstig gebruik
+@echo Verwijderen vmx bestand uit template directory
 IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmx" (
     @del %VMTemplatePath%\%VirtMachNaam%.vmx >nul 2>&1
 )
 ::
+@echo Verwijderen vmdk bestand uit template directory
 IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmdk" (
     @del %VMTemplatePath%\%VirtMachNaam%.vmdk >nul 2>&1
 )
@@ -341,9 +342,9 @@ IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmdk" (
 ::  STAP 16 Starten VMware Workstation Pro
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
-@echo Nieuw proces starten en daarin nieuwe virtuele machine openen niet starten
+@echo Nieuw virtuele machine openen in VMWare Worktation Pro 
 IF EXIST %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx (
-    @start /B vmware -n %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx 
+    @start /B "%VMWareInstallPath%"\vmware -n %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx 
 )
 ::
 ::
@@ -353,20 +354,34 @@ IF EXIST %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx (
 ::
 @echo Starten van de virtuele machine 
 IF EXIST %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx (
-    @start /B vmrun -T ws start %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx
+    @start /B "%VMWareInstallPath%"\vmrun -T ws start %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx
 )
 ::
+@echo Ga naar VMWare Workstation Pro
+@echo "I Copied it" aanklikken bij vraag
 ::
-@echo Twee minuten wachten voordat LUCT wordt overgezet naar VM
-sleep 2m
+::
+@echo Een minuut wachten voordat LUCT wordt overgezet naar VM
+powershell -command "Start-Sleep -Seconds 60"
+::
+::
+::  Alternatief
+::  timeout /T 60
+::
+::
+::  Alternatief
+::  Wacht 30 seconden door het geven van PING (aantal seconden + 1) 
+::  ping 127.0.0.1 -n 31 >nul 2>&1
 ::
 ::
 @echo Downloaden nieuwste versie LUCT vanaf GitHub
-vmrun -T ws -gu ubuntu -gp ubuntu runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/curl" -L -o /home/ubuntu/luctv41.sh https://edu.nl/n7faw
+@"%VMWareInstallPath%"\vmrun -T ws -gu ubuntu -gp ubuntu runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/curl" -L -o /home/ubuntu/luctv41.sh https://edu.nl/n7faw
 @echo Uitvoerbaar maken van LUCT binnen virtuele machine
-vmrun -T ws -gu ubuntu -gp ubuntu runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/sudo" chmod +x /home/ubuntu/luctv41.sh
+@"%VMWareInstallPath%"\vmrun -T ws -gu ubuntu -gp ubuntu runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/sudo" chmod +x /home/ubuntu/luctv41.sh
+@echo LUCT is overgezet naar de virtuele machine 
 ::
 ::
+@echo Starten Windows Terminal
 @start /B wt -p "Ubuntu Demo VM"
 ::
 ::
