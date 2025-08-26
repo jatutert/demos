@@ -338,13 +338,15 @@ IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmdk" (
     @del %VMTemplatePath%\%VirtMachNaam%.vmdk >nul 2>&1
 )
 ::
+::
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::  STAP 16 Starten VMware Workstation Pro
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 @echo Nieuw virtuele machine openen in VMWare Worktation Pro 
 IF EXIST %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx (
-    @start /B "%VMWareInstallPath%"\vmware -n %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx 
+    :: start /B vmware.exe -n %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx
+    start /B "" "%VMWareInstallPath%\vmware.exe" -n %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx
 )
 ::
 ::
@@ -354,11 +356,14 @@ IF EXIST %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx (
 ::
 @echo Starten van de virtuele machine 
 IF EXIST %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx (
-    @start /B "%VMWareInstallPath%"\vmrun -T ws start %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx
+    :: start /B vmrun.exe -T ws start %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx
+    start /B "" "%VMWareInstallPath%\vmrun.exe" -T ws start %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx
 )
 ::
 @echo Ga naar VMWare Workstation Pro
-@echo "I Copied it" aanklikken bij vraag
+@echo Klik op "OK" bij Channel Migitations melding
+@echo Klik op "I Copied it" bij virtual machine might have been moved or copied
+@echo Klik op "OK" bij Removable Devices melding 
 ::
 ::
 @echo Een minuut wachten voordat LUCT wordt overgezet naar VM
@@ -375,14 +380,17 @@ powershell -command "Start-Sleep -Seconds 60"
 ::
 ::
 @echo Downloaden nieuwste versie LUCT vanaf GitHub
-@"%VMWareInstallPath%"\vmrun -T ws -gu ubuntu -gp ubuntu runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/curl" -L -o /home/ubuntu/luctv41.sh https://edu.nl/n7faw
+%VMWareInstallPath%\vmrun -T ws -gu ubuntu -gp ubuntu runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/curl" -L -o /home/ubuntu/luctv41.sh https://edu.nl/n7faw
 @echo Uitvoerbaar maken van LUCT binnen virtuele machine
-@"%VMWareInstallPath%"\vmrun -T ws -gu ubuntu -gp ubuntu runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/sudo" chmod +x /home/ubuntu/luctv41.sh
+%VMWareInstallPath%\vmrun -T ws -gu ubuntu -gp ubuntu runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/sudo" chmod +x /home/ubuntu/luctv41.sh
 @echo LUCT is overgezet naar de virtuele machine 
 ::
 ::
+@echo IP Adres Virtuele Machine ophalen 
+for /f "delims==" %%A in ('%VMWareInstallPath%\vmrun -T ws -gu ubuntu -gp ubuntu getGuestIPAddress %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx') do set vmipadres=%%A
+::
 @echo Starten Windows Terminal
-@start /B wt -p "Ubuntu Demo VM"
+@start wt.exe C:\Windows\System32\OpenSSH\ssh.exe -p 22 ubuntu@%vmipadres%
 ::
 ::
 :: ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
