@@ -10,13 +10,15 @@
 ::  Gemaakt voor docenten
 ::
 ::  Changelog
-::  04juli25 Introductie substap meldingen
-::  04juli25 Introductie variabelen in paden 
-::  24juli25 Volgorde van het Script aangepast
-::  24juli25 Substap meldingen verwijderd 
-::  24juli25 Bugfix path
-::  24juli25 taskkill van vmware workstation pro 
-::  16aug25  auto start vm na inlezen vm en inlezen vmware workstation path uit register
+::  04juli25    Introductie substap meldingen
+::  04juli25    Introductie variabelen in paden 
+::  24juli25    Volgorde van het Script aangepast
+::  24juli25    Substap meldingen verwijderd 
+::  24juli25    Bugfix path
+::  24juli25    taskkill van vmware workstation pro 
+::  16aug25     auto start vm na inlezen vm en inlezen vmware workstation path uit register
+::  26aug25     Laatste deel van het script machine onafhankelijk gemaakt
+::  29aug25     ISO bestand check en download
 ::
 ::
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -59,12 +61,27 @@
 ::
 ::
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-::  Onderstaande variabele aanpassen naar eigen voorkeur
+::  Onderstaande variabelen aanpassen naar eigen voorkeur
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
-::  Locatie van download bestanden van Linux VM Images website
+::  Locatie van download bestand van Linux VM Images website
 @set "VMTemplatePath=D:\Virtual-Machines\Templates\Linux\Ubuntu\Server\24-04-0-LTS"
 @mkdir %VMTemplatePath% >nul 2>&1
+::
+::  Locatie van ISO bestanden 
+@set "MediaPath=D:\Installatie-Catalogus\InstallatieMedia\Besturingssystemen\Linux\Ubuntu\Server\24-04-LTS"
+@mkdir %MediaPath% >nul 2>&1
+::
+::  Naam ISO bestand
+@set "MediaFile=ubuntu-24.04.3-live-server-amd64.iso"
+::
+::
+::  https://mirror.ams.macarne.com/ubuntu-releases/24.04.3/
+::  ubuntu-24.04.3-desktop-amd64.iso  
+::  ubuntu-24.04.3-live-server-amd64.iso  
+::
+::  https://cdimage.debian.org/cdimage/archive/
+::
 ::
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::  Onderstaande variabelen NIET aanpassen
@@ -97,12 +114,13 @@
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 ::
-:: Zoek de regel met prefvmx.defaultVMPath en haal het pad eruit
+:: Stap 5A  Zoek de regel met prefvmx.defaultVMPath en haal het pad eruit
 @set "prefFile=%AppData%\VMware\preferences.ini"
 for /f "tokens=1,* delims==" %%A in ('findstr /i "prefvmx.defaultVMPath" "%prefFile%"') do (
     set "rawPath=%%B"
 )
-:: Verwijder aanhalingstekens uit prefvmx.defaultVMPath
+::
+:: Stap 5B  Verwijder aanhalingstekens uit prefvmx.defaultVMPath
 @set "vmPath=%rawPath:"=%"
 ::
 ::
@@ -116,7 +134,7 @@ for /f "tokens=1,* delims==" %%A in ('findstr /i "prefvmx.defaultVMPath" "%prefF
 @echo.
 @echo Created by John Tutert (TutSOFT)
 @echo.
-@echo LUCT 4 Docker Demo Edition (%VirtMachNaam%)
+@echo LUCT 4.1 Docker Demo Edition (%VirtMachNaam%)
 @echo. 
 ::
 ::
@@ -127,12 +145,14 @@ for /f "tokens=1,* delims==" %%A in ('findstr /i "prefvmx.defaultVMPath" "%prefF
 ::
 7z >nul 2>&1
 if %errorlevel% neq 0 (
-   @winget install --id M2Team.NanaZip --silent >%TEMP%\WinGet-NanaZip-Installatie.log
+    @echo NanaZIP niet aangetroffen op deze machine .. Installatie wordt gestart .. 
+    @winget install --id M2Team.NanaZip --silent >%TEMP%\WinGet-NanaZip-Installatie.log
 )
 ::
 curl -V >nul 2>&1
 if %errorlevel% neq 0 (
-   @winget install --id cURL.cURL --silent >%TEMP%\WinGet-cURL-Installatie.log
+    @echo Curl niet aangetroffen op deze machine .. Installatie wordt gestart .. 
+    @winget install --id cURL.cURL --silent >%TEMP%\WinGet-cURL-Installatie.log
 )
 ::
 ::
@@ -160,38 +180,51 @@ IF EXIST "%vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx" (
 ::
 :: https://techdocs.broadcom.com/us/en/vmware-cis/desktop-hypervisors/workstation-pro/17-0/using-vmware-workstation-pro/using-the-vmrun-command-to-control-virtual-machines/running-vmrun-commands/syntax-of-vmrun-commands.html
 ::
-@echo Verwijderen eventueel aanwezige virtuele machine 
 IF EXIST "%vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx" (
+    @echo Verwijderen virtuele machine in VMWare Workstation Pro ...
     @"%VMWareInstallPath%"\vmrun -T ws DeleteVM %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx >nul 2>&1
 )
 ::
-@echo Verwijderen eventueel aanwezige uitgepakte Template bestanden
 IF EXIST "%VMTemplatePath%\%LVI_Inside_ZIP_Filename%.vmx" (
+    @echo Verwijderen VMX bestand virtuele machine ...
     @del %VMTemplatePath%\%LVI_Inside_ZIP_Filename%.vmx >nul 2>&1
 )
 ::
 IF EXIST "%VMTemplatePath%\%LVI_Inside_ZIP_Filename%.vmdk" (
+    @echo Verwijderen VMDK bestand virtuele machine ...
     @del %VMTemplatePath%\%LVI_Inside_ZIP_Filename%.vmdk >nul 2>&1
 )
 ::
-@echo Verwijderen eventueel overgebleven bestanden aanmaak virtuele machine
 IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmx" (
+    @echo Verwijderen template VMX bestand ... 
     @del %VMTemplatePath%\%VirtMachNaam%.vmx >nul 2>&1
 )
 ::
 IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmdk" (
+    @echo Verwijderen template VMDK bestand ... 
     @del %VMTemplatePath%\%VirtMachNaam%.vmdk >nul 2>&1
 )
 ::
 ::
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
-::  STAP 9 Eventueel downloaden Template van LinuxVMImages website
+::  STAP 9A Eventueel downloaden Template van LinuxVMImages website
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 ::
 IF NOT EXIST "%VMTemplatePath%\%LVI_Download_ZIP_Filename%.7z" (
-    @echo Downloaden ZIP-Bestand Even geduld AUB ...
+    @echo Downloaden template virtuele machine van Linux VM Images website ... 
     @curl -s -L -o %VMTemplatePath%\%LVI_Download_ZIP_Filename%.7z https://edu.nl/xu78m
+)
+:
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  STAP 9B Eventueel downloaden ISO bestand
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+::
+IF NOT EXIST "%MediaPath%\%MediaFile%" (
+    @echo Downloaden ISO bestand 
+    @curl -s -L -o %MediaPath%\%MediaFile% https://mirror.ams.macarne.com/ubuntu-releases/24.04.3/ubuntu-24.04.3-live-server-amd64.iso
 )
 ::
 ::
@@ -200,8 +233,8 @@ IF NOT EXIST "%VMTemplatePath%\%LVI_Download_ZIP_Filename%.7z" (
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 ::
-@echo Uitgepakte bestanden aanmaken in Template directory (7Z)
 IF EXIST "%VMTemplatePath%\%LVI_Download_ZIP_Filename%.7z" (
+    @echo Aanmaken VMX en VMDK template bestanden vanuit template virtuele machine ... 
     @7z x %VMTemplatePath%\%LVI_Download_ZIP_Filename%.7z -o%VMTemplatePath% -y >nul 2>&1
 )
 ::
@@ -211,12 +244,13 @@ IF EXIST "%VMTemplatePath%\%LVI_Download_ZIP_Filename%.7z" (
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 ::
-@echo Hernoemen VMX-bestand naar nieuwe naam
 IF EXIST "%VMTemplatePath%\%LVI_Inside_ZIP_Filename%.vmx" (
+    @echo Hernoemen VMX-bestand naar nieuwe naam
     @rename %VMTemplatePath%\%LVI_Inside_ZIP_Filename%.vmx %VirtMachNaam%.vmx
 )
-@echo Hernoemen VMDK-bestand naar nieuwe naam
+::
 IF EXIST "%VMTemplatePath%\%LVI_Inside_ZIP_Filename%.vmdk" (
+    @echo Hernoemen VMDK-bestand naar nieuwe naam
     @rename %VMTemplatePath%\%LVI_Inside_ZIP_Filename%.vmdk %VirtMachNaam%.vmdk
 )
 ::
@@ -257,13 +291,13 @@ IF EXIST "%VMTemplatePath%\%LVI_Inside_ZIP_Filename%.vmdk" (
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 ::
-@echo VMX bestand uit Template directory overzetten naar locatie virtuele machine
 IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmx" (
+    @echo VMX bestand uit Template directory overzetten naar locatie virtuele machine
     @copy %VMTemplatePath%\%VirtMachNaam%.vmx %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath% >nul 2>&1
 )
 ::
-@echo VMDK betand uit Template directory overzetten naar locatie virtuele machine 
 IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmdk" (
+    @echo VMDK betand uit Template directory overzetten naar locatie virtuele machine 
     @copy %VMTemplatePath%\%VirtMachNaam%.vmdk %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath% >nul 2>&1
 )
 ::
@@ -277,17 +311,25 @@ IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmdk" (
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry displayName "%VirtMachNaam%"
 ::
 @echo Annotation van de virtuele machine aanpassen in de VMX via VMCli
-@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry annotation "Docker Demo Ubuntu Server 24.04 LTS Gebruiker: ubuntu Wachtwoord: ubuntu"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry annotation "LUCT Docker Demo Ubuntu Server 24.04 LTS Gebruiker: ubuntu Wachtwoord: ubuntu"
 ::
 @echo Hardware configuratie van de virtuele machine in de VMX aanpassen via VMCli
-@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry numvcpus "4"
+::  CPU
+set /a div_result=%NUMBER_OF_PROCESSORS% / 3
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry numvcpus "%div_result%"
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry cpuid.coresPerSocket "2"
-@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry memsize "8192"
+::  RAM
+for /f "tokens=2" %%a in ('wmic OS Get TotalVisibleMemorySize /Value') do set "totalmem_kb=%%a"
+set /a totalmem_mb=%totalmem_kb% / 1024
+set /a result=%totalmem_mb% / 4
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry memsize "%result%"
+::  Namen bestanden
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry scsi0:0.fileName "%VirtMachNaam%.vmdk"
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry extendedConfigFile "%VirtMachNaam%.vmxf"
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry nvram "%VirtMachNaam%.nvram"
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry vmxstats.filename "%VirtMachNaam%.scoreboard"
-@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sata0:1.fileName "D:\Installatie-Catalogus\InstallatieMedia\Besturingssystemen\Linux\Ubuntu\Server\24-04-LTS\ubuntu-24.04-live-server-amd64.iso"
+::  ISO
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sata0:1.fileName "%MediaPath%\%MediaFile%"
 ::
 @echo Shared Folders van de virtuele machine in de VMX aanpassen via VMCli
 ::  Shared Folder op Always Enabled zetten 
@@ -328,13 +370,13 @@ IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmdk" (
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 ::
-@echo Verwijderen vmx bestand uit template directory
 IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmx" (
+    @echo Verwijderen vmx bestand uit template directory
     @del %VMTemplatePath%\%VirtMachNaam%.vmx >nul 2>&1
 )
 ::
-@echo Verwijderen vmdk bestand uit template directory
 IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmdk" (
+    @echo Verwijderen vmdk bestand uit template directory
     @del %VMTemplatePath%\%VirtMachNaam%.vmdk >nul 2>&1
 )
 ::
@@ -366,7 +408,7 @@ IF EXIST %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx (
 @echo Klik op "OK" bij Removable Devices melding 
 ::
 ::
-@echo Een minuut wachten voordat LUCT wordt overgezet naar VM
+@echo Een minuut wachten voordat LUCT 4.1 wordt overgezet naar VM
 powershell -command "Start-Sleep -Seconds 60"
 ::
 ::
@@ -379,9 +421,9 @@ powershell -command "Start-Sleep -Seconds 60"
 ::  ping 127.0.0.1 -n 31 >nul 2>&1
 ::
 ::
-@echo Downloaden nieuwste versie LUCT vanaf GitHub
+@echo Downloaden nieuwste versie LUCT 4.1 vanaf GitHub John Tutert 
 %VMWareInstallPath%\vmrun -T ws -gu ubuntu -gp ubuntu runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/curl" -L -o /home/ubuntu/luctv41.sh https://edu.nl/n7faw
-@echo Uitvoerbaar maken van LUCT binnen virtuele machine
+@echo Uitvoerbaar maken van LUCT 4.1 binnen virtuele machine
 %VMWareInstallPath%\vmrun -T ws -gu ubuntu -gp ubuntu runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/sudo" chmod +x /home/ubuntu/luctv41.sh
 @echo LUCT is overgezet naar de virtuele machine 
 ::
@@ -393,28 +435,28 @@ for /f "delims==" %%A in ('%VMWareInstallPath%\vmrun -T ws -gu ubuntu -gp ubuntu
 @start wt.exe C:\Windows\System32\OpenSSH\ssh.exe -p 22 ubuntu@%vmipadres%
 ::
 ::
-:: ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-::	Meerdere manieren om een VM te starten
+::  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  Meerdere manieren om een VM te starten
 ::
-::	@start /B vmware -n %vmPath%\Linux\Docker\%VirtMachNaam%.vmx
-::	vmcli %vmPath%\Linux\Docker\%VirtMachNaam%.vmx power start
-::	vmrun -T ws start "%vmPath%\Linux\Docker\%VirtMachNaam%.vmx" 
+::  @start /B vmware -n %vmPath%\Linux\Docker\%VirtMachNaam%.vmx
+::  vmcli %vmPath%\Linux\Docker\%VirtMachNaam%.vmx power start
+::  vmrun -T ws start "%vmPath%\Linux\Docker\%VirtMachNaam%.vmx" 
 ::
-:: vmcli %vmPath%\Linux\Docker\%VirtMachNaam%.vmx guest run --username ubuntu --password ubuntu curl -s -L -o u24config.sh ......
-::
-::
-:: ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  vmcli %vmPath%\Linux\Docker\%VirtMachNaam%.vmx guest run --username ubuntu --password ubuntu curl -s -L -o u24config.sh ......
 ::
 ::
-::	:::::::::::::::::::::::::::::::::::::::::::::::::::::
-::	STAP 18 Lokale Variabelen vrijgeven
-::	:::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  STAP 18 Lokale Variabelen vrijgeven
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 @endlocal
 ::
-::	:::::::::::::::::::::::::::::::::::::::::::::::::::::
-::	STAP 19 Einde Script
-::	:::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  STAP 19 Einde Script
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 :: Thats it folks
 ::
