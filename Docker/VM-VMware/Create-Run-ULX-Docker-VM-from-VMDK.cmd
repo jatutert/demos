@@ -155,23 +155,43 @@ if %errorlevel% neq 0 (
     @winget install --id cURL.cURL --silent >%TEMP%\WinGet-cURL-Installatie.log
 )
 ::
+pwsh --version >nul 2>&1
+if %errorlevel% neq 0 (
+    @echo Powershell 7 niet aangetroffen op deze machine .. Installatie wordt gestart .. 
+    @winget install --id Microsoft.PowerShell --silent >%TEMP%\WinGet-pwsh-Installatie.log
+)
+::
+set "app_dir_check=C:\Program Files\WindowsApps\Microsoft.WindowsTerminal_1"
+if not exist "%app_dir_check%*" (
+    @echo Windows Terminal niet aangetroffen
+    @winget install --id Microsoft.WindowsTerminal --silent >%TEMP%\WinGet-WinTerm-Installatie.log
+)
+::
 ::
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::  STAP 8 Opruimen eventueel aanwezige virtuele machine 
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
+::
 :: Stoppen eventueel draaiend VMware Workstation PRo
-tasklist /FI "IMAGENAME eq vmware.exe" | findstr "vmware.exe" > nul
-if %errorlevel% equ 0 (
-    echo VMware Workstation Pro wordt afgesloten
-    @taskkill /IM vmware.exe /F
-)
+::  tasklist /FI "IMAGENAME eq vmware.exe" | findstr "vmware.exe" > nul
+::  if %errorlevel% equ 0 (
+::      echo VMware Workstation Pro is actief en wordt daarom afgesloten ... 
+::      @taskkill /IM vmware.exe /F
+::  )
+::
 ::
 :: https://techdocs.broadcom.com/us/en/vmware-cis/desktop-hypervisors/workstation-pro/17-0/using-vmware-workstation-pro/using-the-vmrun-command-to-control-virtual-machines/running-vmrun-commands/syntax-of-vmrun-commands.html
 ::
 @echo Stoppen eventueel draaiende virtuele machine
 IF EXIST "%vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx" (
+    tasklist /FI "IMAGENAME eq vmware.exe" | findstr "vmware.exe" > nul
+    if %errorlevel% neq 0 (
+        @"%VMWareInstallPath%"\vmrun -T ws stop %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx >nul 2>&1
+    ) else (
+    @taskkill /IM vmware.exe /F
     @"%VMWareInstallPath%"\vmrun -T ws stop %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx >nul 2>&1
+    )
 )
 ::
 ::
@@ -409,7 +429,8 @@ IF EXIST %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx (
 ::
 ::
 @echo Een minuut wachten voordat LUCT 4.1 wordt overgezet naar VM
-powershell -command "Start-Sleep -Seconds 60"
+::  powershell -command "Start-Sleep -Seconds 60"
+pwsh -command "Start-Sleep -Seconds 60"
 ::
 ::
 ::  Alternatief
