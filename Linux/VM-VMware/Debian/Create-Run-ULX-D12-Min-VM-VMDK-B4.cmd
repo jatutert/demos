@@ -4,7 +4,7 @@
 ::
 ::  For Educational and/or Personal Use ! 
 ::
-::  LUCT 4 Docker demo Edition
+::  LUCT 4 Debian OMV Edition
 ::
 ::  Dit is de script versie van de handleiding 2.1 Virtualisatie 2025-2026
 ::  Gemaakt voor docenten
@@ -20,6 +20,7 @@
 ::  26aug25     Laatste deel van het script machine onafhankelijk gemaakt
 ::  29aug25     ISO bestand check en download
 ::
+::  04sept25    Toevoegen CD-ROM en NVME disks 
 ::
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::  STAP 0 Schoon scherm 
@@ -65,15 +66,15 @@
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 ::  Locatie van download bestand van Linux VM Images website
-@set "VMTemplatePath=D:\Virtual-Machines\Templates\Linux\Ubuntu\Server\24-04-0-LTS"
+@set "VMTemplatePath=D:\Virtual-Machines\Templates\Linux\Debian\Minimaal\12"
 @mkdir %VMTemplatePath% >nul 2>&1
 ::
 ::  Locatie van ISO bestanden 
-@set "MediaPath=D:\Installatie-Catalogus\InstallatieMedia\Besturingssystemen\Linux\Ubuntu\Server\24-04-LTS"
+@set "MediaPath=D:\Installatie-Catalogus\InstallatieMedia\Besturingssystemen\Linux\Debian\Server-Minimal\12"
 @mkdir %MediaPath% >nul 2>&1
 ::
 ::  Naam ISO bestand
-@set "MediaFile=ubuntu-24.04.3-live-server-amd64.iso"
+@set "MediaFile=debian-12.11.0-amd64-netinst.iso"
 ::
 ::
 ::  https://mirror.ams.macarne.com/ubuntu-releases/24.04.3/
@@ -90,15 +91,15 @@
 ::  Besturingssysteem van de demo
 @set "VMOSPath=Linux"
 ::  Distro van het besturingssysteem van de demo
-@set "VMOSDistroPath=Ubuntu"
+@set "VMOSDistroPath=Debian"
 ::  Applicatie bovenop het het besturingssysteem van de demo
-@set "VMAPPPath=Docker"
+@set "VMAPPPath=OMV"
 ::  Naam van virtuele machine en alle bestanden van de virtuele machine
-@set "VirtMachNaam=U24-LTS-S-DKR-001"
+@set "VirtMachNaam=D12-LTS-S-OMV-001"
 ::  Naam van de bestanden in het ZIP bestand vanuit download linuxvmimages website
-@set "LVI_Inside_ZIP_Filename=UbuntuServer_24.04_VM_LinuxVMImages.COM"
+@set "LVI_Inside_ZIP_Filename=Debian_12.0.0_VMM_LinuxVMImages.COM"
 ::  Eigen naam gegeven aan ZIP bestand afkomstig van LinuxVMImages website
-@set "LVI_Download_ZIP_Filename=LVI-U24-04-LTS-S-VMDK"
+@set "LVI_Download_ZIP_Filename=LVI-D12-00-BKW-M-VMDK"
 ::
 ::
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -134,7 +135,7 @@ for /f "tokens=1,* delims==" %%A in ('findstr /i "prefvmx.defaultVMPath" "%prefF
 @echo.
 @echo Created by John Tutert (TutSOFT)
 @echo.
-@echo LUCT 4.1 Docker Demo Edition (%VirtMachNaam%)
+@echo LUCT 4.1 Open Media Vault Edition (%VirtMachNaam%)
 @echo. 
 ::
 ::
@@ -233,7 +234,7 @@ IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmdk" (
 ::
 IF NOT EXIST "%VMTemplatePath%\%LVI_Download_ZIP_Filename%.7z" (
     @echo Downloaden template virtuele machine van Linux VM Images website ... 
-    @curl -s -L -o %VMTemplatePath%\%LVI_Download_ZIP_Filename%.7z https://edu.nl/xu78m
+    @curl -s -L -o %VMTemplatePath%\%LVI_Download_ZIP_Filename%.7z https://edu.nl/pegff
 )
 :
 ::
@@ -338,7 +339,10 @@ IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmdk" (
 set /a div_result=%NUMBER_OF_PROCESSORS% / 3
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry numvcpus "%div_result%"
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry cpuid.coresPerSocket "2"
+::
+::  :::::::::::::::::::::::::::::::::::::::
 ::  RAM
+::  :::::::::::::::::::::::::::::::::::::::
 for /f %%i in ('powershell -command "[math]::round(((Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory / 1GB))"') do (
     set TotalMemoryGB=%%i
 )
@@ -346,13 +350,71 @@ echo Totaal geheugen: %TotalMemoryGB% GB
 set /a QuarterMemoryMB=%TotalMemoryGB% * 1024 / 4
 echo Een vierde daarvan: %QuarterMemoryMB% MB
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry memsize "%QuarterMemoryMB%"
-::  Namen bestanden
+::
+::  Namen bestanden virtuele machine aanpassen naar hostname
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry scsi0:0.fileName "%VirtMachNaam%.vmdk"
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry extendedConfigFile "%VirtMachNaam%.vmxf"
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry nvram "%VirtMachNaam%.nvram"
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry vmxstats.filename "%VirtMachNaam%.scoreboard"
-::  ISO
-@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sata0:1.fileName "%MediaPath%\%MediaFile%"
+::
+::  CD-ROM Drive 
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Sata SetPresent sata0 1
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Disk SetBackingInfo sata0:0 cdrom_image "%MediaPath%\%MediaFile%" 1
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Disk SetPresent sata0:0 1
+::
+::  @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sata0:1.fileName "%MediaPath%\%MediaFile%"
+::
+::  :::::::::::::::::::::::::::::::::::::::
+::  :::: DISK 
+::  :::::::::::::::::::::::::::::::::::::::
+::
+::  Aanmaken extra schijven voor VM
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Disk Create -f %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\RaidDisk0.vmdk -a lsilogic -s 64GB -t 0
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Disk Create -f %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\RaidDisk1.vmdk -a lsilogic -s 64GB -t 0
+::
+::  :::::::::::::::::::::::::
+::  Koppelen schijf 0 aan VM
+::  :::::::::::::::::::::::::
+::
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx nvme SetPresent nvme0 1
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Disk SetBackingInfo nvme0:0 disk RaidDisk0.vmdk 1 
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Disk SetPresent nvme0:0 1 
+::
+::  @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry nvme0.present "TRUE"
+::  @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry nvme0:0.fileName "RaidDisk0.vmdk"
+::  @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry nvme0:0.present "TRUE"
+::
+::  ::::::::::::::::::::::::
+::  Koppelen schijf 1 aan VM
+::  ::::::::::::::::::::::::
+::
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx nvme SetPresent nvme0 1
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Disk SetBackingInfo nvme0:1 disk RaidDisk1.vmdk 1 
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Disk SetPresent nvme0:1 1 
+::
+::  @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry nvme0.present "TRUE"
+::  @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry nvme0:0.fileName "RaidDisk1.vmdk"
+::  @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry nvme0:0.present "TRUE"
+::
+::  :::::::::::::::::::::::::::::::::::::::
+::  :::: Ethernet
+::  :::::::::::::::::::::::::::::::::::::::
+::
+::  Netwerkkaart type instellen vlance vmxnet e1000e vmxnet3 vrdma
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Ethernet SetVirtualDevice ethernet1 vmxnet
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Ethernet SetConnectionType ethernet1 custom
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Ethernet SetAddressType ethernet1 generated ""
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Ethernet SetLinkStatePropagation ethernet1 true
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Ethernet SetPresent ethernet1 1
+::
+::  Tweede netwerkkaart op VMNet 10 zetten
+::
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry ethernet1.vnet "VMnet10"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry ethernet1.displayName "VMnet10"
+::
+::  :::::::::::::::::::::::::::::::::::::::
+::  ::::    Shared Folders
+::  :::::::::::::::::::::::::::::::::::::::
 ::
 @echo Shared Folders van de virtuele machine in de VMX aanpassen via VMCli
 ::  Shared Folder op Always Enabled zetten 
@@ -446,17 +508,17 @@ pwsh -command "Start-Sleep -Seconds 60"
 ::
 ::
 @echo Downloaden nieuwste versie LUCT 4.1 vanaf GitHub John Tutert 
-%VMWareInstallPath%\vmrun -T ws -gu ubuntu -gp ubuntu runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/curl" -L -o /home/ubuntu/luctv41.sh https://edu.nl/n7faw
+%VMWareInstallPath%\vmrun -T ws -gu debian -gp debian runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/curl" -L -o /home/ubuntu/luctv41.sh https://edu.nl/n7faw
 @echo Uitvoerbaar maken van LUCT 4.1 binnen virtuele machine
-%VMWareInstallPath%\vmrun -T ws -gu ubuntu -gp ubuntu runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/sudo" chmod +x /home/ubuntu/luctv41.sh
+%VMWareInstallPath%\vmrun -T ws -gu debian -gp debian runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/sudo" chmod +x /home/ubuntu/luctv41.sh
 @echo LUCT is overgezet naar de virtuele machine 
 ::
 ::
 @echo IP Adres Virtuele Machine ophalen 
-for /f "delims==" %%A in ('%VMWareInstallPath%\vmrun -T ws -gu ubuntu -gp ubuntu getGuestIPAddress %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx') do set vmipadres=%%A
+for /f "delims==" %%A in ('%VMWareInstallPath%\vmrun -T ws -gu debian -gp debian getGuestIPAddress %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx') do set vmipadres=%%A
 ::
 @echo Starten Windows Terminal
-@start wt.exe C:\Windows\System32\OpenSSH\ssh.exe -p 22 ubuntu@%vmipadres%
+@start wt.exe C:\Windows\System32\OpenSSH\ssh.exe -p 22 debian@%vmipadres%
 ::
 ::
 ::  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
