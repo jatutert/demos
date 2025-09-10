@@ -4,7 +4,7 @@
 ::
 ::  For Educational and/or Personal Use ! 
 ::
-::  LUCT 4 Debian OMV Edition
+::  LUCT 4 Debian Minimal Edition
 ::
 ::  Dit is de script versie van de handleiding 2.1 Virtualisatie 2025-2026
 ::  Gemaakt voor docenten
@@ -27,8 +27,8 @@
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 :: 
-@echo off
-@cls
+@ECHO OFF
+@CLS
 ::
 ::
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -66,15 +66,15 @@
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 ::  Locatie van download bestand van Linux VM Images website
-@set "VMTemplatePath=D:\Virtual-Machines\Templates\Linux\Debian\Minimaal\12"
-@mkdir %VMTemplatePath% >nul 2>&1
+@SET "VMTemplatePath=D:\Virtual-Machines\Templates\Linux\Debian\Minimaal\12"
+@MKDIR %VMTemplatePath% >nul 2>&1
 ::
 ::  Locatie van ISO bestanden 
-@set "MediaPath=D:\Installatie-Catalogus\InstallatieMedia\Besturingssystemen\Linux\Debian\Server-Minimal\12"
-@mkdir %MediaPath% >nul 2>&1
+@SET "MediaPath=D:\Installatie-Catalogus\InstallatieMedia\Besturingssystemen\Linux\Debian\Server-Minimal\12"
+@MKDIR %MediaPath% >nul 2>&1
 ::
 ::  Naam ISO bestand
-@set "MediaFile=debian-12.11.0-amd64-netinst.iso"
+@SET "MediaFile=debian-12.11.0-amd64-netinst.iso"
 ::
 ::
 ::  https://mirror.ams.macarne.com/ubuntu-releases/24.04.3/
@@ -89,17 +89,17 @@
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 ::  Besturingssysteem van de demo
-@set "VMOSPath=Linux"
+@SET "VMOSPath=Linux"
 ::  Distro van het besturingssysteem van de demo
-@set "VMOSDistroPath=Debian"
+@SET "VMOSDistroPath=Debian"
 ::  Applicatie bovenop het het besturingssysteem van de demo
-@set "VMAPPPath=OMV"
+@SET "VMAPPPath=Minimal"
 ::  Naam van virtuele machine en alle bestanden van de virtuele machine
-@set "VirtMachNaam=D12-LTS-S-OMV-001"
+@SET "VirtMachNaam=D12-LTS-S-MIN-001"
 ::  Naam van de bestanden in het ZIP bestand vanuit download linuxvmimages website
-@set "LVI_Inside_ZIP_Filename=Debian_12.0.0_VMM_LinuxVMImages.COM"
+@SET "LVI_Inside_ZIP_Filename=Debian_12.0.0_VMM_LinuxVMImages.COM"
 ::  Eigen naam gegeven aan ZIP bestand afkomstig van LinuxVMImages website
-@set "LVI_Download_ZIP_Filename=LVI-D12-00-BKW-M-VMDK"
+@SET "LVI_Download_ZIP_Filename=LVI-D12-00-BKW-M-VMDK"
 ::
 ::
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -116,13 +116,13 @@
 ::
 ::
 :: Stap 5A  Zoek de regel met prefvmx.defaultVMPath en haal het pad eruit
-@set "prefFile=%AppData%\VMware\preferences.ini"
-for /f "tokens=1,* delims==" %%A in ('findstr /i "prefvmx.defaultVMPath" "%prefFile%"') do (
-    set "rawPath=%%B"
+@SET "prefFile=%AppData%\VMware\preferences.ini"
+@FOR /f "tokens=1,* delims==" %%A in ('findstr /i "prefvmx.defaultVMPath" "%prefFile%"') do (
+    SET "rawPath=%%B"
 )
 ::
 :: Stap 5B  Verwijder aanhalingstekens uit prefvmx.defaultVMPath
-@set "vmPath=%rawPath:"=%"
+@SET "vmPath=%rawPath:"=%"
 ::
 ::
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -135,7 +135,7 @@ for /f "tokens=1,* delims==" %%A in ('findstr /i "prefvmx.defaultVMPath" "%prefF
 @echo.
 @echo Created by John Tutert (TutSOFT)
 @echo.
-@echo LUCT 4.1 Open Media Vault Edition (%VirtMachNaam%)
+@echo LUCT 4.1 Debian Minimal Edition (%VirtMachNaam%)
 @echo. 
 ::
 ::
@@ -328,15 +328,15 @@ IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmdk" (
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 ::
-@echo DisplayName van de virtuele machine aanpassen in de VMX via VMCli
+@ECHO DisplayName van de virtuele machine aanpassen in de VMX via VMCli
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry displayName "%VirtMachNaam%"
 ::
-@echo Annotation van de virtuele machine aanpassen in de VMX via VMCli
+@ECHO Annotation van de virtuele machine aanpassen in de VMX via VMCli
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry annotation "LUCT Docker Demo Ubuntu Server 24.04 LTS Gebruiker: ubuntu Wachtwoord: ubuntu"
 ::
-@echo Hardware configuratie van de virtuele machine in de VMX aanpassen via VMCli
+@ECHO Hardware configuratie van de virtuele machine in de VMX aanpassen via VMCli
 ::  CPU
-set /a div_result=%NUMBER_OF_PROCESSORS% / 3
+@SET /a div_result=%NUMBER_OF_PROCESSORS% / 3
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry numvcpus "%div_result%"
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry cpuid.coresPerSocket "2"
 ::
@@ -344,11 +344,11 @@ set /a div_result=%NUMBER_OF_PROCESSORS% / 3
 ::  RAM
 ::  :::::::::::::::::::::::::::::::::::::::
 for /f %%i in ('powershell -command "[math]::round(((Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory / 1GB))"') do (
-    set TotalMemoryGB=%%i
+    SET TotalMemoryGB=%%i
 )
-echo Totaal geheugen: %TotalMemoryGB% GB
-set /a QuarterMemoryMB=%TotalMemoryGB% * 1024 / 4
-echo Een vierde daarvan: %QuarterMemoryMB% MB
+@ECHO Totaal geheugen: %TotalMemoryGB% GB
+@SET /a QuarterMemoryMB=%TotalMemoryGB% * 1024 / 4
+@ECHO Een vierde daarvan: %QuarterMemoryMB% MB
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry memsize "%QuarterMemoryMB%"
 ::
 ::  Namen bestanden virtuele machine aanpassen naar hostname
@@ -416,7 +416,7 @@ echo Een vierde daarvan: %QuarterMemoryMB% MB
 ::  ::::    Shared Folders
 ::  :::::::::::::::::::::::::::::::::::::::
 ::
-@echo Shared Folders van de virtuele machine in de VMX aanpassen via VMCli
+@ECHO Shared Folders van de virtuele machine in de VMX aanpassen via VMCli
 ::  Shared Folder op Always Enabled zetten 
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry isolation.tools.hgfs.disable "False"
 ::  Shared Folder Downloads
@@ -456,13 +456,13 @@ echo Een vierde daarvan: %QuarterMemoryMB% MB
 ::
 ::
 IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmx" (
-    @echo Verwijderen vmx bestand uit template directory
-    @del %VMTemplatePath%\%VirtMachNaam%.vmx >nul 2>&1
+    @ECHO Verwijderen vmx bestand uit template directory
+    @DEL %VMTemplatePath%\%VirtMachNaam%.vmx >nul 2>&1
 )
 ::
 IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmdk" (
-    @echo Verwijderen vmdk bestand uit template directory
-    @del %VMTemplatePath%\%VirtMachNaam%.vmdk >nul 2>&1
+    @ECHO Verwijderen vmdk bestand uit template directory
+    @DEL %VMTemplatePath%\%VirtMachNaam%.vmdk >nul 2>&1
 )
 ::
 ::
@@ -470,7 +470,7 @@ IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmdk" (
 ::  STAP 16 Starten VMware Workstation Pro
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
-@echo Nieuw virtuele machine openen in VMWare Worktation Pro 
+@ECHO Nieuw virtuele machine openen in VMWare Worktation Pro 
 IF EXIST %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx (
     :: start /B vmware.exe -n %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx
     start /B "" "%VMWareInstallPath%\vmware.exe" -n %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx
@@ -481,7 +481,7 @@ IF EXIST %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx (
 ::  STAP 17 Starten Virtuele machine 
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
-@echo Starten van de virtuele machine 
+@ECHO Starten van de virtuele machine 
 IF EXIST %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx (
     :: start /B vmrun.exe -T ws start %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx
     start /B "" "%VMWareInstallPath%\vmrun.exe" -T ws start %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx
