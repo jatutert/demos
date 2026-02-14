@@ -4,7 +4,7 @@
 ::
 ::  For Educational and/or Personal Use ! 
 ::
-:: LUCT 4 Docker demo Edition
+::  LUCT 4 Ubuntu Server Docker Edition
 ::
 ::  Dit is de script versie van de handleiding 2.1 Virtualisatie 2025-2026
 ::  Gemaakt voor docenten
@@ -27,7 +27,7 @@
 @echo.
 @echo Created by John Tutert (TutSOFT)
 @echo.
-@echo LUCT 4 Docker Demo Edition (U24-LTS-S-DKR-001)
+@echo LUCT 4 Ubuntu Server Docker Edition (U24-LTS-S-DKR-001)
 @echo. 
 ::
 ::

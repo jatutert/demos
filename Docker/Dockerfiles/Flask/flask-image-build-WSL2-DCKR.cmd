@@ -1,0 +1,28 @@
+::
+::
+:: Script for building Flask demo Docker Image
+::
+:: Author: John Tutert
+::
+:: Based on default flash demo https://hackmd.io/@pmanzoni/r1uWcTqfU
+::
+:: For Personal or educational use only 
+::
+::
+echo Verwijderen eventueel aanwezige flash demo image
+docker rmi flask-demo:latest
+::
+docker build --file ./flask-demo-dkr-file-V2 --tag flask-demo:latest .
+::
+::
+:: Meerdere talen demo 
+:: docker build -f ./flask-demo-dkr-file-de -t flask-demo-de:v100 .
+:: docker build -f ./flask-demo-dkr-file-fr -t flask-demo-fr:v100 .
+:: docker build -f ./flask-demo-dkr-file-it -t flask-demo-it:v100 .
+:: docker build -f ./flask-demo-dkr-file-nl -t flask-demo-nl:v100 .
+:: docker build -f ./flask-demo-dkr-file-uk -t flask-demo-uk:v100 .
+::
+::
+echo 'Nieuwe image pushen naar lokale registry'
+docker tag flask-demo:latest 127.0.0.1:9105/flask-demo
+docker push 127.0.0.1:9105/flask-demo

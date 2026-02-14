@@ -1,13 +1,13 @@
 ::
-::	VMWare Workstation Pro Virtual Machine Creator
-::	Created by John Tutert(TutSOFT)
+::  VMWare Workstation Pro Virtual Machine Creator
+::  Created by John Tutert(TutSOFT)
 ::
-::	For Educational and/or Personal Use ! 
+::  For Educational and/or Personal Use ! 
 ::
-:: LUCT 4 Ubuntu 24.04 LTS Desktop Edition
+::  LUCT 4 Ubuntu Desktop Docker Edition 
 ::
-::	Dit is de script versie van de handleiding 2.1 Virtualisatie 2025-2026
-::	Gemaakt voor docenten
+::  Dit is de script versie van de handleiding 2.1 Virtualisatie 2025-2026
+::  Gemaakt voor docenten
 ::
 :: Changelog
 ::
@@ -23,7 +23,7 @@
 @echo.
 @echo Created by John Tutert (TutSOFT)
 @echo.
-@echo LUCT 4 Ubuntu 24.04 LTS Desktop Edition (U24-LTS-D-CLT-001)
+@echo LUCT 4 Ubuntu Desktop Docker Edition (U24-LTS-D-CLT-001)
 @echo. 
 ::
 ::

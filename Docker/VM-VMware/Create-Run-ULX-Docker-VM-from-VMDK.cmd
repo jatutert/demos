@@ -19,6 +19,7 @@
 ::  16aug25     auto start vm na inlezen vm en inlezen vmware workstation path uit register
 ::  26aug25     Laatste deel van het script machine onafhankelijk gemaakt
 ::  29aug25     ISO bestand check en download
+::  25sept25    LUCT versie 4.2 i.p.v. LUCT versie 4.1
 ::
 ::
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -134,7 +135,7 @@ for /f "tokens=1,* delims==" %%A in ('findstr /i "prefvmx.defaultVMPath" "%prefF
 @echo.
 @echo Created by John Tutert (TutSOFT)
 @echo.
-@echo LUCT 4.1 Docker Demo Edition (%VirtMachNaam%)
+@echo LUCT 4.2 Docker Demo Edition (%VirtMachNaam%)
 @echo. 
 ::
 ::
@@ -445,10 +446,10 @@ pwsh -command "Start-Sleep -Seconds 60"
 ::  ping 127.0.0.1 -n 31 >nul 2>&1
 ::
 ::
-@echo Downloaden nieuwste versie LUCT 4.1 vanaf GitHub John Tutert 
-%VMWareInstallPath%\vmrun -T ws -gu ubuntu -gp ubuntu runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/curl" -L -o /home/ubuntu/luctv41.sh https://edu.nl/n7faw
-@echo Uitvoerbaar maken van LUCT 4.1 binnen virtuele machine
-%VMWareInstallPath%\vmrun -T ws -gu ubuntu -gp ubuntu runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/sudo" chmod +x /home/ubuntu/luctv41.sh
+@echo Downloaden nieuwste versie LUCT 4.2 vanaf GitHub John Tutert 
+%VMWareInstallPath%\vmrun -T ws -gu ubuntu -gp ubuntu runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/curl" -L -o /home/ubuntu/luctv42.sh https://edu.nl/vnej9
+@echo Uitvoerbaar maken van LUCT 4.2 binnen virtuele machine
+%VMWareInstallPath%\vmrun -T ws -gu ubuntu -gp ubuntu runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/sudo" chmod +x /home/ubuntu/luctv42.sh
 @echo LUCT is overgezet naar de virtuele machine 
 ::
 ::
