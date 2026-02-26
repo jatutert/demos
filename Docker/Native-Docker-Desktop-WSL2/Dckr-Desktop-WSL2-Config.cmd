@@ -39,40 +39,69 @@ netsh interface ipv4 show excludedportrange protocol=tcp
 :: Pull Images
 ::
 docker pull alpine:latest
-docker pull alpine:3.5
 docker pull amazonlinux:latest
 docker pull clearlinux:latest
-docker pull ubuntu:24.04
+docker pull debian:latest
+docker pull ubuntu:latest
+docker pull httpd:latest
+docker pull dockersamples/static-site
+docker pull nginx:latest
+docker pull wordpress:latest
+:: 
 docker pull codercom/code-server:latest
-docker pull prakhar1989/static-site
 docker pull portainer/portainer-ce:latest
-docker pull registry:latest
 docker pull selfhostedpro/yacht:latest
-docker pull containrrr/watchtower:latest
-docker pull 
+docker pull percona/watchtower:latest
+docker pull jenkins/jenkins:latest-jdk21
+docker pull registry:latest
+::
+docker pull lirantal/dockly:latest
+docker pull moncho/dry:latest
+::
+:: Volumes
+::
+docker volume rm portainer_data
+docker volume rm yacht_data
+docker volume rm jenkins_data
+::
+docker volume create portainer_data
+docker volume create yacht_data
+docker volume create jenkins_data
 ::
 :: Portainer
 ::
-docker volume rm portainer_data
-docker volume create portainer_data
-docker run -d -p 8000:8000 -p 9101:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
+docker run -d -p 8000:8000 -p 9101:9443 --name LUCT_portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
 ::
 echo Portainer is beschikbaar op https://localhost:9101
 echo Gebruik password1234 als wachtwoord bij aanmaken van gebruiker
+::
 :: Yacht
 :: 
-docker volume rm yacht_data
-docker volume create yacht_data
-docker run -d -p 9102:8000 -v /var/run/docker.sock:/var/run/docker.sock -v yacht_data:/config --name yacht --restart=always selfhostedpro/yacht
+docker run -d -p 9102:8000 -v /var/run/docker.sock:/var/run/docker.sock -v yacht_data:/config --name LUCT_Yacht --restart=always selfhostedpro/yacht
 ::
 echo Yacht is beschikbaar op http://localhost:9102
 echo gebruiker  admin@yacht.local
 echo wachtwoord pass
 ::
-:: WatchTower
+:: VS Code Server
 ::
-docker run -d -p 9106:8080 --restart always --name watchtower -v /var/run/docker.sock:/var/run/docker.sock containrrr/watchtower
+docker run -d --name LUCT_VSC_Server -p 9103:8080 --restart=always -v "/home/$USER:/home/coder/project" codercom/code-server:latest --auth=none
+::
+::  Jenkins
+::
+docker run -d --name LUCT_Jenkins -p 9104:8080 -p 50000:50000 --restart=always -v jenkins_data:/var/jenkins_home jenkins/jenkins:latest-jdk21
 ::
 :: Registry
 ::
-docker run -d -p 9105:5000 --restart always --name registry registry
+docker run -d --name LUCT_Registry -p 9105:5000 --restart always -v registry-data:/var/lib/registry registry
+::
+:: WatchTower
+::
+docker run -d -p 9106:8080 --restart always --name LUCT_Watchtower -v /var/run/docker.sock:/var/run/docker.sock percona/watchtower
+::
+::  Jenkins Wachtwoord opslaan
+docker cp LUCT_Jenkins:/var/jenkins_home/secrets/initialAdminPassword %userprofile%/Jenkins_Initial_Password.txt
+
+::
+echo docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock lirantal/dockly > %userprofile%/dkr_run_dockly.cmd
+echo docker run --rm -it -v /var/run/docker.sock:/var/run/docker.sock -e DOCKER_HOST=$DOCKER_HOST moncho/dry > %userprofile%/dkr_run_dry.cmd

@@ -5,7 +5,7 @@
 #
 echo 'Stap 3 Aanpassen aantal replicas van 2 naar 4 gestart ...'
 #
-kubectl apply -f $PWD/deployment-scale.yaml
+kubectl apply -f $PWD/deployment-scale.yml
 kubectl describe deployment nginx-deployment
 kubectl get pods -l app=nginx
 minikube service --all
