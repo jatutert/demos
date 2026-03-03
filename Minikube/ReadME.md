@@ -33,7 +33,9 @@ The virtual machine contains Docker. The worker nodes run on top of Docker withi
 Same as VM-VMware, but now with Vagrant operating VMware Workstation Pro. 
 
 ## License / Copyright / Trademarks 
-> - Virtualbox by Oracle Corporation (oracle.com) 
+> - Docker by Docker (docker.com) 
+> - Kubernetes by Linux Foundation (linuxfoundation.org) 
+> - VM Virtualbox by Oracle Corporation (oracle.com) 
 > - VMware by VMware Company (vmware.com) / Broadcom (broadcom.com) 
 > - Windows by Microsoft Corporation (microsoft.com)
 

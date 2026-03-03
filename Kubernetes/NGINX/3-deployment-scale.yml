@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment
+  name: nginx-deployment # naam van de deployment
 spec:
   selector:
     matchLabels:
-      app: nginx
+      app: nginx # zie label nginx hieronder voor verdere informatie
   replicas: 4 # Update the replicas from 2 to 4
   template:
     metadata:
       labels:
         app: nginx
-    spec:
+    spec: # Specificatie van de inhoud van iedere POD
       containers:
       - name: nginx
-        image: nginx:1.16.1
+        image: nginx:1.28.2 # Blijf gebruik maken van dezelfde versie als eerdere update
         ports:
         - containerPort: 80

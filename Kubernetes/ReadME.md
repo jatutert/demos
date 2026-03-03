@@ -18,6 +18,8 @@ That is step 1. The next step (step 2) is to upgrade nginx from version 14 to ve
 The final step (step 3) is to increase the number of replicas from two to four. 
 
 ## License / Copyright / Trademarks 
+> - Docker by Docker (docker.com) 
+> - Kubernetes by Linux Foundation (linuxfoundation.org) 
 > - Virtualbox by Oracle Corporation (oracle.com) 
 > - VMware by VMware Company (vmware.com) / Broadcom (broadcom.com) 
 > - Windows by Microsoft Corporation (microsoft.com)

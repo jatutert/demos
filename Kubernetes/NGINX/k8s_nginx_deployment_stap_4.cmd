@@ -9,4 +9,3 @@ kubectl delete deployment,svc nginx-deployment
 kubectl get pods -o wide
 kubectl get svc -o wide
 ::
-

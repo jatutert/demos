@@ -15,5 +15,10 @@ kubectl expose deployment nginx-deployment --type=NodePort
 kubectl describe deployment nginx-deployment
 kubectl get pods -l app=nginx
 ::
+kubectl get pods -o wide
+kubectl get svc -o wide
+::
 :: Minikube Container netwerk verbinden met netwerk locale host
-minikube service --all
+:: Opmerking: als je dit zo in het script doet, dan komt dit te snel. Deployment is nog aan het opstarten
+:: 
+:: minikube service --all

@@ -3,9 +3,12 @@
 ::  Kubernetes MicroK8S Minikube demo deployment NGINX stap 0
 ::  Stap 0 is Minikube klaarmaken voor gebruik
 ::
+@echo off
+@cls
+::
 echo Stap 0 Starten Docker Desktop
 ::
-C:\Program Files\Docker\Docker\Docker Desktop.exe
+@"C:\Program Files\Docker\Docker\Docker Desktop.exe"
 ::
 echo Stap 0 Minikube klaarmaken voor gebruik
 ::
@@ -20,5 +23,6 @@ minikube config set WantUpdateNotification true
 minikube config set WantBetaUpdateNotification true
 minikube config set WantVirtualBoxDriverWarning false
 ::
+@echo Kubernetes Cluster starten (met 2 nodes) 
 minikube start --nodes=2 --cni=flannel
 ::

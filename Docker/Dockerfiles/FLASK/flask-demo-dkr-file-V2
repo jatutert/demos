@@ -5,35 +5,42 @@
 #
 #   Created by John Tutert
 # 
-# Only for Personal and/or Education Use !
+#   Only for Personal and/or Education Use !
 # 
 
-#   Image laag 1
-#   Alpine Linux versie 3.5
-FROM alpine:3.5
+#   Image laag 0
+#   Alpine Linux
+FROM alpine:latest
+
+#   Image Laag 1
+#   Shell
 
 #   Image laag 2
-#   Installeer de benodige zaken 
-RUN apk update \
-    apk add py2-pip -q \
-    apk add py2-flask -q \
-    apk add wget -q
+#   Package Manager update 
+RUN apk update 
 
 #   Image laag 3
+#   Application Installation 
+RUN apk add py3-pip py3-flask wget -q
+
+#   Image laag 4
 #   Maak directories
-RUN mkdir -p /usr/src/app \
-    mkdir -p /usr/src/app/templates 
+RUN mkdir -p /usr/src/app/templates 
 
-#   Image laag 4 
+#   Image laag 5 
 #   Python Script
-RUN wget --no-check-certificate -O /usr/src/app/app.py https://raw.githubusercontent.com/jatutert/demos/main/Docker/Dockerfiles/FLASK/app.py
+RUN wget -q --no-check-certificate -O /usr/src/app/app.py https://raw.githubusercontent.com/jatutert/demos/main/Docker/Dockerfiles/FLASK/app.py
 
-#   Image laag 5
+#   Image laag 6
 #   Index HTML
-RUN wget --no-check-certificate -O /usr/src/app/templates/index.html https://raw.githubusercontent.com/jatutert/demos/main/Docker/Dockerfiles/FLASK/index.html
+RUN wget -q --no-check-certificate -O /usr/src/app/templates/index.html https://raw.githubusercontent.com/jatutert/demos/main/Docker/Dockerfiles/FLASK/index.html
 
-# tell the port number the container should expose
+#   Image laag 7
+#   tell the port number the container should expose
 EXPOSE 5000
 
+#   Image laag 8
 #   Start applicatie bij iedere start van deze image als container 
 CMD ["python", "/usr/src/app/app.py"]
+
+# That is all folks ! 

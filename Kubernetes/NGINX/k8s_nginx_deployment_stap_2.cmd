@@ -4,10 +4,10 @@
 ::
 echo Stap 2 Updaten NGiNX van versie 14 naar versie 16 gestart ...
 ::
-kubectl apply -f ./deployment-update.yml
+kubectl apply -f ./2-deployment-update.yml
 ::
 kubectl describe deployment nginx-deployment
 kubectl get pods -l app=nginx
 :: 
-minikube service --all
+::  minikube service --all
 
