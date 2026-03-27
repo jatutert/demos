@@ -26,10 +26,52 @@ Clear-Host
 #   #####################
 #
 #
-$TS_WIN_ISO_FOLDER      = 'D:\Installatie-Catalogus\InstallatieMedia\Besturingssystemen\Microsoft\Windows\10-10-11\10.22-Windows-Server-2022\Standard-DataCenter-Microsoft\'
+
+
+
+
+$Downloads              = "$env:USERPROFILE\Downloads"
+#
+$ISO_Download_Link      - 'https://go.microsoft.com/fwlink/p/?LinkID=2195280&clcid=0x409&culture=en-us&country=US'
+$ISO_Download_FileName  = 'SERVER_EVAL_x64FRE_en-us.iso'
+#
+$AUTOUNATTEND_Download_Link = 'https://raw.githubusercontent.com/jatutert/demos/refs/heads/main/Windows/Guest/Windows/2022/AutoUnattend/GitHub-Ruzickap'
+$AUTOUNATTEND_Download_Filename = 'Autounattend_V008.xml'
+#
+$TS_WIN_ISO_FOLDER      = "$env:USERPROFILE\Downloads"
 $TS_WIN_ISO_FILE        = 'en-us_windows_server_2022_updated_march_2026_x64_dvd_3f772967.iso'
-$TS_WIN_UNATTEND_FOLDER = 'D:\OneDrive\OneDrive - Saxion\Repository-Playground\Development\GitHub-GitDesktop\Demos\Windows\Guest\Windows\2022\AutoUnattend\GitHub-Ruzickap\'
-$TS_WIN_UNATTEND_FILE   = 'Autounattend_Latest.xml'
+$TS_WIN_UNATTEND_FOLDER = "$env:USERPROFILE\Downloads"
+$TS_WIN_UNATTEND_FILE   = 'WS22_Autounattend.xml'
+#
+#
+#   #####################
+#   Downloaden noodzakelijke bestanden
+#   #####################
+#
+#
+# ISO
+if (Test-Path $PadNaarBestand) {
+    Write-Host "Bestand bestaat al: $PadNaarBestand"
+}
+else {
+    Write-Host "Bestand bestaat niet. Download wordt uitgevoerd..."
+    Invoke-WebRequest -URI "$ISO_Download_Link" -OutFile %userprofile%\Downloads\SERVER_EVAL_x64FRE_en-us.iso
+    Write-Host "Download voltooid."
+}
+#
+# AutoUnattend
+if (Test-Path $PadNaarBestand) {
+    Write-Host "Bestand bestaat al: $PadNaarBestand"
+}
+else {
+    Write-Host "Bestand bestaat niet. Download wordt uitgevoerd..."
+    Invoke-WebRequest -URI "$AUTOUNATTEND_Download_Link/$AUTOUNATTEND_Download_Filename" -OutFile %userprofile%\Downloads\WS22_Autounattend_GitHub.xml
+    Write-Host "Download voltooid."
+}
+
+
+
+
 #
 #
 #   #####################

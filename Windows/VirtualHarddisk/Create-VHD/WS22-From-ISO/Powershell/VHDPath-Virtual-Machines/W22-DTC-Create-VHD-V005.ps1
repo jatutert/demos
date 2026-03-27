@@ -29,7 +29,7 @@ Clear-Host
 $TS_WIN_ISO_FOLDER      = 'D:\Installatie-Catalogus\InstallatieMedia\Besturingssystemen\Microsoft\Windows\10-10-11\10.22-Windows-Server-2022\Standard-DataCenter-Microsoft\'
 $TS_WIN_ISO_FILE        = 'en-us_windows_server_2022_updated_march_2026_x64_dvd_3f772967.iso'
 $TS_WIN_UNATTEND_FOLDER = 'D:\OneDrive\OneDrive - Saxion\Repository-Playground\Development\GitHub-GitDesktop\Demos\Windows\Guest\Windows\2022\AutoUnattend\GitHub-Ruzickap\'
-$TS_WIN_UNATTEND_FILE   = 'Autounattend_V008.xml'
+$TS_WIN_UNATTEND_FILE   = 'Autounattend_Latest.xml'
 #
 #
 #   #####################
