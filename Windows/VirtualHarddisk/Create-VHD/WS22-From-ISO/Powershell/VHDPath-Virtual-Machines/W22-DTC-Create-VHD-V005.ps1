@@ -3,7 +3,7 @@
 #     TT    U    U    TT    SS      O    O  FF        TT
 #     TT    U    U    TT    SSSSSS  O    O  FFFF      TT
 #     TT    U    U    TT        SS  O    O  FF        TT
-#     TT    UUUUUU    TT    SSSSSS  OOOOOOO FF        TT
+#     TT    UUUUUU    TT    SSSSSS  OOOOOO  FF        TT
 #
 #   Windows Server 2022 DataCenter ISO naar Virtual Harddisk VHD
 #   PowerSHELL SCRIPT
@@ -20,6 +20,12 @@
 #
 Clear-Host
 #
+Write-Host "   TTTTTT  U    U  TTTTTT  SSSSSS  OOOOOO  FFFFFF  TTTTTT"
+Write-Host "     TT    U    U    TT    SS      O    O  FF        TT"
+Write-Host "     TT    U    U    TT    SSSSSS  O    O  FFFF      TT"
+Write-Host "     TT    U    U    TT        SS  O    O  FF        TT"
+Write-Host "     TT    UUUUUU    TT    SSSSSS  OOOOOO  FF        TT"
+Write-Host " "
 #
 #   #####################
 #   DECLARATIE VARIABELEN

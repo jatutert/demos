@@ -7,7 +7,7 @@
 <!--     TT    UUUUUU    TT    SSSSSS  OOOOOOO FF        TT   -->
 <!--    -->
 <!-- Windows Server 2022 DataCenter -->
-<!-- Versie 012 -->
+<!-- Versie 011 -->
 <!--    -->
 <!-- Created by John Tutert -->
 <!-- 29 Maart 2026 -->
@@ -23,7 +23,6 @@
             <UILanguage>en-US</UILanguage>
             <UILanguageFallback>en-US</UILanguageFallback>
             <UserLocale>nl-NL</UserLocale>
-            <WillShowUI>Never</WillShowUI>
         </component>
         <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
             <DiskConfiguration>
@@ -85,7 +84,7 @@
                     <!-- Windows 10 and 11 Education           NW6C2-QMPVW-D7KKK-3GKT6-VCFB2 -->
                     <!-- Windows 10 and 11 Enterprise          NPPR9-FWDCX-D2C8J-H872K-2YT43 -->
                     <Key>6NMRW-2C8FM-D24W7-TQWMY-CWH2D</Key>
-                    <WillShowUI>Never</WillShowUI>
+                    <WillShowUI>OnError</WillShowUI>
                 </ProductKey>
                 <AcceptEula>true</AcceptEula>
                 <FullName>Student</FullName>
@@ -154,13 +153,6 @@
         </component>
     </settings>
     <settings pass="oobeSystem">
-        <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
-            <InputLocale>0413:00020409</InputLocale>
-            <SystemLocale>nl-NL</SystemLocale>
-            <UILanguage>en-US</UILanguage>
-            <UILanguageFallback>nl-NL</UILanguageFallback>
-            <UserLocale>nl-NL</UserLocale>
-        </component>
         <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
             <AutoLogon>
                 <Password>
@@ -312,8 +304,7 @@
                 <HideOEMRegistrationScreen>true</HideOEMRegistrationScreen>
                 <HideOnlineAccountScreens>true</HideOnlineAccountScreens>
                 <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
-                <HideRegionalSettingsPage>true</HideRegionalSettingsPage>
-                <NetworkLocation>Work</NetworkLocation>
+                <NetworkLocation>Home</NetworkLocation>
                 <ProtectYourPC>3</ProtectYourPC>
             </OOBE>
             <UserAccounts>
@@ -334,6 +325,7 @@
                     </LocalAccount>
                 </LocalAccounts>
             </UserAccounts>
+            <RegisteredOwner/>
         </component>
     </settings>
     <settings pass="offlineServicing">

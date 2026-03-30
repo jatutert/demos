@@ -14,6 +14,7 @@
 <!--    -->
 <unattend xmlns="urn:schemas-microsoft-com:unattend">
     <settings pass="windowsPE">
+        <!-- Microsoft-Windows-International-Core-WinPE -->
         <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
             <SetupUILanguage>
                 <UILanguage>en-US</UILanguage>
@@ -25,6 +26,7 @@
             <UserLocale>nl-NL</UserLocale>
             <WillShowUI>Never</WillShowUI>
         </component>
+        <!-- Microsoft-Windows-Setup --> 
         <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
             <DiskConfiguration>
                 <Disk wcm:action="add">
@@ -85,7 +87,7 @@
                     <!-- Windows 10 and 11 Education           NW6C2-QMPVW-D7KKK-3GKT6-VCFB2 -->
                     <!-- Windows 10 and 11 Enterprise          NPPR9-FWDCX-D2C8J-H872K-2YT43 -->
                     <Key>6NMRW-2C8FM-D24W7-TQWMY-CWH2D</Key>
-                    <WillShowUI>Never</WillShowUI>
+                    <WillShowUI>OnError</WillShowUI>
                 </ProductKey>
                 <AcceptEula>true</AcceptEula>
                 <FullName>Student</FullName>
@@ -94,6 +96,7 @@
         </component>
     </settings>
     <settings pass="specialize">
+        <!-- Microsoft-Windows-Shell-Setup -->
         <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
             <OEMInformation>
                 <HelpCustomized>false</HelpCustomized>
@@ -104,6 +107,7 @@
             <RegisteredOwner>Student</RegisteredOwner>
             <RegisteredOrganization>University of Applied Science</RegisteredOrganization>
         </component>
+        <!-- Microsoft-Windows-International-Core -->
         <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
             <InputLocale>0413:00020409</InputLocale>
             <SystemLocale>nl-NL</SystemLocale>
@@ -111,6 +115,7 @@
             <UILanguageFallback>nl-NL</UILanguageFallback>
             <UserLocale>nl-NL</UserLocale>
         </component>
+        <!-- Microsoft-Windows-ServerManager-SvrMgrNc -->
         <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-ServerManager-SvrMgrNc" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
             <DoNotOpenServerManagerAtLogon>true</DoNotOpenServerManagerAtLogon>
         </component>
@@ -210,11 +215,11 @@
                     <Description>OOBE Download Services Script from Github</Description>
                     <Order>4</Order>
                     <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
                 <!-- OOBE                                                    -->
                 <!-- Step 5                                                  -->
                 <!-- Windows Services                                        -->
                 <!-- Execute Script                                          -->
-                </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>cmd.exe /c powershell -file c:\users\labadmin\downloads\VM-OOBE-Config-Services-V007.ps1</CommandLine>
                     <Description>OOBE Execute Services Script from Github</Description>
@@ -230,11 +235,11 @@
                     <Description>OOBE Download Services Script from Github</Description>
                     <Order>6</Order>
                     <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
                 <!-- OOBE                                                    -->
                 <!-- Step 7                                                  -->
                 <!-- WinRM                                                   -->
                 <!-- Execute Script                                          -->
-                </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>cmd.exe /c powershell -file c:\users\labadmin\downloads\VM-OOBE-Windows-WinRM-Config-V001.ps1</CommandLine>
                     <Description>OOBE Execute Services Script from Github</Description>
@@ -313,7 +318,7 @@
                 <HideOnlineAccountScreens>true</HideOnlineAccountScreens>
                 <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
                 <HideRegionalSettingsPage>true</HideRegionalSettingsPage>
-                <NetworkLocation>Work</NetworkLocation>
+                <NetworkLocation>Home</NetworkLocation>
                 <ProtectYourPC>3</ProtectYourPC>
             </OOBE>
             <UserAccounts>
