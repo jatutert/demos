@@ -1,12 +1,19 @@
+#
+#   TTTTTT  U    U  TTTTTT  SSSSSS  OOOOOO  FFFFFF  TTTTTT
+#     TT    U    U    TT    SS      O    O  FF        TT
+#     TT    U    U    TT    SSSSSS  O    O  FFFF      TT
+#     TT    U    U    TT        SS  O    O  FF        TT
+#     TT    UUUUUU    TT    SSSSSS  OOOOOO  FF        TT
+#
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment # naam van de deployment
+  name: nginx-deployment # naam van de deployment binnen kubernetes 
 spec:
   selector:
     matchLabels:
       app: nginx # zie label nginx hieronder voor verdere informatie 
-  replicas: 2 # tells deployment to run 2 pods matching the template
+  replicas: 2 # Draai binnen deze deployment twee pods zoals aangegeven in de template
   template:
     metadata:
       labels:

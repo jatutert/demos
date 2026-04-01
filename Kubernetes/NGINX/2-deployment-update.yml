@@ -1,3 +1,10 @@
+#
+#   TTTTTT  U    U  TTTTTT  SSSSSS  OOOOOO  FFFFFF  TTTTTT
+#     TT    U    U    TT    SS      O    O  FF        TT
+#     TT    U    U    TT    SSSSSS  O    O  FFFF      TT
+#     TT    U    U    TT        SS  O    O  FF        TT
+#     TT    UUUUUU    TT    SSSSSS  OOOOOO  FF        TT
+#
 apiVersion: apps/v1
 kind: Deployment
 metadata:
