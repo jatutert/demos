@@ -7,10 +7,10 @@
 <!--     TT    UUUUUU    TT    SSSSSS  OOOOOOO FF        TT   -->
 <!--    -->
 <!-- Windows Server 2022 DataCenter -->
-<!-- Versie 015 -->
+<!-- Versie 014 A -->
 <!--    -->
 <!-- Created by John Tutert -->
-<!-- 02 April 2026 -->
+<!-- 01 April 2026 -->
 <!--    -->
 <!-- Naslag https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/ -->
 <!--    -->
@@ -198,7 +198,7 @@
                 <!-- Powershell                                              -->
                 <!-- Download Script from Github                             -->
                 <SynchronousCommand wcm:action="add">
-                    <CommandLine>cmd.exe /c powershell -Command "Invoke-WebRequest -URI https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/PS-Windows-VM-OOBE/PS-Windows-VM-OOBE-Latest.ps1 -OutFile %userprofile%\Downloads\PS-Windows-VM-OOBE-Latest.ps1"</CommandLine>
+                    <CommandLine>cmd.exe /c powershell -Command "Invoke-WebRequest -URI https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/PS-Windows-VM-OOBE/PS-Windows-VM-OOBE-V001.ps1 -OutFile %userprofile%\Downloads\PS-Windows-VM-OOBE-V001.ps1"</CommandLine>
                     <Description>OOBE Download Powershell OOBE Script from Github</Description>
                     <Order>2</Order>
                     <RequiresUserInput>true</RequiresUserInput>
@@ -208,7 +208,7 @@
                 <!-- Powershell                                              -->
                 <!-- Execute Script                                          -->
                 <SynchronousCommand wcm:action="add">
-                    <CommandLine>cmd.exe /c powershell -file c:\users\labadmin\downloads\PS-Windows-VM-OOBE-Latest.ps1</CommandLine>
+                    <CommandLine>cmd.exe /c powershell -file c:\users\labadmin\downloads\PS-Windows-VM-OOBE-V001.ps1</CommandLine>
                     <Description>OOBE Execute Powershell OOBE Script from Github</Description>
                     <Order>3</Order>
                     <RequiresUserInput>true</RequiresUserInput>
