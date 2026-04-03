@@ -6,7 +6,7 @@
 <!--     TT    U    U    TT        SS  O    O  FF        TT   -->
 <!--     TT    UUUUUU    TT    SSSSSS  OOOOOOO FF        TT   -->
 <!--    -->
-<!-- Windows Server 2022 DataCenter -->
+<!-- Windows 11 Education -->
 <!-- Versie 017 -->
 <!--    -->
 <!-- Created by John Tutert -->
@@ -52,7 +52,7 @@
                         </ModifyPartition>
                         <ModifyPartition wcm:action="add">
                             <Format>NTFS</Format>
-                            <Label>W22DTCSYSDSK</Label>
+                            <Label>W11EDUSYSDSK</Label>
                             <Letter>C</Letter>
                             <Order>2</Order>
                             <PartitionID>2</PartitionID>
@@ -67,7 +67,7 @@
                     <InstallFrom>
                         <MetaData wcm:action="add">
                             <Key>/IMAGE/NAME</Key>
-                            <Value>Windows Server 2022 SERVERDATACENTER</Value>
+                            <Value>Windows 11 Education</Value>
                         </MetaData>
                     </InstallFrom>
                     <InstallTo>
@@ -86,7 +86,7 @@
                     <!-- Windows Server Datacenter 2019 2022   6NMRW-2C8FM-D24W7-TQWMY-CWH2D -->
                     <!-- Windows 10 and 11 Education           NW6C2-QMPVW-D7KKK-3GKT6-VCFB2 -->
                     <!-- Windows 10 and 11 Enterprise          NPPR9-FWDCX-D2C8J-H872K-2YT43 -->
-                    <Key>6NMRW-2C8FM-D24W7-TQWMY-CWH2D</Key>
+                    <Key>YNMGQ-8RYV3-4PGQ3-C8XTP-7CFBY</Key>
                     <WillShowUI>OnError</WillShowUI>
                 </ProductKey>
                 <AcceptEula>true</AcceptEula>
@@ -103,7 +103,7 @@
                 <Model>Virtual Machine</Model>
             </OEMInformation>
             <OEMName>Saxion</OEMName>
-            <ComputerName>W22-DTC-S-LAB01</ComputerName>
+            <ComputerName>W11-EDU-S-LAB01</ComputerName>
             <TimeZone>W. Europe Standard Time</TimeZone>
             <DisableAutoDaylightTimeSet>false</DisableAutoDaylightTimeSet>
             <RegisteredOwner>Student Bachelor IT</RegisteredOwner>
