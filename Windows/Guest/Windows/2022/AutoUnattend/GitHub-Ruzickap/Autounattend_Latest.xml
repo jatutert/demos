@@ -6,13 +6,17 @@
 <!--     TT    U    U    TT        SS  O    O  FF        TT   -->
 <!--     TT    UUUUUU    TT    SSSSSS  OOOOOOO FF        TT   -->
 <!--    -->
-<!-- Windows Server 2022 DataCenter -->
-<!-- Versie 017 -->
+<!--    Windows Server 2022 DataCenter -->
+<!--    Versie 017 -->
 <!--    -->
-<!-- Created by John Tutert -->
-<!-- 03 April 2026 -->
+<!--    Created by John Tutert -->
+<!--    03 April 2026 -->
 <!--    -->
-<!-- Naslag https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/ -->
+<!--    Naslag  -->
+<!--    -->
+<!--    AutoUnattend Windows https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/ -->
+<!--    Default Keyboards https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-8.1-and-8/hh825682(v=win.10) -->
+<!--    Language Packs https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-8.1-and-8/hh825684(v=win.10) -->
 <!--    -->
 <unattend xmlns="urn:schemas-microsoft-com:unattend">
     <settings pass="windowsPE">
