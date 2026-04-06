@@ -31,8 +31,13 @@
 )
 ::
 ::
-@del /F D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\W22-DTC-S-LAB-001\W22-DTC-S-LAB-001.VHD
-@del /F D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB-001\W22-DTC-S-LAB-001.VMDK
+IF EXIST "D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\W22-DTC-S-LAB-001\W22-DTC-S-LAB-001.VHD" (
+    @del /F "D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\W22-DTC-S-LAB-001\W22-DTC-S-LAB-001.VHD"
+)
+::
+IF EXIST D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB-001\W22-DTC-S-LAB-001.VMDK (
+    @del /F D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB-001\W22-DTC-S-LAB-001.VMDK
+)
 ::
 @mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\
 @mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\
@@ -53,5 +58,5 @@
 ::
 @copy "D:\OneDrive\OneDrive - Saxion\Repository-Playground\Development\GitHub-GitDesktop\Demos\Windows\Hypervisor\VMware-Desktop\VMX\Windows Server 2022.vmx" D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB-001\W22-DTC-S-LAB-001.vmx
 ::
-start /B vmware -n D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB-001\W22-DTC-S-LAB-001.vmx
+@start /B vmware -n D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB-001\W22-DTC-S-LAB-001.vmx
 @start vmrun -T ws start D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB-001\W22-DTC-S-LAB-001.vmx
