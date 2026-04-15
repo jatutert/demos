@@ -31,12 +31,12 @@
 )
 ::
 ::
-IF EXIST "D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\W22-DTC-S-LAB-001\W22-DTC-S-LAB-001.VHD" (
-    @del /F "D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\W22-DTC-S-LAB-001\W22-DTC-S-LAB-001.VHD"
+IF EXIST "D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\SXN-DB-01\SXN-DB-01.VHD" (
+    @del /F "D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\SXN-DB-01\SXN-DB-01.VHD"
 )
 ::
-IF EXIST D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB-001\W22-DTC-S-LAB-001.VMDK (
-    @del /F D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB-001\W22-DTC-S-LAB-001.VMDK
+IF EXIST D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DB-01\SXN-DB-01.VMDK (
+    @del /F D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DB-01\SXN-DB-01.VMDK
 )
 ::
 @echo Aanmaken Directories Oracle VM Virtualbox
@@ -44,7 +44,10 @@ IF EXIST D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB
 @mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\
 @mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\
 @mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\
+@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\SXN-WS-01
 @mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\W11-EDU-C-LAB-001
+@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\SXN-DB-01
+@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\SXN-DC-01
 @mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\W22-DTC-S-LAB-001
 ::
 @echo Aanmaken Directories VMware Workstation Pro
@@ -52,13 +55,16 @@ IF EXIST D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB
 @mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\
 @mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\
 @mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\
+@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\SXN-WS-01
 @mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\W11-EDU-C-LAB-001
+@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DC-001
+@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DB-001
 @mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB-001
 ::
-@Powershell -file "D:\OneDrive\OneDrive - Saxion\Repository-Playground\Development\GitHub-GitDesktop\Demos\Windows\VirtualHarddisk\Create-VHD\WS22-From-ISO\Powershell\VHDPath-Virtual-Machines"\W22-DTC-Create-VHD-Latest.ps1
+@Powershell -file "D:\OneDrive\OneDrive - Saxion\Repository-Playground\Development\GitHub-GitDesktop\Demos\Windows\VirtualHarddisk\Create-VHD\WS22-From-ISO\Powershell\VHDPath-Virtual-Machines"\W22-SXN-DB-01-Create-VHD-Latest.ps1
 ::
 @echo Conversie van VHD naar VMDK gestart ... 
-"C:\Program Files\StarWind Software\StarWind V2V Converter\V2V_ConverterConsole.exe" convert in_file_name="D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\W22-DTC-S-LAB-001\W22-DTC-S-LAB-001.VHD" out_file_name="D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB-001\W22-DTC-S-LAB-001.VMDK" out_file_type=ft_vmdk_ws_growable
+"C:\Program Files\StarWind Software\StarWind V2V Converter\V2V_ConverterConsole.exe" convert in_file_name="D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\SXN-DB-001\SXN-DB-001.VHD" out_file_name="D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DB-001\SXN-DB-001.VMDK" out_file_type=ft_vmdk_ws_growable
 ::
 @echo Aanmaken VMX in VM Directory
 @copy "D:\OneDrive\OneDrive - Saxion\Repository-Playground\Development\GitHub-GitDesktop\Demos\Windows\Hypervisor\VMware-Desktop\VMX\Windows Server 2022.vmx" D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB-001\W22-DTC-S-LAB-001.vmx
@@ -67,7 +73,7 @@ IF EXIST D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB
 @copy D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB-001\W22-DTC-S-LAB-001.vmx C:\Users\jtu03\Nextcloud\Shared
 ::
 @echo Overzetten VMDK uit VM Directory naar NextCloud
-@copy D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB-001\W22-DTC-S-LAB-001.VMDK C:\Users\jtu03\Nextcloud\Shared
+@copy D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB-001\SXN-DB-001.VMDK C:\Users\jtu03\Nextcloud\Shared
 ::
 ::  @start /B vmware -n D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB-001\W22-DTC-S-LAB-001.vmx
 ::  @start vmrun -T ws start D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB-001\W22-DTC-S-LAB-001.vmx
