@@ -1,0 +1,78 @@
+#
+#
+#   TTTTTT  U    U  TTTTTT  SSSSSS  OOOOOO  FFFFFF  TTTTTT
+#     TT    U    U    TT    SS      O    O  FF        TT
+#     TT    U    U    TT    SSSSSS  O    O  FFFF      TT
+#     TT    U    U    TT        SS  O    O  FF        TT
+#     TT    UUUUUU    TT    SSSSSS  OOOOOO  FF        TT
+#
+#       Saxion
+#       Bachelor ICT
+#       Scripting met Powershell 
+#
+#       Database Server (DBMS)
+#       VMware Workstation PRO Virtuele Machine configuratie
+#
+#
+.encoding = "UTF-8"
+config.version = "8"
+virtualHW.version = "22"
+pciBridge0.present = "TRUE"
+pciBridge4.present = "TRUE"
+pciBridge4.virtualDev = "pcieRootPort"
+pciBridge4.functions = "8"
+pciBridge5.present = "TRUE"
+pciBridge5.virtualDev = "pcieRootPort"
+pciBridge5.functions = "8"
+pciBridge6.present = "TRUE"
+pciBridge6.virtualDev = "pcieRootPort"
+pciBridge6.functions = "8"
+pciBridge7.present = "TRUE"
+pciBridge7.virtualDev = "pcieRootPort"
+pciBridge7.functions = "8"
+vmci0.present = "TRUE"
+hpet0.present = "TRUE"
+nvram = "SXN-DB-001.nvram"
+virtualHW.productCompatibility = "hosted"
+powerType.powerOff = "soft"
+powerType.powerOn = "soft"
+powerType.suspend = "soft"
+powerType.reset = "soft"
+displayName = "SXN-DB-01"
+firmware = "efi"
+guestOS = "windows2019srvnext-64"
+tools.syncTime = "TRUE"
+sound.autoDetect = "TRUE"
+sound.virtualDev = "hdaudio"
+sound.fileName = "-1"
+sound.present = "TRUE"
+numvcpus = "2"
+cpuid.coresPerSocket = "1"
+vcpu.hotadd = "TRUE"
+memsize = "4096"
+mem.hotadd = "TRUE"
+sata0.present = "TRUE"
+nvme0.present = "TRUE"
+nvme0:0.fileName = "SXN-DB-01.VMDK"
+nvme0:0.present = "TRUE"
+sata0:1.autodetect = "TRUE"
+sata0:1.deviceType = "cdrom-raw"
+sata0:1.fileName = "auto detect"
+sata0:1.present = "TRUE"
+usb.present = "TRUE"
+ehci.present = "TRUE"
+usb_xhci.present = "TRUE"
+ethernet0.connectionType = "nat"
+ethernet0.addressType = "generated"
+ethernet0.virtualDev = "e1000e"
+ethernet0.present = "TRUE"
+extendedConfigFile = "SXN-DB-01.vmxf"
+floppy0.present = "FALSE"
+tools.upgrade.policy = "upgradeAtPowerCycle"
+annotation = "1.4 Scripting met Powershell|0D|0ASXN-DB-01|0D|0ADatabase Server(DBMS)|0D|0AWindows Server 2022 DataCenter Edition|0D|0A|0D|0AUser: labadmin|0D|0APassword: !@WACHTwoord#$"
+ethernet1.connectionType = "custom"
+ethernet1.addressType = "generated"
+ethernet1.vnet = "VMnet4"
+ethernet1.displayName = "VMnet4"
+ethernet1.virtualDev = "e1000e"
+ethernet1.present = "TRUE"

@@ -222,7 +222,7 @@ IF NOT EXIST "%VMTemplatePath%\LVI-U24-04-LTS-S-VMDK.7z" (
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\U24-LTS-S-DKR-001.vmx ConfigParams SetEntry sharedFolder0.readAccess "True"
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\U24-LTS-S-DKR-001.vmx ConfigParams SetEntry sharedFolder0.writeAccess "True"
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\U24-LTS-S-DKR-001.vmx ConfigParams SetEntry sharedFolder0.hostPath %USERPROFILE%"\Downloads"
-@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\U24-LTS-S-DKR-001.vmx ConfigParams SetEntry sharedFolder0.guestName "windownloads"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\U24-LTS-S-DKR-001.vmx ConfigParams SetEntry sharedFolder0.guestName "windwnloads"
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\U24-LTS-S-DKR-001.vmx ConfigParams SetEntry sharedFolder0.expiration "never"
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\U24-LTS-S-DKR-001.vmx ConfigParams SetEntry sharedFolder.maxNum "1"
 ::  Shared Folder OneDrive
