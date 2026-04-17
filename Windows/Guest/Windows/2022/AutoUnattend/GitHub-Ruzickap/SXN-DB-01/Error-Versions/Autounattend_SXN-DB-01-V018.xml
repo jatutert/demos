@@ -6,13 +6,17 @@
 <!--     TT    U    U    TT        SS  O    O  FF        TT   -->
 <!--     TT    UUUUUU    TT    SSSSSS  OOOOOOO FF        TT   -->
 <!--    -->
-<!-- Windows Server 2022 DataCenter -->
-<!-- Versie 017 -->
+<!--    Windows Server 2022 DataCenter -->
+<!--    Versie 017 -->
 <!--    -->
-<!-- Created by John Tutert -->
-<!-- 17 April 2026 -->
+<!--    Created by John Tutert -->
+<!--    08 April 2026 -->
 <!--    -->
-<!-- Naslag https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/ -->
+<!--    Naslag  -->
+<!--    -->
+<!--    AutoUnattend Windows https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/ -->
+<!--    Default Keyboards https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-8.1-and-8/hh825682(v=win.10) -->
+<!--    Language Packs https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-8.1-and-8/hh825684(v=win.10) -->
 <!--    -->
 <unattend xmlns="urn:schemas-microsoft-com:unattend">
     <settings pass="windowsPE">
@@ -87,27 +91,31 @@
                     <!-- Windows 10 and 11 Education           NW6C2-QMPVW-D7KKK-3GKT6-VCFB2 -->
                     <!-- Windows 10 and 11 Enterprise          NPPR9-FWDCX-D2C8J-H872K-2YT43 -->
                     <Key>6NMRW-2C8FM-D24W7-TQWMY-CWH2D</Key>
-                    <WillShowUI>Never</WillShowUI>
+                    <WillShowUI>OnError</WillShowUI>
                 </ProductKey>
                 <AcceptEula>true</AcceptEula>
-                <FullName>TutSOFT</FullName>
+                <FullName>Student Bachelor IT</FullName>
                 <Organization>Saxion University of Applied Science</Organization>
             </UserData>
         </component>
     </settings>
     <settings pass="specialize">
         <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
+            <ComputerName>SXN-DB-01</ComputerName>
+            <DisableAutoDaylightTimeSet>false</DisableAutoDaylightTimeSet>
+            <OEMName>TutSOFT</OEMName>
             <OEMInformation>
-                <HelpCustomized>false</HelpCustomized>
-                <Manufacturer>Saxion</Manufacturer>
+                <SupportProvider>TutSOFT</SupportProvider>
+                <SupportAppURL>TutSOFT-contact-support</SupportAppURL>
+                <SupportURL>https://www.tutsoft.nl/support</SupportURL>
+                <Manufacturer>TutSOFT</Manufacturer>
                 <Model>Virtual Machine</Model>
             </OEMInformation>
-            <OEMName>Saxion</OEMName>
-            <ComputerName>SXN-DB-01</ComputerName>
-            <TimeZone>W. Europe Standard Time</TimeZone>
-            <DisableAutoDaylightTimeSet>false</DisableAutoDaylightTimeSet>
-            <RegisteredOwner>TutSOFT</RegisteredOwner>
+            <ProductKey>6NMRW-2C8FM-D24W7-TQWMY-CWH2D</ProductKey>
+            <RegisteredOwner>Student Bachelor IT</RegisteredOwner>
             <RegisteredOrganization>Saxion University of Applied Science</RegisteredOrganization>
+            <ShowPowerButtonOnStartScreen>true</ShowPowerButtonOnStartScreen>
+            <TimeZone>W. Europe Standard Time</TimeZone>
         </component>
         <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
             <InputLocale>0413:00020409</InputLocale>
@@ -140,13 +148,13 @@
             <FavoriteBarItems>
                 <FavoriteBarItem wcm:action="add">
                     <ItemKey>Favorite1</ItemKey>
-                    <ItemName>Saxion</ItemName>
-                    <ItemUrl>https://www.saxion.nl/</ItemUrl>
+                    <ItemName>Contoso</ItemName>
+                    <ItemUrl>http://www.contoso.com/</ItemUrl>
                 </FavoriteBarItem>
                 <FavoriteBarItem wcm:action="add">
                     <ItemKey>Favorite2</ItemKey>
-                    <ItemName>MijnSaxion</ItemName>
-                    <ItemUrl>https://mijn.saxion.nl/</ItemUrl>
+                    <ItemName>Intranet</ItemName>
+                    <ItemUrl>http://intra.contoso.com/</ItemUrl>
                 </FavoriteBarItem>
             </FavoriteBarItems>
         </component>
@@ -222,6 +230,10 @@
                 <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
                 <NetworkLocation>Home</NetworkLocation>
                 <ProtectYourPC>3</ProtectYourPC>
+                <VMModeOptimizations>
+                    <SkipNotifyUILanguageChange>true</SkipNotifyUILanguageChange>
+                    <SkipWinREInitialization>true</SkipWinREInitialization>
+                </VMModeOptimizations>
             </OOBE>
             <UserAccounts>
                 <AdministratorPassword>

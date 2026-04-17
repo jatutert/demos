@@ -6,17 +6,13 @@
 <!--     TT    U    U    TT        SS  O    O  FF        TT   -->
 <!--     TT    UUUUUU    TT    SSSSSS  OOOOOOO FF        TT   -->
 <!--    -->
-<!--    Windows Server 2022 DataCenter -->
-<!--    Versie 017 -->
+<!-- Windows Server 2022 DataCenter -->
+<!-- Versie 016 -->
 <!--    -->
-<!--    Created by John Tutert -->
-<!--    08 April 2026 -->
+<!-- Created by John Tutert -->
+<!-- 02 April 2026 -->
 <!--    -->
-<!--    Naslag  -->
-<!--    -->
-<!--    AutoUnattend Windows https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/ -->
-<!--    Default Keyboards https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-8.1-and-8/hh825682(v=win.10) -->
-<!--    Language Packs https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-8.1-and-8/hh825684(v=win.10) -->
+<!-- Naslag https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/ -->
 <!--    -->
 <unattend xmlns="urn:schemas-microsoft-com:unattend">
     <settings pass="windowsPE">
@@ -28,8 +24,8 @@
             <SystemLocale>en-US</SystemLocale>
             <UILanguage>en-US</UILanguage>
             <UILanguageFallback>en-US</UILanguageFallback>
-            <UserLocale>nl-NL</UserLocale>
-            <WillShowUI>OnError</WillShowUI>
+            <UserLocale>en-US</UserLocale>
+            <WillShowUI>Never</WillShowUI>
         </component>
         <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
             <DiskConfiguration>
@@ -56,7 +52,7 @@
                         </ModifyPartition>
                         <ModifyPartition wcm:action="add">
                             <Format>NTFS</Format>
-                            <Label>SXNDC01SYSDSK</Label>
+                            <Label>W22DTCSYSDSK</Label>
                             <Letter>C</Letter>
                             <Order>2</Order>
                             <PartitionID>2</PartitionID>
@@ -91,38 +87,34 @@
                     <!-- Windows 10 and 11 Education           NW6C2-QMPVW-D7KKK-3GKT6-VCFB2 -->
                     <!-- Windows 10 and 11 Enterprise          NPPR9-FWDCX-D2C8J-H872K-2YT43 -->
                     <Key>6NMRW-2C8FM-D24W7-TQWMY-CWH2D</Key>
-                    <WillShowUI>OnError</WillShowUI>
+                    <WillShowUI>Never</WillShowUI>
                 </ProductKey>
                 <AcceptEula>true</AcceptEula>
-                <FullName>Student Bachelor IT</FullName>
+                <FullName>Student</FullName>
                 <Organization>Saxion University of Applied Science</Organization>
             </UserData>
         </component>
     </settings>
     <settings pass="specialize">
         <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
-            <ComputerName>SXN-DC-01</ComputerName>
-            <DisableAutoDaylightTimeSet>false</DisableAutoDaylightTimeSet>
-            <OEMName>TutSOFT</OEMName>
             <OEMInformation>
-                <SupportProvider>TutSOFT</SupportProvider>
-                <SupportAppURL>TutSOFT-contact-support</SupportAppURL>
-                <SupportURL>https://www.tutsoft.nl/support</SupportURL>
-                <Manufacturer>TutSOFT</Manufacturer>
+                <HelpCustomized>false</HelpCustomized>
+                <Manufacturer>Saxion</Manufacturer>
                 <Model>Virtual Machine</Model>
             </OEMInformation>
-            <ProductKey>6NMRW-2C8FM-D24W7-TQWMY-CWH2D</ProductKey>
-            <RegisteredOwner>Student Bachelor IT</RegisteredOwner>
-            <RegisteredOrganization>Saxion University of Applied Science</RegisteredOrganization>
-            <ShowPowerButtonOnStartScreen>true</ShowPowerButtonOnStartScreen>
+            <OEMName>Saxion</OEMName>
+            <ComputerName>W22-DTC-S-LAB01</ComputerName>
             <TimeZone>W. Europe Standard Time</TimeZone>
+            <DisableAutoDaylightTimeSet>false</DisableAutoDaylightTimeSet>
+            <RegisteredOwner>Student</RegisteredOwner>
+            <RegisteredOrganization>Saxion University of Applied Science</RegisteredOrganization>
         </component>
         <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
             <InputLocale>0413:00020409</InputLocale>
             <SystemLocale>en-US</SystemLocale>
             <UILanguage>en-US</UILanguage>
             <UILanguageFallback>en-US</UILanguageFallback>
-            <UserLocale>nl-NL</UserLocale>
+            <UserLocale>en-US</UserLocale>
         </component>
         <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-ServerManager-SvrMgrNc" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
             <DoNotOpenServerManagerAtLogon>true</DoNotOpenServerManagerAtLogon>
@@ -148,13 +140,13 @@
             <FavoriteBarItems>
                 <FavoriteBarItem wcm:action="add">
                     <ItemKey>Favorite1</ItemKey>
-                    <ItemName>Contoso</ItemName>
-                    <ItemUrl>http://www.contoso.com/</ItemUrl>
+                    <ItemName>Saxion</ItemName>
+                    <ItemUrl>https://www.saxion.nl/</ItemUrl>
                 </FavoriteBarItem>
                 <FavoriteBarItem wcm:action="add">
                     <ItemKey>Favorite2</ItemKey>
-                    <ItemName>Intranet</ItemName>
-                    <ItemUrl>http://intra.contoso.com/</ItemUrl>
+                    <ItemName>MijnSaxion</ItemName>
+                    <ItemUrl>https://mijn.saxion.nl/</ItemUrl>
                 </FavoriteBarItem>
             </FavoriteBarItems>
         </component>
@@ -206,7 +198,7 @@
                 <!-- Powershell                                              -->
                 <!-- Download Script from Github                             -->
                 <SynchronousCommand wcm:action="add">
-                    <CommandLine>cmd.exe /c powershell -Command "Invoke-WebRequest -URI https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/PS-Windows-VM-OOBE/SXN-LAB-VM-OOBE/PS-Windows-VM-OOBE-Latest.ps1 -OutFile %userprofile%\Downloads\PS-Windows-VM-OOBE-Latest.ps1"</CommandLine>
+                    <CommandLine>cmd.exe /c powershell -Command "Invoke-WebRequest -URI https://raw.githubusercontent.com/jatutert/Windows-Config/refs/heads/main/PS-Windows-VM-OOBE/PS-Windows-VM-OOBE-Latest.ps1 -OutFile %userprofile%\Downloads\PS-Windows-VM-OOBE-Latest.ps1"</CommandLine>
                     <Description>OOBE Download Powershell OOBE Script from Github</Description>
                     <Order>2</Order>
                     <RequiresUserInput>true</RequiresUserInput>
@@ -230,10 +222,6 @@
                 <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
                 <NetworkLocation>Home</NetworkLocation>
                 <ProtectYourPC>3</ProtectYourPC>
-                <VMModeOptimizations>
-                    <SkipNotifyUILanguageChange>true</SkipNotifyUILanguageChange>
-                    <SkipWinREInitialization>true</SkipWinREInitialization>
-                </VMModeOptimizations>
             </OOBE>
             <UserAccounts>
                 <AdministratorPassword>

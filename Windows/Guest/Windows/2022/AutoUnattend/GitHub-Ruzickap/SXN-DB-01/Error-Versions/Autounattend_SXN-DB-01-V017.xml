@@ -56,7 +56,7 @@
                         </ModifyPartition>
                         <ModifyPartition wcm:action="add">
                             <Format>NTFS</Format>
-                            <Label>SXNDC01SYSDSK</Label>
+                            <Label>SXNDB01SYSDSK</Label>
                             <Letter>C</Letter>
                             <Order>2</Order>
                             <PartitionID>2</PartitionID>
@@ -101,7 +101,7 @@
     </settings>
     <settings pass="specialize">
         <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
-            <ComputerName>SXN-DC-01</ComputerName>
+            <ComputerName>SXN-DB-01</ComputerName>
             <DisableAutoDaylightTimeSet>false</DisableAutoDaylightTimeSet>
             <OEMName>TutSOFT</OEMName>
             <OEMInformation>
