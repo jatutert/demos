@@ -11,7 +11,7 @@
 #   For Personal and/or Education Use Only ! 
 #
 #
-#   03 APRIL 2026
+#   18 APRIL 2026
 #
 #
 #   LET OP!
@@ -33,10 +33,13 @@ Write-Host " "
 #   #####################
 #
 #
+Write-Host "Declaratie van parameters voor Script"
+#
+#
 $TS_WIN_ISO_FOLDER      = 'C:\Users\jtu03\Nextcloud\Shared\ISO-Bestanden\Operating-Systems\Windows\10-11\10.22-Windows-11\Consumer-Editions-Microsoft\25H2\Retail-OEM\'
 $TS_WIN_ISO_FILE        = 'en-us_windows_11_consumer_editions_version_25h2_updated_march_2026_x64_dvd_a1cf6c36.iso'
-$TS_WIN_UNATTEND_FOLDER = 'D:\OneDrive\OneDrive - Saxion\Repository-Playground\Development\GitHub-GitDesktop\Demos\Windows\Guest\Windows\11\AutoUnattend\GitHub-Ruzickap\'
-$TS_WIN_UNATTEND_FILE   = 'Autounattend_Latest.xml'
+$TS_WIN_UNATTEND_FOLDER = 'D:\OneDrive\OneDrive - Saxion\Repository-Playground\Development\GitHub-GitDesktop\Demos\Windows\Guest\Windows\11\AutoUnattend\GitHub-Ruzickap\SXN-WS-01\'
+$TS_WIN_UNATTEND_FILE   = 'Autounattend_SXN-WS-01-Latest.xml'
 #
 #
 #   #####################
@@ -50,7 +53,7 @@ $ConvertParams          =   @{
 #
 SourcePath              =   $TS_WIN_ISO_FOLDER + $TS_WIN_ISO_FILE
 #
-VHDPath                 =   'D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\W11-EDU-C-LAB-001\W11-EDU-C-LAB-001.VHD'
+VHDPath                 =   'D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\SXN-WS-01\SXN-WS-01.VHD'
 #
 SizeBytes               =   90GB
 VHDFormat               =   'VHD' 

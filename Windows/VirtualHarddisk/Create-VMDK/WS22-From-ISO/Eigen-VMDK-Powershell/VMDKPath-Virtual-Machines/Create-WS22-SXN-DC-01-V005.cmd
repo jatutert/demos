@@ -61,13 +61,13 @@ IF EXIST D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DC-01\SXN
 @mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\SXN-WS-01
 @mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\W11-EDU-C-LAB-001
 ::
-@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DC-01
 @mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DB-01
+@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DC-01
 @mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB-001
 ::
 ::  VHD
 ::
-@Powershell -file "D:\OneDrive\OneDrive - Saxion\Repository-Playground\Development\GitHub-GitDesktop\Demos\Windows\VirtualHarddisk\Create-VHD\WS22-From-ISO\Powershell\VHDPath-Virtual-Machines"\W22-SXN-DC-01-Create-VHD-Latest.ps1
+@Powershell -file "D:\OneDrive\OneDrive - Saxion\Repository-Playground\Development\GitHub-GitDesktop\Demos\Windows\VirtualHarddisk\Create-VHD\WS22-From-ISO\Powershell\VHDPath-Virtual-Machines"\WS22-SXN-DC-01-Create-VHD-Latest.ps1
 ::
 ::  VHD naar VMDK
 ::
@@ -92,8 +92,12 @@ attrib +U -P "C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\SXN-DC-01\SXN-DC-
 @copy D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DC-01\SXN-DC-01.vmx C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\SXN-DC-01
 ::
 ::
-::  @start /B vmware -n D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB-001\W22-DTC-S-LAB-001.vmx
-::  @start vmrun -T ws start D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB-001\W22-DTC-S-LAB-001.vmx
+@echo Openen VM in VMware Workstation PRO
+@start /B vmware -n D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DC-01\SXN-DC-01.vmx
+::
+::
+@start vmrun -T ws start D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DC-01\SXN-DC-01.vmx
+::
 ::
 ::  Thats all folks
 ::

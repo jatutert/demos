@@ -6,7 +6,9 @@
 <!--     TT    U    U    TT        SS  O    O  FF        TT   -->
 <!--     TT    UUUUUU    TT    SSSSSS  OOOOOOO FF        TT   -->
 <!--    -->
-<!-- Windows 11 Education -->
+<!-- Windows Server 2022 DataCenter -->
+<!-- SXN-DC-01 -->
+<!--    -->
 <!-- Versie 017 -->
 <!--    -->
 <!-- Created by John Tutert -->
@@ -21,7 +23,7 @@
                 <UILanguage>en-US</UILanguage>
             </SetupUILanguage>
             <InputLocale>0413:00020409</InputLocale>
-            <SystemLocale>en-US</SystemLocale>
+            <SystemLocale>nl-NL</SystemLocale>
             <UILanguage>en-US</UILanguage>
             <UILanguageFallback>en-US</UILanguageFallback>
             <UserLocale>nl-NL</UserLocale>
@@ -52,7 +54,7 @@
                         </ModifyPartition>
                         <ModifyPartition wcm:action="add">
                             <Format>NTFS</Format>
-                            <Label>SXNWS01SYSDSK</Label>
+                            <Label>SXNDC01SYSDSK</Label>
                             <Letter>C</Letter>
                             <Order>2</Order>
                             <PartitionID>2</PartitionID>
@@ -67,7 +69,7 @@
                     <InstallFrom>
                         <MetaData wcm:action="add">
                             <Key>/IMAGE/NAME</Key>
-                            <Value>Windows 11 Education</Value>
+                            <Value>Windows Server 2022 SERVERDATACENTER</Value>
                         </MetaData>
                     </InstallFrom>
                     <InstallTo>
@@ -86,7 +88,7 @@
                     <!-- Windows Server Datacenter 2019 2022   6NMRW-2C8FM-D24W7-TQWMY-CWH2D -->
                     <!-- Windows 10 and 11 Education           NW6C2-QMPVW-D7KKK-3GKT6-VCFB2 -->
                     <!-- Windows 10 and 11 Enterprise          NPPR9-FWDCX-D2C8J-H872K-2YT43 -->
-                    <Key>NW6C2-QMPVW-D7KKK-3GKT6-VCFB2</Key>
+                    <Key>6NMRW-2C8FM-D24W7-TQWMY-CWH2D</Key>
                     <WillShowUI>Never</WillShowUI>
                 </ProductKey>
                 <AcceptEula>true</AcceptEula>
@@ -103,7 +105,7 @@
                 <Model>Virtual Machine</Model>
             </OEMInformation>
             <OEMName>Saxion</OEMName>
-            <ComputerName>SXN-WS-01</ComputerName>
+            <ComputerName>SXN-DC-01</ComputerName>
             <TimeZone>W. Europe Standard Time</TimeZone>
             <DisableAutoDaylightTimeSet>false</DisableAutoDaylightTimeSet>
             <RegisteredOwner>TutSOFT</RegisteredOwner>
@@ -111,7 +113,7 @@
         </component>
         <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
             <InputLocale>0413:00020409</InputLocale>
-            <SystemLocale>en-US</SystemLocale>
+            <SystemLocale>nl-NL</SystemLocale>
             <UILanguage>en-US</UILanguage>
             <UILanguageFallback>en-US</UILanguageFallback>
             <UserLocale>nl-NL</UserLocale>

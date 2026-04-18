@@ -33,7 +33,7 @@ Write-Host " "
 #   #####################
 #
 #
-$TS_WIN_ISO_FOLDER      = 'D:\Installatie-Catalogus\InstallatieMedia\Besturingssystemen\Microsoft\Windows\10-10-11\10.22-Windows-11\Consumer-Editions-Microsoft\25H2\Retail-OEM\'
+$TS_WIN_ISO_FOLDER      = 'C:\Users\jtu03\Nextcloud\Shared\ISO-Bestanden\Operating-Systems\Windows\10-11\10.22-Windows-11\Consumer-Editions-Microsoft\25H2\Retail-OEM\'
 $TS_WIN_ISO_FILE        = 'en-us_windows_11_consumer_editions_version_25h2_updated_march_2026_x64_dvd_a1cf6c36.iso'
 $TS_WIN_UNATTEND_FOLDER = 'D:\OneDrive\OneDrive - Saxion\Repository-Playground\Development\GitHub-GitDesktop\Demos\Windows\Guest\Windows\11\AutoUnattend\GitHub-Ruzickap\'
 $TS_WIN_UNATTEND_FILE   = 'Autounattend_Latest.xml'

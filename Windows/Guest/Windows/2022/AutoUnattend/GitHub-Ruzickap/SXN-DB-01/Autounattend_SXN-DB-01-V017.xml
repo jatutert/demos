@@ -7,6 +7,7 @@
 <!--     TT    UUUUUU    TT    SSSSSS  OOOOOOO FF        TT   -->
 <!--    -->
 <!-- Windows Server 2022 DataCenter -->
+<!-- SXN-DB-01 -->
 <!-- Versie 017 -->
 <!--    -->
 <!-- Created by John Tutert -->
@@ -21,7 +22,7 @@
                 <UILanguage>en-US</UILanguage>
             </SetupUILanguage>
             <InputLocale>0413:00020409</InputLocale>
-            <SystemLocale>en-US</SystemLocale>
+            <SystemLocale>nl-NL</SystemLocale>
             <UILanguage>en-US</UILanguage>
             <UILanguageFallback>en-US</UILanguageFallback>
             <UserLocale>nl-NL</UserLocale>
