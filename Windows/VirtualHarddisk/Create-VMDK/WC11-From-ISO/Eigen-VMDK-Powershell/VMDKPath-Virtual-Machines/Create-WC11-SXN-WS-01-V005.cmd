@@ -31,12 +31,12 @@
 )
 ::
 ::
-IIF EXIST "D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\SXN-WS-01\SXN-WS-01.VHD" (
-    @del /F "D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\SXN-WS-01\SXN-WS-01.VHD"
+@IF EXIST "D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\SXN-WS-01\SXN-WS-01.VHD" (
+    @del /F "D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\SXN-WS-01\SXN-WS-01.VHD" >nul 2>&1
 )
 ::
-IF EXIST D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\SXN-WS-01\SXN-WS-01.VMDK (
-    @del /F D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\SXN-WS-01\SXN-WS-01.VMDK
+@IF EXIST D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\SXN-WS-01\SXN-WS-01.VMDK (
+    @del /F D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\SXN-WS-01\SXN-WS-01.VMDK >nul 2>&1
 )
 ::
 @echo Aanmaken Directories Oracle VM Virtualbox
@@ -67,12 +67,14 @@ IF EXIST D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\SXN-WS-01\SXN
 ::
 ::  VHD
 ::
+@echo Overschakelen naar Powershell
 @Powershell -file "D:\OneDrive\OneDrive - Saxion\Repository-Playground\Development\GitHub-GitDesktop\Demos\Windows\VirtualHarddisk\Create-VHD\WC11-From-ISO\Powershell\VHDPath-Virtual-Machines"\WC11-SXN-WS-01-Create-VHD-Latest.ps1
+@echo Terug van Powershell
 ::
 ::  VHD naar VMDK
 ::
-@echo Conversie van VHD naar VMDK gestart ... 
-"C:\Program Files\StarWind Software\StarWind V2V Converter\V2V_ConverterConsole.exe" convert in_file_name="D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\SXN-WS-01\SXN-WS-01.VHD" out_file_name="D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\SXN-WS-01\SXN-WS-01.VMDK" out_file_type=ft_vmdk_ws_growable
+@echo Conversie van VHD naar VMDK mbv StarWind V2V Converter gestart ... 
+@"C:\Program Files\StarWind Software\StarWind V2V Converter\V2V_ConverterConsole.exe" convert in_file_name="D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\SXN-WS-01\SXN-WS-01.VHD" out_file_name="D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\SXN-WS-01\SXN-WS-01.VMDK" out_file_type=ft_vmdk_ws_growable >nul 2>&1
 ::
 ::  VMDK op de juiste locaties
 ::
@@ -81,12 +83,19 @@ IF EXIST D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\SXN-WS-01\SXN
 ::
 ::  VMDK Ruimte besparen op lokale schijf van de laptop
 ::
-attrib +U -P "C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\SXN-WS-01\SXN-WS-01.VMDK"
+@echo Attributen aanpassen NextCloud bestand om ruimte te besparen
+@sattrib +U -P "C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\SXN-WS-01\SXN-WS-01.VMDK"
+::
+::  VHD Verwijderen
+::
+@echo VHD verwijderen
+@del D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\SXN-WS-01\SXN-WS-01.VHD
 ::
 ::  VMX
 ::
 @echo Aanmaken VMX in VM Directory
 @copy "D:\OneDrive\OneDrive - Saxion\Repository-Playground\Development\GitHub-GitDesktop\Demos\Windows\Hypervisor\VMware-Desktop\VMX\SXN-WS-01.vmx" D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\SXN-WS-01\SXN-WS-01.vmx
+::
 ::
 @echo Overzetten VMX uit VM Directory naar NextCloud
 @copy D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\SXN-WS-01\SXN-WS-01.vmx C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\SXN-WS-01
@@ -96,8 +105,8 @@ attrib +U -P "C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\SXN-WS-01\SXN-WS-
 @start /B vmware -n D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\SXN-WS-01\SXN-WS-01.vmx
 ::
 ::
+@echo Starten VM in VMware Workstation PRO
 @start vmrun -T ws start D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\SXN-WS-01\SXN-WS-01.vmx
-::
 ::
 ::  Thats all folks
 ::
