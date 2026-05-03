@@ -84,7 +84,7 @@
 ::  VMDK Ruimte besparen op lokale schijf van de laptop
 ::
 @echo Attributen aanpassen NextCloud bestand om ruimte te besparen
-@sattrib +U -P "C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\SXN-WS-01\SXN-WS-01.VMDK"
+@attrib +U -P "C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\SXN-WS-01\SXN-WS-01.VMDK"
 ::
 ::  VHD Verwijderen
 ::

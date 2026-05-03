@@ -38,11 +38,8 @@ Write-Host "Declaratie van parameters voor Script"
 #
 $TS_WIN_ISO_FOLDER      = 'C:\Users\jtu03\Nextcloud\Shared\ISO-Bestanden\Operating-Systems\Windows\10-11\10.22-Windows-11\Consumer-Editions-Microsoft\25H2\Retail-OEM\'
 $TS_WIN_ISO_FILE        = 'en-us_windows_11_consumer_editions_version_25h2_updated_april_2026_x64_dvd_38233bf1.iso'
-#
 $TS_WIN_UNATTEND_FOLDER = 'D:\OneDrive\OneDrive - Saxion\Repository-Playground\Development\GitHub-GitDesktop\Demos\Windows\Guest\Windows\11\AutoUnattend\GitHub-Ruzickap\SXN-WS-01\'
 $TS_WIN_UNATTEND_FILE   = 'Autounattend_SXN-WS-01-Latest.xml'
-#
-$TS_VHD_PATH            = 'D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\SXN-WS-01\SXN-WS-01.VHD'
 #
 #
 #   #####################
@@ -56,7 +53,7 @@ $ConvertParams          =   @{
 #
 SourcePath              =   $TS_WIN_ISO_FOLDER + $TS_WIN_ISO_FILE
 #
-VHDPath                 =   $TS_VHD_PATH
+VHDPath                 =   'D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\SXN-WS-01\SXN-WS-01.VHD'
 #
 SizeBytes               =   90GB
 VHDFormat               =   'VHD' 
@@ -83,10 +80,10 @@ Convert-WindowsImage @ConvertParams
 #
 #
 #   Mounten VHD als schijf
-Mount-DiskImage -ImagePath "$TS_VHD_PATH"
+Mount-DiskImage -ImagePath 'D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\SXN-WS-01\SXN-WS-01.VHD'
 #
 #   #   Ophalen toegewezen schijfletter
-#   $vhdschijfltr = (Get-DiskImage -ImagePath "$TS_VHD_PATH" | Get-Disk | Get-Partition | Get-Volume ).DriveLetter
+#   $vhdschijfltr = (Get-DiskImage -ImagePath 'D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\SXN-WS-01\SXN-WS-01.VHD' | Get-Disk | Get-Partition | Get-Volume ).DriveLetter
 #
 #   Mounten VMware Tools ISO
 Mount-DiskImage -ImagePath "C:\Program Files (x86)\VMware\VMware Workstation\windows.iso"
@@ -100,7 +97,7 @@ mkdir G:\vmware-tools -Force
 cmd.exe /c "xcopy e:\*.* g:\vmware-tools /e /h /r /y"
 #
 #   Dismounten VHD 
-DisMount-DiskImage -ImagePath "$TS_VHD_PATH"
+DisMount-DiskImage -ImagePath 'D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\SXN-WS-01\SXN-WS-01.VHD'
 #
 #   Dismounten ISO
 DisMount-DiskImage -ImagePath 'C:\Program Files (x86)\VMware\VMware Workstation\windows.iso'
