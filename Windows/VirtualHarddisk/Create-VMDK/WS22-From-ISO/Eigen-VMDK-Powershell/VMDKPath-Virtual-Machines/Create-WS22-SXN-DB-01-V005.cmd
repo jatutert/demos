@@ -100,10 +100,8 @@ IF EXIST D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DB-01\SXN
 @echo Overzetten VMX uit VM Directory naar NextCloud
 @copy D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DB-01\SXN-DB-01.vmx C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\SXN-DB-01
 ::
-::
 @echo Openen VM in VMware Workstation PRO
 @start /B vmware -n D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DB-01\SXN-DB-01.vmx
-::
 ::
 @start vmrun -T ws start D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DB-01\SXN-DB-01.vmx
 ::
