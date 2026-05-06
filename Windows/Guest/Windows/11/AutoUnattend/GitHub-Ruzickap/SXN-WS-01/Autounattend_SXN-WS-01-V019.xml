@@ -7,7 +7,7 @@
 <!--     TT    UUUUUU    TT    SSSSSS  OOOOOOO FF        TT   -->
 <!--    -->
 <!-- Windows 11 Education -->
-<!-- Versie 019 -->
+<!-- Versie 018 -->
 <!--    -->
 <!-- Created by John Tutert -->
 <!-- 6 mei 2026 -->
@@ -20,7 +20,7 @@
             <SetupUILanguage>
                 <UILanguage>en-US</UILanguage>
             </SetupUILanguage>
-            <InputLocale>0413:00020409</InputLocale>
+            <InputLocale>en-US</InputLocale>
             <SystemLocale>en-US</SystemLocale>
             <UILanguage>en-US</UILanguage>
             <UILanguageFallback>en-US</UILanguageFallback>
@@ -110,7 +110,7 @@
             <RegisteredOrganization>Saxion University of Applied Science</RegisteredOrganization>
         </component>
         <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
-            <InputLocale>0413:00020409</InputLocale>
+            <InputLocale>en-US</InputLocale>
             <SystemLocale>en-US</SystemLocale>
             <UILanguage>en-US</UILanguage>
             <UILanguageFallback>en-US</UILanguageFallback>
