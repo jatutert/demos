@@ -31,51 +31,70 @@
 )
 ::
 ::
-IF EXIST "D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\SXN-DB-01\SXN-DB-01.VHD" (
-    @del /F "D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\SXN-DB-01\SXN-DB-01.VHD"
+@echo Virtual machine creator script by TutSOFT
+@echo Creating SXN-DB-01 virtual machine 
+::
+::  Verwijderen Template 
+::
+::  IF EXIST "D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\SXN-DB-01\SXN-DB-01.VHD" (
+::      @del /F "D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\SXN-DB-01\SXN-DB-01.VHD"
+::  )
+::
+::  Verwijderen Virtuele machine 
+::
+@IF EXIST D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DB-01\SXN-DB-01.VMX (
+    @echo Verwijderen bestaande virtuele machine
+    @vmrun -T ws stop D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DB-01\SXN-DB-01.vmx >nul 2>&1
+    @vmrun -T ws DeleteVM D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DB-01\SXN-DB-01.vmx >nul 2>&1
 )
 ::
-IF EXIST D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DB-01\SXN-DB-01.VMDK (
-    @del /F D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DB-01\SXN-DB-01.VMDK
+::
+@IF EXIST D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DB-01\SXN-DB-01.VMDK (
+    @echo Verwijderen bestaande virtuele machine
+    @del /F /S /Q D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DB-01\*.* >nul 2>&1
 )
+::
 ::
 @echo Aanmaken Directories Oracle VM Virtualbox
 ::
-@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\
-@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\
-@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\
+@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\ >nul 2>&1
+@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\ >nul 2>&1
+@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\ >nul 2>&1
 ::
-@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\SXN-WS-01
-@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\W11-EDU-C-LAB-001
+@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\SXN-WS-01 >nul 2>&1
+@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\W11-EDU-C-LAB-001 >nul 2>&1
 ::
-@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\SXN-DB-01
-@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\SXN-DC-01
-@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\W22-DTC-S-LAB-001
+@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\SXN-DB-01 >nul 2>&1
+@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\SXN-DC-01 >nul 2>&1
+@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\W22-DTC-S-LAB-001 >nul 2>&1
 ::
 @echo Aanmaken Directories VMware Workstation Pro
 ::
-@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\
-@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\
-@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\
+@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\ >nul 2>&1
+@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\ >nul 2>&1
+@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\ >nul 2>&1
 ::
-@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\SXN-WS-01
-@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\W11-EDU-C-LAB-001
+@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\SXN-WS-01 >nul 2>&1
+@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\W11-EDU-C-LAB-001 >nul 2>&1
 ::
-@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DB-01
-@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DC-01
-@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB-001
+@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DB-01 >nul 2>&1
+@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DC-01 >nul 2>&1
+@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB-001 >nul 2>&1
 ::
 @echo Aanmaken Directory NextCloud
 ::
-@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\
-@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\SXN-DB-01
-@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\SXN-DC-01
-@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\SXN-WS-01
+@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\ >nul 2>&1
+@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\SXN-DB-01 >nul 2>&1
+@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\SXN-DC-01 >nul 2>&1
+@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\SXN-WS-01 >nul 2>&1
 ::
 ::  VHD
 ::
-@echo Powershell script starten
-@Powershell -file "D:\OneDrive\OneDrive - Saxion\Repository-Playground\Development\GitHub-GitDesktop\Demos\Windows\VirtualHarddisk\Create-VHD\WS22-From-ISO\Powershell\VHDPath-Virtual-Machines"\WS22-SXN-DB-01-Create-VHD-Latest.ps1
+IF NOT EXIST "D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\SXN-DB-01\SXN-DB-01.VHD" (
+    @echo Powershell script starten
+    @Powershell -file "D:\OneDrive\OneDrive - Saxion\Repository-Playground\Development\GitHub-GitDesktop\Demos\Windows\VirtualHarddisk\Create-VHD\WS22-From-ISO\Powershell\VHDPath-Virtual-Machines"\WS22-SXN-DB-01-Create-VHD-Latest.ps1
+    @echo Terug van Powershell
+)
 ::
 ::  VHD naar VMDK
 ::
@@ -84,25 +103,26 @@ IF EXIST D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DB-01\SXN
 ::
 ::  VMDK op de juiste locaties
 ::
-@echo Overzetten VMDK uit VM Directory naar NextCloud (Surf CloudDrive)
-@copy D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DB-01\SXN-DB-01.VMDK C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\SXN-DB-01
+::  @echo Overzetten VMDK uit VM Directory naar NextCloud (Surf CloudDrive)
+::  @copy D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DB-01\SXN-DB-01.VMDK C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\SXN-DB-01
 ::
 ::  VMDK Ruimte besparen op lokale schijf van de laptop
 ::
-@echo Ruimte besparen NextCloud 
-@attrib +U -P "C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\SXN-DB-01\SXN-DB-01.VMDK"
+::  @echo Ruimte besparen NextCloud 
+::  @attrib +U -P "C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\SXN-DB-01\SXN-DB-01.VMDK"
 ::
 ::  VMX
 ::
 @echo Aanmaken VMX in VM Directory
 @copy "D:\OneDrive\OneDrive - Saxion\Repository-Playground\Development\GitHub-GitDesktop\Demos\Windows\Hypervisor\VMware-Desktop\VMX\SXN-DB-01.vmx" D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DB-01\SXN-DB-01.vmx
 ::
-@echo Overzetten VMX uit VM Directory naar NextCloud
-@copy D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DB-01\SXN-DB-01.vmx C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\SXN-DB-01
+::  @echo Overzetten VMX uit VM Directory naar NextCloud
+::  @copy D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DB-01\SXN-DB-01.vmx C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\SXN-DB-01
 ::
 @echo Openen VM in VMware Workstation PRO
 @start /B vmware -n D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DB-01\SXN-DB-01.vmx
 ::
+@echo Starten VM
 @start vmrun -T ws start D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DB-01\SXN-DB-01.vmx
 ::
 ::
