@@ -41,16 +41,16 @@
 ::  )
 ::
 ::
-@IF EXIST D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-WS-01\SXN-WS-01.VMX (
+@IF EXIST D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\SXN-WS-01\SXN-WS-01.VMX (
     @echo Verwijderen bestaande virtuele machine
-    @vmrun -T ws stop D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-WS-01\SXN-WS-01.vmx >nul 2>&1
-    @vmrun -T ws DeleteVM D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-WS-01\SXN-WS-01.vmx >nul 2>&1
+    @vmrun -T ws stop D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\SXN-WS-01\SXN-WS-01.vmx >nul 2>&1
+    @vmrun -T ws DeleteVM D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\SXN-WS-01\SXN-WS-01.vmx >nul 2>&1
 )
 ::
 ::
-@IF EXIST D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-WS-01\SXN-WS-01.VMDK (
+@IF EXIST D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\SXN-WS-01\SXN-WS-01.VMDK (
     @echo Verwijderen bestaande virtuele machine
-    @del /F /S /Q D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-WS-01\*.* >nul 2>&1
+    @del /F /S /Q D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\SXN-WS-01\*.* >nul 2>&1
 )
 ::
 ::
@@ -89,7 +89,7 @@
 ::
 ::  VHD
 ::
-@IF NOT EXIST "D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\SXN-WS-01\SXN-WS-01.VHD" (
+@IF NOT EXIST "D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\SXN-WS-01\SXN-WS-01.VHD" (
     @echo Powershell script starten
     @Powershell -file "D:\OneDrive\OneDrive - Saxion\Repository-Playground\Development\GitHub-GitDesktop\Demos\Windows\VirtualHarddisk\Create-VHD\WC11-From-ISO\Powershell\VHDPath-Virtual-Machines"\WC11-SXN-WS-01-Create-VHD-Latest.ps1
     @echo Terug van Powershell
