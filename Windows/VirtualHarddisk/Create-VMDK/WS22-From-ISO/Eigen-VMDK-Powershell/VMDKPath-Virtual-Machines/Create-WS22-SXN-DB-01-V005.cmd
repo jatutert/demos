@@ -90,7 +90,7 @@
 ::
 ::  VHD
 ::
-IF NOT EXIST "D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\SXN-DB-01\SXN-DB-01.VHD" (
+@IF NOT EXIST "D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\SXN-DB-01\SXN-DB-01.VHD" (
     @echo Powershell script starten
     @Powershell -file "D:\OneDrive\OneDrive - Saxion\Repository-Playground\Development\GitHub-GitDesktop\Demos\Windows\VirtualHarddisk\Create-VHD\WS22-From-ISO\Powershell\VHDPath-Virtual-Machines"\WS22-SXN-DB-01-Create-VHD-Latest.ps1
     @echo Terug van Powershell
