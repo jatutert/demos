@@ -21,6 +21,91 @@
 ::  wmic path softwarelicensingservice get OA3xOriginalProductKey
 ::
 ::
+
+
+
+
+
+
+
+
+
+
+
+
+
+=================================================== werken met een functie =================================================
+
+Standaard
+======================
+
+@echo off
+
+echo Voor functie
+
+call :ToonBericht
+
+echo Na functie
+goto :eof
+
+:ToonBericht
+echo Dit is de functie
+goto :eof
+
+
+Werken met argumenten
+====================
+
+@echo off
+
+call :Begroeting John
+call :Begroeting Marie
+
+goto :eof
+
+:Begroeting
+echo Hallo %1
+goto :eof
+
+
+Waarden teruggeven
+=========================
+
+@echo off
+
+call :Som 5 7 antwoord
+
+echo Antwoord = %antwoord%
+goto :eof
+
+:Som
+set /a resultaat=%1+%2
+set "%3=%resultaat%"
+goto :eof
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @NET SESSION >nul 2>&1
 @IF %ERRORLEVEL% EQU 0 (
     @ECHO Administrator PRIVILEGES Detected! 
@@ -33,7 +118,7 @@
 ::
 :hoofdmenu
 ::
-@CLS
+@cls
 ::
 echo ===========================================================================
 echo ==== Virtual Machine Manager
@@ -45,8 +130,8 @@ echo ==== [3] Virtualisatie
 echo ==== [4] x
 echo ==== [5] x
 echo ==== [6] x 
-echo ==== [7] Maak mappenstructuur
-echo ==== [8] Opschonen
+echo ==== [7] x
+echo ==== [8] x
 echo ====
 echo ==== [9] Verlaten / Einde 
 echo ====
@@ -57,8 +142,8 @@ choice /C:123456789 /N
 set antwoord=%errorlevel%
 ::
 if %antwoord%==9 exit /b
-if %antwoord%==8 goto :scripting 
-if %antwoord%==7 goto :hm-maak-mappen-structuur
+if %antwoord%==8 goto :yyyyyyyyy 
+if %antwoord%==7 goto :xxxxxxxxx
 if %antwoord%==6 goto :virtualisatie
 if %antwoord%==5 goto :storeapps
 if %antwoord%==4 goto :tools
@@ -66,125 +151,6 @@ if %antwoord%==3 goto :virtualiatie
 if %antwoord%==2 goto :scriptingpowershell
 if %antwoord%==1 goto :ethicalhacking
 goto :hoofdmenu
-::
-::
-::  Keuze 7
-::
-:hm-maak-mappen-structuur
-::
-@echo off
-@cls
-::
-::      ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-::      ::  Oracle VM Virtualbox
-::      ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-::
-@echo Aanmaken Directories Oracle VM Virtualbox
-::
-@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\ >nul 2>&1
-::
-::
-::
-::
-@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\ >nul 2>&1
-::
-@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\EthicalHacking\
-@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\ScriptPwrshell\
-@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\Virtualisatie\
-::
-@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\EthicalHacking\SXN-EH-DB-01 >nul 2>&1
-@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\EthicalHacking\SXN-EH-DC-01 >nul 2>&1
-::
-@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\ScriptPwrshell\SXN-SP-DB-01 >nul 2>&1
-@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\ScriptPwrshell\SXN-SP-DC-01 >nul 2>&1
-::
-@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\Virtualisatie\SXN-VA-DB-01 >nul 2>&1
-@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\Virtualisatie\SXN-VA-DC-01 >nul 2>&1
-::
-@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\W22-DTC-S-LAB-001 >nul 2>&1
-::
-::
-::
-::
-@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\ >nul 2>&1
-::
-@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\SXN-WS-01 >nul 2>&1
-::
-@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\W11-EDU-C-LAB-001 >nul 2>&1
-::
-::      ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-::      ::  VMWare Workstation PRO
-::      ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-::
-@echo Aanmaken Directories VMware Workstation Pro
-::
-@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\ >nul 2>&1
-::
-::
-::
-::
-@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\ >nul 2>&1
-::
-@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\EthicalHacking\
-@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\ScriptPwrshell\
-@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\Virtualisatie\
-::
-@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\EthicalHacking\SXN-EH-DB-01 >nul 2>&1
-@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\EthicalHacking\SXN-EH-DC-01 >nul 2>&1
-::
-@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\ScriptPwrshell\SXN-SP-DB-01 >nul 2>&1
-@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\ScriptPwrshell\SXN-SP-DC-01 >nul 2>&1
-::
-@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\Virtualisatie\SXN-VA-DB-01 >nul 2>&1
-@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\Virtualisatie\SXN-VA-DC-01 >nul 2>&1
-::
-@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB-001 >nul 2>&1
-::
-::
-::
-::
-::
-@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\ >nul 2>&1
-::
-@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\SXN-WS-01 >nul 2>&1
-::
-@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\W11-EDU-C-LAB-001 >nul 2>&1
-::
-::      ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-::      ::  NextCloud
-::      ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-::
-@echo Aanmaken Directories NextCloud
-::
-@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\ >nul 2>&1
-::
-@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\Windows\ >nul 2>&1
-::
-@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\Windows\Server\ >nul 2>&1
-::
-@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\Windows\Server\EthicalHacking >nul 2>&1
-@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\Windows\Server\Powershell >nul 2>&1
-@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\Windows\Server\Virtualisatie >nul 2>&1
-::
-@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\Windows\Server\EthicalHacking\SXN-EH-DB-01 >nul 2>&1
-@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\Windows\Server\EthicalHacking\SXN-EH-DC-01 >nul 2>&1
-::
-@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\Windows\Server\Powershell\SXN-PS-DB-01 >nul 2>&1
-@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\Windows\Server\Powershell\SXN-PS-DC-01 >nul 2>&1
-::
-@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\Windows\Server\Virtualisatie\SXN-VA-DB-01 >nul 2>&1
-@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\Windows\Server\Virtualisatie\SXN-VA-DC-01 >nul 2>&1
-::
-goto :hoofdmenu
-::
-:hm-opschonen
-
-
-
-
-::
-goto :hoofdmenu
-::
 
 
 
@@ -551,3 +517,134 @@ if %errorlevel%==0 (
 ::
 ::  Thats all folks
 ::
+
+
+
+
+
+
+
+
+
+::  ========================================================== Functies =====================================================
+
+
+:functie-maak-mappen-structuur
+::
+::  Deze functie kun je aanroepen door call met naam van de functie te doen
+::
+@echo off
+@cls
+::
+::      ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::      ::  Oracle VM Virtualbox
+::      ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+@echo Aanmaken Directories Oracle VM Virtualbox
+::
+@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\ >nul 2>&1
+::
+::
+::
+::
+@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\ >nul 2>&1
+::
+@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\EthicalHacking\
+@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\ScriptPwrshell\
+@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\Virtualisatie\
+::
+@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\EthicalHacking\SXN-EH-DB-01 >nul 2>&1
+@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\EthicalHacking\SXN-EH-DC-01 >nul 2>&1
+::
+@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\ScriptPwrshell\SXN-SP-DB-01 >nul 2>&1
+@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\ScriptPwrshell\SXN-SP-DC-01 >nul 2>&1
+::
+@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\Virtualisatie\SXN-VA-DB-01 >nul 2>&1
+@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\Virtualisatie\SXN-VA-DC-01 >nul 2>&1
+::
+@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Server\W22-DTC-S-LAB-001 >nul 2>&1
+::
+::
+::
+::
+@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\ >nul 2>&1
+::
+@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\SXN-WS-01 >nul 2>&1
+::
+@mkdir D:\Virtual-Machines\Oracle-VM-Virtualbox\Windows\Client\W11-EDU-C-LAB-001 >nul 2>&1
+::
+::      ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::      ::  VMWare Workstation PRO
+::      ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+@echo Aanmaken Directories VMware Workstation Pro
+::
+@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\ >nul 2>&1
+::
+::
+::
+::
+@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\ >nul 2>&1
+::
+@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\EthicalHacking\
+@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\ScriptPwrshell\
+@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\Virtualisatie\
+::
+@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\EthicalHacking\SXN-EH-DB-01 >nul 2>&1
+@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\EthicalHacking\SXN-EH-DC-01 >nul 2>&1
+::
+@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\ScriptPwrshell\SXN-SP-DB-01 >nul 2>&1
+@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\ScriptPwrshell\SXN-SP-DC-01 >nul 2>&1
+::
+@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\Virtualisatie\SXN-VA-DB-01 >nul 2>&1
+@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\Virtualisatie\SXN-VA-DC-01 >nul 2>&1
+::
+@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB-001 >nul 2>&1
+::
+::
+::
+::
+::
+@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\ >nul 2>&1
+::
+@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\SXN-WS-01 >nul 2>&1
+::
+@mkdir D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\W11-EDU-C-LAB-001 >nul 2>&1
+::
+::      ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::      ::  NextCloud
+::      ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+@echo Aanmaken Directories NextCloud
+::
+@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\ >nul 2>&1
+::
+@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\Windows\ >nul 2>&1
+::
+@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\Windows\Server\ >nul 2>&1
+::
+@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\Windows\Server\EthicalHacking >nul 2>&1
+@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\Windows\Server\Powershell >nul 2>&1
+@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\Windows\Server\Virtualisatie >nul 2>&1
+::
+@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\Windows\Server\EthicalHacking\SXN-EH-DB-01 >nul 2>&1
+@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\Windows\Server\EthicalHacking\SXN-EH-DC-01 >nul 2>&1
+::
+@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\Windows\Server\Powershell\SXN-PS-DB-01 >nul 2>&1
+@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\Windows\Server\Powershell\SXN-PS-DC-01 >nul 2>&1
+::
+@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\Windows\Server\Virtualisatie\SXN-VA-DB-01 >nul 2>&1
+@mkdir C:\Users\jtu03\Nextcloud\Shared\Virtual-Machines\Windows\Server\Virtualisatie\SXN-VA-DC-01 >nul 2>&1
+::
+::  Ga terug naar de plek waarvan call is gedaan
+::
+goto :eof
+::
+
+
+
+
+
+
+
+
