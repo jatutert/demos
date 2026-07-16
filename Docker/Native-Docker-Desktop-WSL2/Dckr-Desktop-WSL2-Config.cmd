@@ -8,21 +8,33 @@
 ::  2026
 :: 
 ::
-:: Poort 9443 vrijgeven voor Docker Desktop
+::  Opschonen
 ::
-:: Windows NAT service stoppen
+::  Alle draaiende Docker containers stoppen en verwijderen
+docker rm -f $(docker ps -aq)
+::
+::  Verwijder alle Docker Images
+docker rmi -f $(docker images -aq)
+::
+::  Verwijder alle Docker Volumes
+docker volume rm $(docker volume ls -q)
+::
+::  Windows NAT service stoppen
 net stop winnat
-:: Portainer
+::
+::  Poorten vrijgeven
+::
+::  Portainer
 netsh int ipv4 add excludedportrange protocol=tcp startport=9101 numberofports=1
-:: Yacht
+::  Yacht
 netsh int ipv4 add excludedportrange protocol=tcp startport=9102 numberofports=1
-:: Visual Studio Code Server
+::  Visual Studio Code Server
 netsh int ipv4 add excludedportrange protocol=tcp startport=9103 numberofports=1
-:: Jenkins
+::  Jenkins
 netsh int ipv4 add excludedportrange protocol=tcp startport=9104 numberofports=1
-:: Registry
+::  Registry
 netsh int ipv4 add excludedportrange protocol=tcp startport=9105 numberofports=1
-:: WatchTower
+::  WatchTower
 netsh int ipv4 add excludedportrange protocol=tcp startport=9106 numberofports=1
 ::
 ::  Toevoegen
@@ -60,13 +72,13 @@ docker pull moncho/dry:latest
 ::
 :: Volumes
 ::
-docker volume rm portainer_data
-docker volume rm yacht_data
-docker volume rm jenkins_data
+docker volume rm portainer_data
+docker volume rm yacht_data
+docker volume rm jenkins_data
 ::
-docker volume create portainer_data
-docker volume create yacht_data
-docker volume create jenkins_data
+docker volume create portainer_data
+docker volume create yacht_data
+docker volume create jenkins_data
 ::
 :: Portainer
 ::

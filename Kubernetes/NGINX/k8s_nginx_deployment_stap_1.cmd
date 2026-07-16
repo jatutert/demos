@@ -6,9 +6,9 @@
 echo Stap 1 Deployment NGINX versie 14 gestart ...
 ::
 :: Deployment aanmaken
-kubectl apply -f ./1-deployment.yml
+kubectl apply -f ./1-deployment-V2.yml
 ::  Deployment verbinden met de buitenwereld via NodePort
-kubectl expose deployment nginx-deployment --type=NodePort
+::  kubectl expose deployment nginx-deployment --type=NodePort
 ::  kubectl expose deployment nginx-deployment --type=NodePort --port=9302 --target-port=80
 ::
 ::  Geef detailinformatie over de uitgevoerde deployment
@@ -22,3 +22,11 @@ kubectl get svc -o wide
 :: Opmerking: als je dit zo in het script doet, dan komt dit te snel. Deployment is nog aan het opstarten
 :: 
 :: minikube service --all
+::
+::  :::::::::::::::::::::::::::::::::::::::::::
+::  Start een Tunnel 
+::  NGINX is nu bereikbaar op localhost 8080
+::  :::::::::::::::::::::::::::::::::::::::::::
+::
+kubectl port-forward deployment/nginx-deployment 8080:80
+

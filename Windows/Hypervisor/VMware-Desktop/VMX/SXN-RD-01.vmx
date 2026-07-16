@@ -7,9 +7,9 @@
 #     TT    UUUUUU    TT    SSSSSS  OOOOOO  FF        TT
 #
 #       Saxion
-#       Bachelor ICT
-#       Module Scripting met Powershell 
-#       Module Virtualisatie
+#       Techniek Bachelor ICT
+#       Scripting met Powershell
+#       Virtualisatie
 #
 #       Active Directory Domain Services (ADDS) Domain Controller (DC)
 #       VMware Workstation PRO Virtuele Machine configuratie
@@ -33,13 +33,13 @@ pciBridge7.virtualDev = "pcieRootPort"
 pciBridge7.functions = "8"
 vmci0.present = "TRUE"
 hpet0.present = "TRUE"
-nvram = "SXN-DC-01.nvram"
+nvram = "SXN-RD-01.nvram"
 virtualHW.productCompatibility = "hosted"
 powerType.powerOff = "soft"
 powerType.powerOn = "soft"
 powerType.suspend = "soft"
 powerType.reset = "soft"
-displayName = "SXN-DC-01"
+displayName = "SXN-RD-01"
 firmware = "efi"
 guestOS = "windows2019srvnext-64"
 tools.syncTime = "TRUE"
@@ -54,7 +54,7 @@ memsize = "2048"
 mem.hotadd = "TRUE"
 sata0.present = "TRUE"
 nvme0.present = "TRUE"
-nvme0:0.fileName = "SXN-DC-01.VMDK"
+nvme0:0.fileName = "SXN-RD-01.VMDK"
 nvme0:0.present = "TRUE"
 sata0:1.autodetect = "TRUE"
 sata0:1.deviceType = "cdrom-raw"
@@ -68,10 +68,10 @@ ethernet0.connectionType = "nat"
 ethernet0.addressType = "generated"
 ethernet0.virtualDev = "e1000e"
 ethernet0.present = "TRUE"
-extendedConfigFile = "SXN-DC-01.vmxf"
+extendedConfigFile = "SXN-RD-01.vmxf"
 floppy0.present = "FALSE"
 tools.upgrade.policy = "upgradeAtPowerCycle"
-annotation = "Saxion |7C Bachelor ICT|0D|0ACCSHomeLab|0D|0A|0D|0ASXN-DC-01|0D|0AADDS DC(ccshomelab.net)|0D|0AWindows Server 2022 DataCenter Edition|0D|0A|0D|0AUser: labadmin|0D|0APassword: !@WACHTwoord#$|0D|0A|0D|0ANetwerk 1: NAT|0D|0ANetwerk 2: Custom (CCSHomeLab)"
+annotation = "Saxion |7C Bachelor ICT|0D|0ACCSHomeLab|0D|0A|0D|0ASXN-DC-01|0D|0ARemote Desktop Services (RDS) Session Host |0D|0AWindows Server 2022 DataCenter Edition|0D|0A|0D|0AUser: labadmin|0D|0APassword: !@WACHTwoord#$|0D|0A|0D|0ANetwerk 1: NAT|0D|0ANetwerk 2: Custom (CCSHomeLab)"
 ethernet1.connectionType = "custom"
 ethernet1.addressType = "generated"
 ethernet1.vnet = "VMnet3"
