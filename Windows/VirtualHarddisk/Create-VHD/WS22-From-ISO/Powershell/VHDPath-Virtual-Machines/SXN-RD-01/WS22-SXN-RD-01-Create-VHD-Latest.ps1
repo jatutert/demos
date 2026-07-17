@@ -1,42 +1,53 @@
 #
+#
+#
+#
 #   TTTTTT  U    U  TTTTTT  SSSSSS  OOOOOO  FFFFFF  TTTTTT
 #     TT    U    U    TT    SS      O    O  FF        TT
 #     TT    U    U    TT    SSSSSS  O    O  FFFF      TT
 #     TT    U    U    TT        SS  O    O  FF        TT
 #     TT    UUUUUU    TT    SSSSSS  OOOOOO  FF        TT
 #
+#
+#
+#
 #   Windows Server 2022 DataCenter ISO naar Virtual Harddisk VHD
 #   PowerSHELL SCRIPT
 #
+#   SXN-RD-01 Edition of the script
+#
 #   For Personal and/or Education Use Only ! 
 #
-#
-#   03 mei 2026
-#
-#
-#   LET OP!
-#   Dit script maakt gebruik van Schneegans autounattend.xml
+#   16 juli 2026
 #
 #
-#   Clear-Host
 #
-#   Write-Host " "
-#   Write-Host "   TTTTTT  U    U  TTTTTT  SSSSSS  OOOOOO  FFFFFF  TTTTTT"
-#   Write-Host "     TT    U    U    TT    SS      O    O  FF        TT"
-#   Write-Host "     TT    U    U    TT    SSSSSS  O    O  FFFF      TT"
-#   Write-Host "     TT    U    U    TT        SS  O    O  FF        TT"
-#   Write-Host "     TT    UUUUUU    TT    SSSSSS  OOOOOO  FF        TT"
-#   Write-Host " "
+#
+Write-Host  "Powershell ISO 2 VHD Converter by TutSOFT Version 10"
+#
+#
+#
+#
+#   #####################
+#   Powershell Module
+#   #####################
+#
+#   Zorgen dat Powershell module aanwezig is
+Install-Module -Name Hyper-ConvertImage
+#
+#
+#
 #
 #   #####################
 #   DECLARATIE VARIABELEN
 #   #####################
 #
 #
-Write-Host  "TutSOFT" 
-Write-Host  "Powershell ISO to VHD Converter"
 #
-Write-Host "ISOVHD Stap 1 Declaratie van parameters voor Script"
+#
+Write-Host  "ISO2VHD Stap 1 Declaratie van parameters voor Script"
+#
+#
 #
 #
 $TS_WIN_ISO_FOLDER      = 'C:\Users\jtu03\Nextcloud\Shared\ISO-Bestanden\Operating-Systems\Windows\10-11\10.22-Windows-Server-2022\Standard-DataCenter-Microsoft\'
@@ -48,12 +59,19 @@ $TS_WIN_UNATTEND_FILE   = 'Autounattend_SXN-RD-01-Latest.xml'
 $TS_VHD_PATH            = 'D:\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\SXN-RD-01\SXN-RD-01.VHD'
 #
 #
+#
+#
 #   #####################
 #   PARAMETERS CONVERSIE CMDLET
 #   #####################
 #
 #
-Write-Host "ISOVHD Stap 2 Declaratie van parameters voor conversie"
+#
+#
+Write-Host  "ISO2VHD Stap 2 Declaratie van parameters voor conversie"
+#
+#
+#
 #
 $ConvertParams          =   @{
 #
@@ -71,13 +89,20 @@ BCDinVHD                =   'VirtualMachine'
 }
 #
 #
+#
+#
+#
 #   #####################
 #   CONVERSIE ISO NAAR VHD
 #   #####################
 #
 #
-Write-Host "ISOVHD Stap 3 Conversie Windows Server 2022 DataCenter ISO naar VHD gestart ..."
+#
+#
+Write-Host "ISO2VHD Stap 3 Maken SXN-RD-01 Virtual Harddisk op basis van ISO gestart ..."
 Convert-WindowsImage @ConvertParams
+#
+#
 #
 #
 #   #####################
@@ -85,7 +110,9 @@ Convert-WindowsImage @ConvertParams
 #   #####################
 #
 #
-Write-Host "ISOVHD Stap 4 VMWare Tools overzetten op VHD"
+#
+#
+Write-Host "ISO2VHD Stap 4 VMWare Tools overzetten op VHD"
 # 
 #   Mounten VHD als schijf
 Mount-DiskImage -ImagePath "$TS_VHD_PATH"

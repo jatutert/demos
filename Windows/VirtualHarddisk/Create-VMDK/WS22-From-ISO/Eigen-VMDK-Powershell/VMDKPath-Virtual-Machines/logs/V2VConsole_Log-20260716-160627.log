@@ -1,0 +1,13 @@
+7/16 16:06:27.798 6e04 Facility ???INFO: main: SetDllDirectory: C:\Program Files\StarWind Software\StarWind V2V Converter\lib
+7/16 16:06:27.798 6e04 Facility ???INFO: main: File Version: 9.0.1.848
+7/16 16:06:27.801 6e04 Facility ???INFO: main: Load language IDR_XML_ENGLISH
+7/16 16:06:27.801 6e04 Facility ???INFO: RunConsole: Version MajorVersion 10, MinorVersion 0, BuildNumber 26100
+7/16 16:06:27.801 6e04 Facility ???INFO: RunConsole: "C:\Program Files\StarWind Software\StarWind V2V Converter\V2V_ConverterConsole.exe"  convert in_file_name="D:\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\SXN-RD-01\SXN-RD-01.VHD" out_file_name="D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-RD-01\SXN-RD-01.VMDK" out_file_type=ft_vmdk_ws_growable
+7/16 16:06:27.801 6e04 Facility ???INFO: CCommandLineManager::AddParametersForConvertCommand: in_file_name=D:\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\SXN-RD-01\SXN-RD-01.VHD
+7/16 16:06:27.801 6e04 Facility ???INFO: CCommandLineManager::AddParametersForConvertCommand: out_file_name=D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-RD-01\SXN-RD-01.VMDK
+7/16 16:06:27.801 6e04 Facility ???INFO: CCommandLineManager::AddParametersForConvertCommand: out_file_type=ft_vmdk_ws_growable
+7/16 16:06:28.085 6e04 Facility ???INFO: VMwareFile::NewFile: sFileName - D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-RD-01\SXN-RD-01.VMDK
+7/16 16:06:28.085 6e04 Facility ???INFO: VMwareFile::NewFile: SectorType - 188743680
+7/16 16:06:28.085 6e04 Facility ???INFO: VMwareFile::NewFile: EVMDKCreateType - 0
+7/16 16:06:28.085 6e04 Facility ???INFO: VMwareFile::NewFile: EVMDKAdapterType - 0
+7/16 16:06:52.421 6e04 Facility ???INFO: CLI::PrintResultToLog: Converted successfully
