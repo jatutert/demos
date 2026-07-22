@@ -1,4 +1,10 @@
 ::
+::   TTTTTT  U    U  TTTTTT  SSSSSS  OOOOOO  FFFFFF  TTTTTT
+::     TT    U    U    TT    SS      O    O  FF        TT
+::     TT    U    U    TT    SSSSSS  O    O  FFFF      TT
+::     TT    U    U    TT        SS  O    O  FF        TT
+::     TT    UUUUUU    TT    SSSSSS  OOOOOO  FF        TT
+::
 ::  Docker Desktop on Windows Subsystem for Linux (WSL)
 ::  Configuration Script
 ::
@@ -63,7 +69,7 @@ FOR /F %%i IN ('docker volume ls -q') DO docker volume rm %%i >nul 2>&1
 ::  Windows NAT service stoppen
 @net stop winnat >nul 2>&1
 ::
-@echo Poorten Docker Containers vrijgeven ... 
+@echo Poorten voor Docker containers vrijgeven ... 
 ::  Poort vrijgeven voor Portainer
 @netsh int ipv4 add excludedportrange protocol=tcp startport=9101 numberofports=1 >nul 2>&1
 ::  Poort vrijgeven voor Yacht
@@ -168,6 +174,24 @@ FOR /F %%i IN ('docker volume ls -q') DO docker volume rm %%i >nul 2>&1
 ::  @echo docker run --rm -it -v /var/run/docker.sock:/var/run/docker.sock -e DOCKER_HOST=$DOCKER_HOST moncho/dry > %userprofile%/dkr_run_dry.cmd
 ::
 ::
-@winget install kubernetes.kubectl
-@winget install kubernetes.minikube
-@winget install wagoodman.dive
+@kubectl >nul 2>&1
+@if %ERRORLEVEL% neq 0 (
+    @winget install kubernetes.kubectl
+)
+::
+@minikube >nul 2>&1
+@if %ERRORLEVEL% neq 0 (
+    @winget install kubernetes.minikube
+)
+::
+@minikube config set driver docker >nul 2>&1
+::
+@dive version >nul 2>&1
+@if %ERRORLEVEL% neq 0 (
+    @winget install wagoodman.dive
+)
+::
+::
+::  Thats all folks
+::
+::

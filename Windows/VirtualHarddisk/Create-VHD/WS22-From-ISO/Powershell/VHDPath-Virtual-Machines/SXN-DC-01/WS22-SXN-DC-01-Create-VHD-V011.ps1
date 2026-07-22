@@ -18,7 +18,7 @@
 #
 #   For Personal and/or Education Use Only ! 
 #
-#   16 juli 2026
+#   22 juli 2026
 #
 #
 #
@@ -106,13 +106,13 @@ Convert-WindowsImage @ConvertParams
 #
 #
 #   #####################
-#   VMware Tools overzetten op nieuwe VHD
+#   Software overzetten op nieuwe VHD
 #   #####################
 #
 #
 #
 #
-Write-Host "ISO2VHD Stap 4 VMWare Tools overzetten op VHD"
+Write-Host "ISO2VHD Stap 4 software overzetten op VHD"
 # 
 #   Mounten VHD als schijf
 Mount-DiskImage -ImagePath "$TS_VHD_PATH"
@@ -120,6 +120,12 @@ Mount-DiskImage -ImagePath "$TS_VHD_PATH"
 #   #   Ophalen toegewezen schijfletter
 #   $vhdschijfltr = (Get-DiskImage -ImagePath 'D:\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\SXN-DC-01\SXN-DC-01.VHD' | Get-Disk | Get-Partition | Get-Volume ).DriveLetter
 #
+#
+#   #############
+#   VMware Tools
+#   #############
+#
+# 
 #   Mounten VMware Tools ISO
 Mount-DiskImage -ImagePath "C:\Program Files (x86)\VMware\VMware Workstation\windows.iso"
 #
@@ -130,6 +136,17 @@ mkdir G:\vmware-tools -Force
 #
 #   Alle bestanden van de ISO overzetten naar VHD
 cmd.exe /c "xcopy e:\*.* g:\vmware-tools /e /h /r /y"
+#
+#
+#   ###################
+#   SQL-Server Express
+#   ###################
+#
+#
+mkdir G:\SQL-Server-2022-Express -Force
+#
+cmd.exe /c "xcopy C:\Users\jtu03\Nextcloud\Shared\ISO-Bestanden\Application-Servers\DBMS\Microsoft\SQL-Server\SQL-Server-2022-Express\*.* g:\SQL-Server-2022-Express /e /h /r /y"
+#
 #
 #   Dismounten VHD 
 DisMount-DiskImage -ImagePath "$TS_VHD_PATH"
