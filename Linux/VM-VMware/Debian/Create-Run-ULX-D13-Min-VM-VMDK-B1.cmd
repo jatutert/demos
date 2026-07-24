@@ -1,0 +1,578 @@
+::
+::  VMWare Workstation Pro Virtual Machine Creator
+::  Created by John Tutert(TutSOFT)
+::
+::  For Educational and/or Personal Use ! 
+::
+::  LUCT 4 Debian Minimal Edition
+::
+::  Dit is de script versie van de handleiding 2.1 Virtualisatie 2025-2026
+::  Gemaakt voor docenten
+::
+::  Changelog
+::  04juli25    Introductie substap meldingen
+::  04juli25    Introductie variabelen in paden 
+::  24juli25    Volgorde van het Script aangepast
+::  24juli25    Substap meldingen verwijderd 
+::  24juli25    Bugfix path
+::  24juli25    taskkill van vmware workstation pro 
+::  16aug25     auto start vm na inlezen vm en inlezen vmware workstation path uit register
+::  26aug25     Laatste deel van het script machine onafhankelijk gemaakt
+::  29aug25     ISO bestand check en download
+::
+::  04sept25    Toevoegen CD-ROM en NVME disks 
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  STAP 0 Schoon scherm 
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+:: 
+@ECHO OFF
+@CLS
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  STAP 1 Administrator rechten check
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+:: 
+@NET SESSION >nul 2>&1
+@IF %ERRORLEVEL% NEQ 0 (
+    @echo.
+    @echo Script NIET gestart met de vereiste Adminstrator rechten 
+    @echo.
+    @echo Script wordt afgebroken !
+    @echo. 
+    @pause
+    @exit 1
+)
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  STAP 2 Instellen dat vanaf nu de variabelen tot endlocal lokaal zijn 
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+:: 
+@setlocal enabledelayedexpansion
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  STAP 3 Aanmaken lokale omgevingsvariabelen voor dit script 
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  Onderstaande variabelen aanpassen naar eigen voorkeur
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+::  Locatie van download bestand van Linux VM Images website
+@SET "VMTemplatePath=D:\Virtual-Machines\Templates\Linux\Debian\Minimaal\13"
+@MKDIR %VMTemplatePath% >nul 2>&1
+::
+::  Locatie van ISO bestanden 
+@SET "MediaPath=D:\Installatie-Catalogus\InstallatieMedia\Besturingssystemen\Linux\Debian\Server-Minimal\13"
+@MKDIR %MediaPath% >nul 2>&1
+::
+::  Naam ISO bestand
+@SET "MediaFile=debian-12.11.0-amd64-netinst.iso"
+::
+::
+::  https://mirror.ams.macarne.com/ubuntu-releases/24.04.3/
+::  ubuntu-24.04.3-desktop-amd64.iso  
+::  ubuntu-24.04.3-live-server-amd64.iso  
+::
+::  https://cdimage.debian.org/cdimage/archive/
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  Onderstaande variabelen NIET aanpassen
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+::  Besturingssysteem van de demo
+@SET "VMOSPath=Linux"
+::  Distro van het besturingssysteem van de demo
+@SET "VMOSDistroPath=Debian"
+::  Applicatie bovenop het het besturingssysteem van de demo
+@SET "VMAPPPath=Minimal"
+::  Naam van virtuele machine en alle bestanden van de virtuele machine
+@SET "VirtMachNaam=D13-LTS-S-MIN-001"
+::  Naam van de bestanden in het ZIP bestand vanuit download linuxvmimages website
+@SET "LVI_Inside_ZIP_Filename=Debian_13_VMM_LinuxVMImages.COM"
+::  Eigen naam gegeven aan ZIP bestand afkomstig van LinuxVMImages website
+@SET "LVI_Download_ZIP_Filename=LVI-D13-00-TRX-M-VMDK"
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  STAP 4 Bepalen installatie locatie VMWare Workstation Pro 
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+::
+@FOR /F "tokens=2,*" %%a IN ('REG QUERY "HKEY_LOCAL_MACHINE\SOFTWARE\VMware, Inc.\VMware Workstation" /v "InstallPath"') DO SET VMWareInstallPath=%%b
+::  @echo VMware Workstation Pro aangetroffen in %VMWareInstallPath%
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  STAP 5 Bepalen ingestelde standaard locatie voor virtuele machines in VMW Workstation Pro
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+::
+:: Stap 5A  Zoek de regel met prefvmx.defaultVMPath en haal het pad eruit
+@SET "prefFile=%AppData%\VMware\preferences.ini"
+@FOR /f "tokens=1,* delims==" %%A in ('findstr /i "prefvmx.defaultVMPath" "%prefFile%"') do (
+    SET "rawPath=%%B"
+)
+::
+:: Stap 5B  Verwijder aanhalingstekens uit prefvmx.defaultVMPath
+@SET "vmPath=%rawPath:"=%"
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  STAP 6 Tonen welkomscherm gebruiker
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+::
+@echo off
+@cls
+@echo.
+@echo VMWare Workstation Pro Virtual Machine Creator
+@echo.
+@echo Created by John Tutert (TutSOFT)
+@echo.
+@echo LUCT 4.1 Debian 13 Minimal Edition (%VirtMachNaam%)
+@echo. 
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  STAP 7 Eventuele installie software noodzakelijk voor dit script
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+::
+@echo [Stap 7] Eventuele installatie software noodzakelijk voor dit script
+7z >nul 2>&1
+if %errorlevel% neq 0 (
+    @echo NanaZIP niet aangetroffen op deze machine .. Installatie wordt gestart .. 
+    @winget install --id M2Team.NanaZip --silent >%TEMP%\WinGet-NanaZip-Installatie.log
+)
+::
+curl -V >nul 2>&1
+if %errorlevel% neq 0 (
+    @echo Curl niet aangetroffen op deze machine .. Installatie wordt gestart .. 
+    @winget install --id cURL.cURL --silent >%TEMP%\WinGet-cURL-Installatie.log
+)
+::
+pwsh --version >nul 2>&1
+if %errorlevel% neq 0 (
+    @echo Powershell 7 niet aangetroffen op deze machine .. Installatie wordt gestart .. 
+    @winget install --id Microsoft.PowerShell --silent >%TEMP%\WinGet-pwsh-Installatie.log
+)
+::
+set "app_dir_check=C:\Program Files\WindowsApps\Microsoft.WindowsTerminal_1"
+if not exist "%app_dir_check%*" (
+    @echo Windows Terminal niet aangetroffen
+    @winget install --id Microsoft.WindowsTerminal --silent >%TEMP%\WinGet-WinTerm-Installatie.log
+)
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  STAP 8 Opruimen eventueel aanwezige virtuele machine 
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+@echo [Stap 8] Opruimen eventueel aanwezige virtuele machine ...
+::
+:: Stoppen eventueel draaiend VMware Workstation PRo
+::  tasklist /FI "IMAGENAME eq vmware.exe" | findstr "vmware.exe" > nul
+::  if %errorlevel% equ 0 (
+::      echo VMware Workstation Pro is actief en wordt daarom afgesloten ... 
+::      @taskkill /IM vmware.exe /F
+::  )
+::
+::
+:: https://techdocs.broadcom.com/us/en/vmware-cis/desktop-hypervisors/workstation-pro/17-0/using-vmware-workstation-pro/using-the-vmrun-command-to-control-virtual-machines/running-vmrun-commands/syntax-of-vmrun-commands.html
+::
+IF EXIST "%vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx" (
+    @echo Stoppen draaiende virtuele machine
+    tasklist /FI "IMAGENAME eq vmware.exe" | findstr "vmware.exe" > nul
+    if %errorlevel% neq 0 (
+        @"%VMWareInstallPath%"\vmrun -T ws stop %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx >nul 2>&1
+    ) else (
+    @taskkill /IM vmware.exe /F
+    @"%VMWareInstallPath%"\vmrun -T ws stop %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx >nul 2>&1
+    )
+)
+::
+::
+::	Let OP!
+::	Permissie foutmelding als Workstation openstaat door gebruiker met VM
+::
+:: https://techdocs.broadcom.com/us/en/vmware-cis/desktop-hypervisors/workstation-pro/17-0/using-vmware-workstation-pro/using-the-vmrun-command-to-control-virtual-machines/running-vmrun-commands/syntax-of-vmrun-commands.html
+::
+IF EXIST "%vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx" (
+    @echo Verwijderen virtuele machine in VMWare Workstation Pro ...
+    @"%VMWareInstallPath%"\vmrun -T ws DeleteVM %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx >nul 2>&1
+)
+::
+IF EXIST "%VMTemplatePath%\%LVI_Inside_ZIP_Filename%.vmx" (
+    @echo Verwijderen VMX bestand virtuele machine ...
+    @del %VMTemplatePath%\%LVI_Inside_ZIP_Filename%.vmx >nul 2>&1
+)
+::
+IF EXIST "%VMTemplatePath%\%LVI_Inside_ZIP_Filename%.vmdk" (
+    @echo Verwijderen VMDK bestand virtuele machine ...
+    @del %VMTemplatePath%\%LVI_Inside_ZIP_Filename%.vmdk >nul 2>&1
+)
+::
+IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmx" (
+    @echo Verwijderen template VMX bestand ... 
+    @del %VMTemplatePath%\%VirtMachNaam%.vmx >nul 2>&1
+)
+::
+IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmdk" (
+    @echo Verwijderen template VMDK bestand ... 
+    @del %VMTemplatePath%\%VirtMachNaam%.vmdk >nul 2>&1
+)
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  STAP 9A Eventueel downloaden Template van LinuxVMImages website
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+::
+IF NOT EXIST "%VMTemplatePath%\%LVI_Download_ZIP_Filename%.7z" (
+    @echo Downloaden template virtuele machine van Linux VM Images website ... 
+    @curl -s -L -o %VMTemplatePath%\%LVI_Download_ZIP_Filename%.7z https://edu.nl/wmdrh
+)
+:
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  STAP 9B Eventueel downloaden ISO bestand
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+::
+@echo Skip ISO download 
+IF NOT EXIST "%MediaPath%\%MediaFile%" (
+    @echo Downloaden ISO bestand 
+    @REM @curl -s -L -o %MediaPath%\%MediaFile% https://mirror.ams.macarne.com/ubuntu-releases/24.04.3/ubuntu-24.04.3-live-server-amd64.iso
+)
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  STAP 10 Uitpakken ZIP bestand afkomstig van LinuxVMImages website
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+::
+@echo [Stap 10] Uitpakken ZIP bestand van LinuxVMImages ... 
+IF EXIST "%VMTemplatePath%\%LVI_Download_ZIP_Filename%.7z" (
+    @echo Aanmaken VMX en VMDK template bestanden vanuit template virtuele machine ... 
+    @7z x %VMTemplatePath%\%LVI_Download_ZIP_Filename%.7z -o%VMTemplatePath% -y >nul 2>&1
+)
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  STAP 11 HERNOEMEN BESTANDEN
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+::
+@echo [Stap 11] Hernoemen template VMX en VMDK bestanden naar %VirtMachNaam%
+IF EXIST "%VMTemplatePath%\%LVI_Inside_ZIP_Filename%\%LVI_Inside_ZIP_Filename%.vmx" (
+    @echo Hernoemen VMX-bestand naar nieuwe naam
+    @rename %VMTemplatePath%\%LVI_Inside_ZIP_Filename%\%LVI_Inside_ZIP_Filename%.vmx %VirtMachNaam%.vmx
+)
+::
+IF EXIST "%VMTemplatePath%\%LVI_Inside_ZIP_Filename%\%LVI_Inside_ZIP_Filename%.vmdk" (
+    @echo Hernoemen VMDK-bestand naar nieuwe naam
+    @rename %VMTemplatePath%\%LVI_Inside_ZIP_Filename%\%LVI_Inside_ZIP_Filename%.vmdk %VirtMachNaam%.vmdk
+)
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  STAP 12 Zorgen dat noodzakelijk directories aanwezig zijn 
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+::
+@echo [Stap 12] Zorgen dat noodzakelijke directories aanwezig zijn ... 
+:: Maken OS directories
+@mkdir %vmPath%\%VMOSPath% >nul 2>&1
+@mkdir %vmPath%\Android >nul 2>&1
+@mkdir %vmPath%\ChromeOS >nul 2>&1
+@mkdir %vmPath%\Linux >nul 2>&1
+@mkdir %vmPath%\MACos >nul 2>&1
+@mkdir %vmPath%\Unix >nul 2>&1
+@mkdir %vmPath%\Windows >nul 2>&1
+:: Maken OS Distro directory
+@mkdir %vmPath%\Linux\%VMOSDistroPath% >nul 2>&1
+@mkdir %vmPath%\Linux\Debian >nul 2>&1
+@mkdir %vmPath%\Linux\Fedora >nul 2>&1
+@mkdir %vmPath%\Linux\Mint >nul 2>&1
+@mkdir %vmPath%\Linux\Mint\Debian-Edition >nul 2>&1
+@mkdir %vmPath%\Linux\Mint\Ubuntu-Edition >nul 2>&1
+@mkdir %vmPath%\Linux\RHEL >nul 2>&1
+@mkdir %vmPath%\Linux\Ubuntu >nul 2>&1
+::
+:: Zorgen dat directory voor virtuele machine leeg is door te verwijderen
+@rmdir /s /q %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%
+::
+:: Aanmaken directory voor virtuele machine na eerst verwijderen 
+@mkdir %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  STAP 13 Bestanden overzetten  
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+::
+@echo [Stap 13] Template bestanden overzetten naar virtual machine directory ...
+IF EXIST "%VMTemplatePath%\%LVI_Inside_ZIP_Filename%\%VirtMachNaam%.vmx" (
+    @echo VMX bestand uit Template directory overzetten naar locatie virtuele machine
+
+    @robocopy %VMTemplatePath%\%LVI_Inside_ZIP_Filename% %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath% *.vmx /MOV /NJH /NJS /NP
+
+    @REM  @copy %VMTemplatePath%\%LVI_Inside_ZIP_Filename%\%VirtMachNaam%.vmx %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath% >nul 2>&1
+)
+::
+IF EXIST "%VMTemplatePath%\%LVI_Inside_ZIP_Filename%\%VirtMachNaam%.vmdk" (
+    @echo VMDK betand uit Template directory overzetten naar locatie virtuele machine 
+
+    @robocopy %VMTemplatePath%\%LVI_Inside_ZIP_Filename% %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath% *.vmdk /MOV /NJH /NJS /NP
+
+    @REM  @copy %VMTemplatePath%\%LVI_Inside_ZIP_Filename%\%VirtMachNaam%.vmdk %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath% >nul 2>&1
+)
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  STAP 14 Template VMX aanpassen naar eigen settings 
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+::
+@ECHO [Stap 14a] DisplayName van de virtuele machine aanpassen in de VMX via VMCli
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry displayName "%VirtMachNaam%"
+::
+@ECHO [Stap 14b] Annotation van de virtuele machine aanpassen in de VMX via VMCli
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry annotation "LUCT Demo Debian 13 Gebruiker: debian Wachtwoord: debian"
+::
+@ECHO [Stap 14c] Hardware configuratie van de virtuele machine in de VMX aanpassen via VMCli
+::
+::  :::::::::::::::::::::::::::::::::::::::
+::  CPU
+::  :::::::::::::::::::::::::::::::::::::::
+::
+@SET /a div_result=%NUMBER_OF_PROCESSORS% / 3
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry numvcpus "%div_result%"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry cpuid.coresPerSocket "2"
+::
+::  Disable Side Channeld migitations for Hyper-V Enabled Hosts
+::
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry ulm.disableMitigations "TRUE"
+::
+::  :::::::::::::::::::::::::::::::::::::::
+::  RAM
+::  :::::::::::::::::::::::::::::::::::::::
+for /f %%i in ('powershell -command "[math]::round(((Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory / 1GB))"') do (
+    SET TotalMemoryGB=%%i
+)
+::  @ECHO Totaal geheugen: %TotalMemoryGB% GB
+@SET /a QuarterMemoryMB=%TotalMemoryGB% * 1024 / 4
+::  @ECHO Een vierde daarvan: %QuarterMemoryMB% MB
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry memsize "%QuarterMemoryMB%"
+::
+::  Namen bestanden virtuele machine aanpassen naar hostname
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry scsi0:0.fileName "%VirtMachNaam%.vmdk"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry extendedConfigFile "%VirtMachNaam%.vmxf"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry nvram "%VirtMachNaam%.nvram"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry vmxstats.filename "%VirtMachNaam%.scoreboard"
+::
+::  CD-ROM Drive 
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Sata SetPresent sata0 1
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Disk SetBackingInfo sata0:0 cdrom_image "%MediaPath%\%MediaFile%" 1
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Disk SetPresent sata0:0 1
+::
+::  @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sata0:1.fileName "%MediaPath%\%MediaFile%"
+::
+::  :::::::::::::::::::::::::::::::::::::::
+::  :::: DISK 
+::  :::::::::::::::::::::::::::::::::::::::
+::
+::  Aanmaken extra schijven voor VM
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Disk Create -f %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\RaidDisk0.vmdk -a lsilogic -s 64GB -t 0 >nul 2>&1
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Disk Create -f %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\RaidDisk1.vmdk -a lsilogic -s 64GB -t 0 >nul 2>&1
+::
+::  :::::::::::::::::::::::::
+::  Koppelen schijf 0 aan VM
+::  :::::::::::::::::::::::::
+::
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx nvme SetPresent nvme0 1
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Disk SetBackingInfo nvme0:0 disk RaidDisk0.vmdk 1 
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Disk SetPresent nvme0:0 1 
+::
+::  @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry nvme0.present "TRUE"
+::  @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry nvme0:0.fileName "RaidDisk0.vmdk"
+::  @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry nvme0:0.present "TRUE"
+::
+::  ::::::::::::::::::::::::
+::  Koppelen schijf 1 aan VM
+::  ::::::::::::::::::::::::
+::
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx nvme SetPresent nvme0 1
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Disk SetBackingInfo nvme0:1 disk RaidDisk1.vmdk 1 
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Disk SetPresent nvme0:1 1 
+::
+::  @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry nvme0.present "TRUE"
+::  @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry nvme0:0.fileName "RaidDisk1.vmdk"
+::  @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry nvme0:0.present "TRUE"
+::
+::  :::::::::::::::::::::::::::::::::::::::
+::  :::: Ethernet
+::  :::::::::::::::::::::::::::::::::::::::
+::
+::  Genereer MAC Adres voor Ethernet0 (NAT) 
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Ethernet SetAddressType ethernet0 generated ""
+::
+::  Configuratie Ethernet1
+::
+::  Netwerkkaart type instellen beschikbare opties: vlance vmxnet e1000e vmxnet3 vrdma
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Ethernet SetVirtualDevice ethernet1 vmxnet
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Ethernet SetConnectionType ethernet1 custom
+::  Genereer MAC adres voor Ethernet1
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Ethernet SetAddressType ethernet1 generated ""
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Ethernet SetLinkStatePropagation ethernet1 true
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Ethernet SetPresent ethernet1 1
+::
+::  Tweede netwerkkaart op VMNet 3 zetten
+::
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry ethernet1.vnet "VMnet3"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry ethernet1.displayName "VMnet3"
+::
+::  :::::::::::::::::::::::::::::::::::::::
+::  ::::    Shared Folders
+::  :::::::::::::::::::::::::::::::::::::::
+::
+::  @ECHO Shared Folders van de virtuele machine in de VMX aanpassen via VMCli
+::  Shared Folder op Always Enabled zetten 
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry isolation.tools.hgfs.disable "False"
+::  Shared Folder Downloads
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sharedFolder0.present "True"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sharedFolder0.enabled "True"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sharedFolder0.readAccess "True"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sharedFolder0.writeAccess "True"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sharedFolder0.hostPath %USERPROFILE%"\Downloads"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sharedFolder0.guestName "windownloads"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sharedFolder0.expiration "never"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sharedFolder.maxNum "1"
+::  Shared Folder OneDrive
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sharedFolder1.present "True"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sharedFolder1.enabled "True"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sharedFolder1.readAccess "True"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sharedFolder1.writeAccess "True"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sharedFolder1.hostPath %USERPROFILE%"\OneDrive"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sharedFolder1.guestName "winonedrive"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sharedFolder1.expiration "never"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sharedFolder.maxNum "2"
+::  Shared Folder Profile zodat oa SSH bestanden benaderd kunnen worden
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sharedFolder2.present "True"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sharedFolder2.enabled "True"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sharedFolder2.readAccess "True"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sharedFolder2.writeAccess "False"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sharedFolder2.hostPath %USERPROFILE%
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sharedFolder2.guestName "winuserprofile"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sharedFolder2.expiration "never"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry sharedFolder.maxNum "3"
+::  Tijd synchronisatie aanzetten tussen host en guest
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry tools.syncTime "TRUE"
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  STAP 15 Opruimen Template directory voor toekomstig gebruik
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+::
+@echo [Stap 15] Opruimen template directory voor toekomstig gebruik ...
+IF EXIST "%VMTemplatePath%\%LVI_Inside_ZIP_Filename%\%VirtMachNaam%.vmx" (
+    @ECHO Verwijderen vmx bestand uit template directory
+    @DEL %VMTemplatePath%\%LVI_Inside_ZIP_Filename%\%VirtMachNaam%.vmx >nul 2>&1
+)
+::
+IF EXIST "%VMTemplatePath%\%LVI_Inside_ZIP_Filename%\%VirtMachNaam%.vmdk" (
+    @ECHO Verwijderen vmdk bestand uit template directory
+    @DEL %VMTemplatePath%\%LVI_Inside_ZIP_Filename%\%VirtMachNaam%.vmdk >nul 2>&1
+)
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  STAP 16 Starten VMware Workstation Pro
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+@ECHO [Stap 16] Nieuw virtuele machine openen in VMWare Worktation Pro 
+IF EXIST %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx (
+    :: start /B vmware.exe -n %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx
+    start /B "" "%VMWareInstallPath%\vmware.exe" -n %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx
+)
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  STAP 17 Starten Virtuele machine 
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+@ECHO [Stap 17a] Starten van de virtuele machine 
+IF EXIST %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx (
+    :: start /B vmrun.exe -T ws start %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx
+    start /B "" "%VMWareInstallPath%\vmrun.exe" -T ws start %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx
+)
+::
+@echo Ga naar VMWare Workstation Pro
+::  @echo Klik op "OK" bij Channel Migitations melding
+@echo Klik op "I Copied it" bij virtual machine might have been moved or copied
+@echo Klik op "OK" bij Removable Devices melding 
+::
+::
+@echo [Stap 17b] Een minuut wachten voordat LUCT 4.1 wordt overgezet naar VM
+::  powershell -command "Start-Sleep -Seconds 60"
+@pwsh -command "Start-Sleep -Seconds 60"
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  STAP 18 VM voorzien van LUCT 
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+@echo [Stap 18a] APT Update uitvoeren in virtuele machine ...
+@"%VMWareInstallPath%"\vmrun -T ws -gu debian -gp debian runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/sudo" apt update -y
+::
+@echo [Stap 18b] Curl installeren in virtuele machine ...
+@"%VMWareInstallPath%"\vmrun -T ws -gu debian -gp debian runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/sudo" apt install curl -y
+::
+@echo [Stap 18c] Downloaden nieuwste versie LUCT vanaf GitHub John Tutert 
+@"%VMWareInstallPath%"\vmrun -T ws -gu debian -gp debian runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/sudo" curl -L -o /home/debian/luctv42.sh https://edu.nl/vnej9
+:: 
+@echo [Stap 18d] Uitvoerbaar maken van LUCT binnen virtuele machine
+@"%VMWareInstallPath%"\vmrun -T ws -gu debian -gp debian runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/sudo" chmod +x /home/debian/luctv42.sh
+::
+@echo [Stap 18e] IP Adres Virtuele Machine ophalen 
+for /f "delims==" %%A in ('vmrun -T ws -gu debian -gp debian getGuestIPAddress %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx') do set vmipadres=%%A
+::
+:: @echo Starten Windows Terminal
+C:\Windows\System32\OpenSSH\ssh.exe -p 22 debian@%vmipadres%
+::
+::
+::  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  Meerdere manieren om een VM te starten
+::
+::  @start /B vmware -n %vmPath%\Linux\Docker\%VirtMachNaam%.vmx
+::  vmcli %vmPath%\Linux\Docker\%VirtMachNaam%.vmx power start
+::  vmrun -T ws start "%vmPath%\Linux\Docker\%VirtMachNaam%.vmx" 
+::
+::  vmcli %vmPath%\Linux\Docker\%VirtMachNaam%.vmx guest run --username ubuntu --password ubuntu curl -s -L -o u24config.sh ......
+::
+::
+::  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  STAP 19 Lokale Variabelen vrijgeven
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+@endlocal
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  STAP 20 Einde Script
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+:: Thats it folks
+::
