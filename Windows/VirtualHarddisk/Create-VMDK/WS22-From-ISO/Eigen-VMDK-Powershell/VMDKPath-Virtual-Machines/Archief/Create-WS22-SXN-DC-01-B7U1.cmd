@@ -9,8 +9,8 @@
 ::  Create VMDK from VHD from ISO
 ::  Windows Command Prompt 
 ::
-::  Version 007
-::  17 juli 2026
+::  Build 7 Update 1
+::  24 juli 2026
 ::
 ::  Kopie van SXN RD Script
 ::
@@ -109,11 +109,11 @@
 ::
 @IF EXIST "D:\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\SXN-DC-01\SXN-DC-01.VHD" (
     @REM
-    forfiles /p "D:\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\SXN-DC-01" /m "SXN-DC-01.VHD" /d -30 >nul 2>&1
+    forfiles /p "D:\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\SXN-DC-01" /m "SXN-DC-01.VHD" /d -21 >nul 2>&1
     @REM
     if %errorlevel%==0 (
         @REM
-        @echo Het VHD Bestand is aanwezig maar ouder dan 30 dagen
+        @echo Het VHD Bestand is aanwezig maar ouder dan 21 dagen
         @echo Verwijderen VHD bestand op D schijf 
         @REM
         @del /F "D:\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\SXN-DC-01\SXN-DC-01.VHD"

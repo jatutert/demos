@@ -1,0 +1,10 @@
+7/24 16:59:44.740 14fc Facility ???INFO: main: SetDllDirectory: C:\Program Files\StarWind Software\StarWind V2V Converter\lib
+7/24 16:59:44.740 14fc Facility ???INFO: main: File Version: 9.0.1.848
+7/24 16:59:44.743 14fc Facility ???INFO: main: Load language IDR_XML_ENGLISH
+7/24 16:59:44.743 14fc Facility ???INFO: RunConsole: Version MajorVersion 10, MinorVersion 0, BuildNumber 26100
+7/24 16:59:44.743 14fc Facility ???INFO: RunConsole: "C:\Program Files\StarWind Software\StarWind V2V Converter\V2V_ConverterConsole.exe"  convert in_file_name="D:\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\SXN-DC-01\SXN-DC-01.VHD" out_file_name="D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DC-01\SXN-DC-01.VMDK" out_file_type=ft_vmdk_ws_growable
+7/24 16:59:44.753 14fc Facility ???INFO: CCommandLineManager::AddParametersForConvertCommand: in_file_name=D:\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\SXN-DC-01\SXN-DC-01.VHD
+7/24 16:59:44.753 14fc Facility ???INFO: CCommandLineManager::AddParametersForConvertCommand: out_file_name=D:\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DC-01\SXN-DC-01.VMDK
+7/24 16:59:44.753 14fc Facility ???INFO: CCommandLineManager::AddParametersForConvertCommand: out_file_type=ft_vmdk_ws_growable
+7/24 16:59:44.757 14fc Facility ???ERROR: CVHDFile::ParseFile: Error opening file d:\virtual-machines\microsoft-hyper-v\windows\server\sxn-dc-01\sxn-dc-01.vhd - 2. Het systeem kan het opgegeven bestand niet vinden.
+7/24 16:59:44.758 14fc Facility ???ERROR: RunConsole: Error create input image - 6
