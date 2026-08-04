@@ -66,11 +66,11 @@
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 ::  Locatie van download bestand van Linux VM Images website
-@SET "VMTemplatePath=D:\Virtual-Machines\Templates\Linux\Debian\Minimaal\12"
+@SET "VMTemplatePath=D:\Virtual-Machines\Templates\Linux\Debian\Minimaal\13"
 @MKDIR %VMTemplatePath% >nul 2>&1
 ::
 ::  Locatie van ISO bestanden 
-@SET "MediaPath=D:\Installatie-Catalogus\InstallatieMedia\Besturingssystemen\Linux\Debian\Server-Minimal\12"
+@SET "MediaPath=D:\Installatie-Catalogus\InstallatieMedia\Besturingssystemen\Linux\Debian\Server-Minimal\13"
 @MKDIR %MediaPath% >nul 2>&1
 ::
 ::  Naam ISO bestand
@@ -95,11 +95,11 @@
 ::  Applicatie bovenop het het besturingssysteem van de demo
 @SET "VMAPPPath=Minimal"
 ::  Naam van virtuele machine en alle bestanden van de virtuele machine
-@SET "VirtMachNaam=D12-LTS-S-MIN-001"
+@SET "VirtMachNaam=D13-LTS-S-MIN-001"
 ::  Naam van de bestanden in het ZIP bestand vanuit download linuxvmimages website
-@SET "LVI_Inside_ZIP_Filename=Debian_12.0.0_VMM_LinuxVMImages.COM"
+@SET "LVI_Inside_ZIP_Filename=Debian_13_VMM_LinuxVMImages.COM"
 ::  Eigen naam gegeven aan ZIP bestand afkomstig van LinuxVMImages website
-@SET "LVI_Download_ZIP_Filename=LVI-D12-00-BKW-M-VMDK"
+@SET "LVI_Download_ZIP_Filename=LVI-D13-00-TRX-M-VMDK"
 ::
 ::
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -108,6 +108,7 @@
 ::
 ::
 @FOR /F "tokens=2,*" %%a IN ('REG QUERY "HKEY_LOCAL_MACHINE\SOFTWARE\VMware, Inc.\VMware Workstation" /v "InstallPath"') DO SET VMWareInstallPath=%%b
+::  @echo VMware Workstation Pro aangetroffen in %VMWareInstallPath%
 ::
 ::
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -130,12 +131,14 @@
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 ::
+@echo off
+@cls
 @echo.
 @echo VMWare Workstation Pro Virtual Machine Creator
 @echo.
 @echo Created by John Tutert (TutSOFT)
 @echo.
-@echo LUCT 4.1 Debian Minimal Edition (%VirtMachNaam%)
+@echo LUCT 4.1 Debian 13 Minimal Edition (%VirtMachNaam%)
 @echo. 
 ::
 ::
@@ -144,6 +147,7 @@
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 ::
+@echo [Stap 7] Eventuele installatie software noodzakelijk voor dit script
 7z >nul 2>&1
 if %errorlevel% neq 0 (
     @echo NanaZIP niet aangetroffen op deze machine .. Installatie wordt gestart .. 
@@ -173,6 +177,7 @@ if not exist "%app_dir_check%*" (
 ::  STAP 8 Opruimen eventueel aanwezige virtuele machine 
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
+@echo [Stap 8] Opruimen eventueel aanwezige virtuele machine ...
 ::
 :: Stoppen eventueel draaiend VMware Workstation PRo
 ::  tasklist /FI "IMAGENAME eq vmware.exe" | findstr "vmware.exe" > nul
@@ -184,8 +189,8 @@ if not exist "%app_dir_check%*" (
 ::
 :: https://techdocs.broadcom.com/us/en/vmware-cis/desktop-hypervisors/workstation-pro/17-0/using-vmware-workstation-pro/using-the-vmrun-command-to-control-virtual-machines/running-vmrun-commands/syntax-of-vmrun-commands.html
 ::
-@echo Stoppen eventueel draaiende virtuele machine
 IF EXIST "%vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx" (
+    @echo Stoppen draaiende virtuele machine
     tasklist /FI "IMAGENAME eq vmware.exe" | findstr "vmware.exe" > nul
     if %errorlevel% neq 0 (
         @"%VMWareInstallPath%"\vmrun -T ws stop %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx >nul 2>&1
@@ -234,7 +239,7 @@ IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmdk" (
 ::
 IF NOT EXIST "%VMTemplatePath%\%LVI_Download_ZIP_Filename%.7z" (
     @echo Downloaden template virtuele machine van Linux VM Images website ... 
-    @curl -s -L -o %VMTemplatePath%\%LVI_Download_ZIP_Filename%.7z https://edu.nl/pegff
+    @curl -s -L -o %VMTemplatePath%\%LVI_Download_ZIP_Filename%.7z https://edu.nl/wmdrh
 )
 :
 ::
@@ -243,9 +248,10 @@ IF NOT EXIST "%VMTemplatePath%\%LVI_Download_ZIP_Filename%.7z" (
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 ::
+@echo Skip ISO download 
 IF NOT EXIST "%MediaPath%\%MediaFile%" (
     @echo Downloaden ISO bestand 
-    @curl -s -L -o %MediaPath%\%MediaFile% https://mirror.ams.macarne.com/ubuntu-releases/24.04.3/ubuntu-24.04.3-live-server-amd64.iso
+    @REM @curl -s -L -o %MediaPath%\%MediaFile% https://mirror.ams.macarne.com/ubuntu-releases/24.04.3/ubuntu-24.04.3-live-server-amd64.iso
 )
 ::
 ::
@@ -254,6 +260,7 @@ IF NOT EXIST "%MediaPath%\%MediaFile%" (
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 ::
+@echo [Stap 10] Uitpakken ZIP bestand van LinuxVMImages ... 
 IF EXIST "%VMTemplatePath%\%LVI_Download_ZIP_Filename%.7z" (
     @echo Aanmaken VMX en VMDK template bestanden vanuit template virtuele machine ... 
     @7z x %VMTemplatePath%\%LVI_Download_ZIP_Filename%.7z -o%VMTemplatePath% -y >nul 2>&1
@@ -265,14 +272,15 @@ IF EXIST "%VMTemplatePath%\%LVI_Download_ZIP_Filename%.7z" (
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 ::
-IF EXIST "%VMTemplatePath%\%LVI_Inside_ZIP_Filename%.vmx" (
+@echo [Stap 11] Hernoemen template VMX en VMDK bestanden naar %VirtMachNaam%
+IF EXIST "%VMTemplatePath%\%LVI_Inside_ZIP_Filename%\%LVI_Inside_ZIP_Filename%.vmx" (
     @echo Hernoemen VMX-bestand naar nieuwe naam
-    @rename %VMTemplatePath%\%LVI_Inside_ZIP_Filename%.vmx %VirtMachNaam%.vmx
+    @rename %VMTemplatePath%\%LVI_Inside_ZIP_Filename%\%LVI_Inside_ZIP_Filename%.vmx %VirtMachNaam%.vmx
 )
 ::
-IF EXIST "%VMTemplatePath%\%LVI_Inside_ZIP_Filename%.vmdk" (
+IF EXIST "%VMTemplatePath%\%LVI_Inside_ZIP_Filename%\%LVI_Inside_ZIP_Filename%.vmdk" (
     @echo Hernoemen VMDK-bestand naar nieuwe naam
-    @rename %VMTemplatePath%\%LVI_Inside_ZIP_Filename%.vmdk %VirtMachNaam%.vmdk
+    @rename %VMTemplatePath%\%LVI_Inside_ZIP_Filename%\%LVI_Inside_ZIP_Filename%.vmdk %VirtMachNaam%.vmdk
 )
 ::
 ::
@@ -281,7 +289,7 @@ IF EXIST "%VMTemplatePath%\%LVI_Inside_ZIP_Filename%.vmdk" (
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 ::
-@echo Directories maken
+@echo [Stap 12] Zorgen dat noodzakelijke directories aanwezig zijn ... 
 :: Maken OS directories
 @mkdir %vmPath%\%VMOSPath% >nul 2>&1
 @mkdir %vmPath%\Android >nul 2>&1
@@ -312,14 +320,21 @@ IF EXIST "%VMTemplatePath%\%LVI_Inside_ZIP_Filename%.vmdk" (
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 ::
-IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmx" (
+@echo [Stap 13] Template bestanden overzetten naar virtual machine directory ...
+IF EXIST "%VMTemplatePath%\%LVI_Inside_ZIP_Filename%\%VirtMachNaam%.vmx" (
     @echo VMX bestand uit Template directory overzetten naar locatie virtuele machine
-    @copy %VMTemplatePath%\%VirtMachNaam%.vmx %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath% >nul 2>&1
+
+    @robocopy %VMTemplatePath%\%LVI_Inside_ZIP_Filename% %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath% *.vmx /MOV /NJH /NJS /NP
+
+    @REM  @copy %VMTemplatePath%\%LVI_Inside_ZIP_Filename%\%VirtMachNaam%.vmx %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath% >nul 2>&1
 )
 ::
-IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmdk" (
+IF EXIST "%VMTemplatePath%\%LVI_Inside_ZIP_Filename%\%VirtMachNaam%.vmdk" (
     @echo VMDK betand uit Template directory overzetten naar locatie virtuele machine 
-    @copy %VMTemplatePath%\%VirtMachNaam%.vmdk %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath% >nul 2>&1
+
+    @robocopy %VMTemplatePath%\%LVI_Inside_ZIP_Filename% %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath% *.vmdk /MOV /NJH /NJS /NP
+
+    @REM  @copy %VMTemplatePath%\%LVI_Inside_ZIP_Filename%\%VirtMachNaam%.vmdk %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath% >nul 2>&1
 )
 ::
 ::
@@ -328,17 +343,25 @@ IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmdk" (
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 ::
-@ECHO DisplayName van de virtuele machine aanpassen in de VMX via VMCli
+@ECHO [Stap 14a] DisplayName van de virtuele machine aanpassen in de VMX via VMCli
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry displayName "%VirtMachNaam%"
 ::
-@ECHO Annotation van de virtuele machine aanpassen in de VMX via VMCli
-@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry annotation "LUCT Docker Demo Ubuntu Server 24.04 LTS Gebruiker: ubuntu Wachtwoord: ubuntu"
+@ECHO [Stap 14b] Annotation van de virtuele machine aanpassen in de VMX via VMCli
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry annotation "LUCT Demo Debian 13 Gebruiker: debian Wachtwoord: debian"
 ::
-@ECHO Hardware configuratie van de virtuele machine in de VMX aanpassen via VMCli
+@ECHO [Stap 14c] Hardware configuratie van de virtuele machine in de VMX aanpassen via VMCli
+::
+::  :::::::::::::::::::::::::::::::::::::::
 ::  CPU
+::  :::::::::::::::::::::::::::::::::::::::
+::
 @SET /a div_result=%NUMBER_OF_PROCESSORS% / 3
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry numvcpus "%div_result%"
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry cpuid.coresPerSocket "2"
+::
+::  Disable Side Channeld migitations for Hyper-V Enabled Hosts
+::
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry ulm.disableMitigations "TRUE"
 ::
 ::  :::::::::::::::::::::::::::::::::::::::
 ::  RAM
@@ -346,9 +369,9 @@ IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmdk" (
 for /f %%i in ('powershell -command "[math]::round(((Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory / 1GB))"') do (
     SET TotalMemoryGB=%%i
 )
-@ECHO Totaal geheugen: %TotalMemoryGB% GB
+::  @ECHO Totaal geheugen: %TotalMemoryGB% GB
 @SET /a QuarterMemoryMB=%TotalMemoryGB% * 1024 / 4
-@ECHO Een vierde daarvan: %QuarterMemoryMB% MB
+::  @ECHO Een vierde daarvan: %QuarterMemoryMB% MB
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry memsize "%QuarterMemoryMB%"
 ::
 ::  Namen bestanden virtuele machine aanpassen naar hostname
@@ -369,8 +392,8 @@ for /f %%i in ('powershell -command "[math]::round(((Get-CimInstance Win32_Compu
 ::  :::::::::::::::::::::::::::::::::::::::
 ::
 ::  Aanmaken extra schijven voor VM
-@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Disk Create -f %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\RaidDisk0.vmdk -a lsilogic -s 64GB -t 0
-@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Disk Create -f %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\RaidDisk1.vmdk -a lsilogic -s 64GB -t 0
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Disk Create -f %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\RaidDisk0.vmdk -a lsilogic -s 64GB -t 0 >nul 2>&1
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Disk Create -f %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\RaidDisk1.vmdk -a lsilogic -s 64GB -t 0 >nul 2>&1
 ::
 ::  :::::::::::::::::::::::::
 ::  Koppelen schijf 0 aan VM
@@ -400,23 +423,29 @@ for /f %%i in ('powershell -command "[math]::round(((Get-CimInstance Win32_Compu
 ::  :::: Ethernet
 ::  :::::::::::::::::::::::::::::::::::::::
 ::
-::  Netwerkkaart type instellen vlance vmxnet e1000e vmxnet3 vrdma
+::  Genereer MAC Adres voor Ethernet0 (NAT) 
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Ethernet SetAddressType ethernet0 generated ""
+::
+::  Configuratie Ethernet1
+::
+::  Netwerkkaart type instellen beschikbare opties: vlance vmxnet e1000e vmxnet3 vrdma
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Ethernet SetVirtualDevice ethernet1 vmxnet
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Ethernet SetConnectionType ethernet1 custom
+::  Genereer MAC adres voor Ethernet1
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Ethernet SetAddressType ethernet1 generated ""
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Ethernet SetLinkStatePropagation ethernet1 true
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx Ethernet SetPresent ethernet1 1
 ::
-::  Tweede netwerkkaart op VMNet 10 zetten
+::  Tweede netwerkkaart op VMNet 3 zetten
 ::
-@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry ethernet1.vnet "VMnet10"
-@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry ethernet1.displayName "VMnet10"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry ethernet1.vnet "VMnet3"
+@"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry ethernet1.displayName "VMnet3"
 ::
 ::  :::::::::::::::::::::::::::::::::::::::
 ::  ::::    Shared Folders
 ::  :::::::::::::::::::::::::::::::::::::::
 ::
-@ECHO Shared Folders van de virtuele machine in de VMX aanpassen via VMCli
+::  @ECHO Shared Folders van de virtuele machine in de VMX aanpassen via VMCli
 ::  Shared Folder op Always Enabled zetten 
 @"%VMWareInstallPath%"\vmcli %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx ConfigParams SetEntry isolation.tools.hgfs.disable "False"
 ::  Shared Folder Downloads
@@ -455,14 +484,15 @@ for /f %%i in ('powershell -command "[math]::round(((Get-CimInstance Win32_Compu
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 ::
-IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmx" (
+@echo [Stap 15] Opruimen template directory voor toekomstig gebruik ...
+IF EXIST "%VMTemplatePath%\%LVI_Inside_ZIP_Filename%\%VirtMachNaam%.vmx" (
     @ECHO Verwijderen vmx bestand uit template directory
-    @DEL %VMTemplatePath%\%VirtMachNaam%.vmx >nul 2>&1
+    @DEL %VMTemplatePath%\%LVI_Inside_ZIP_Filename%\%VirtMachNaam%.vmx >nul 2>&1
 )
 ::
-IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmdk" (
+IF EXIST "%VMTemplatePath%\%LVI_Inside_ZIP_Filename%\%VirtMachNaam%.vmdk" (
     @ECHO Verwijderen vmdk bestand uit template directory
-    @DEL %VMTemplatePath%\%VirtMachNaam%.vmdk >nul 2>&1
+    @DEL %VMTemplatePath%\%LVI_Inside_ZIP_Filename%\%VirtMachNaam%.vmdk >nul 2>&1
 )
 ::
 ::
@@ -470,7 +500,7 @@ IF EXIST "%VMTemplatePath%\%VirtMachNaam%.vmdk" (
 ::  STAP 16 Starten VMware Workstation Pro
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
-@ECHO Nieuw virtuele machine openen in VMWare Worktation Pro 
+@ECHO [Stap 16] Nieuw virtuele machine openen in VMWare Worktation Pro 
 IF EXIST %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx (
     :: start /B vmware.exe -n %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx
     start /B "" "%VMWareInstallPath%\vmware.exe" -n %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx
@@ -481,44 +511,44 @@ IF EXIST %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx (
 ::  STAP 17 Starten Virtuele machine 
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
-@ECHO Starten van de virtuele machine 
+@ECHO [Stap 17a] Starten van de virtuele machine 
 IF EXIST %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx (
     :: start /B vmrun.exe -T ws start %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx
     start /B "" "%VMWareInstallPath%\vmrun.exe" -T ws start %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx
 )
 ::
 @echo Ga naar VMWare Workstation Pro
-@echo Klik op "OK" bij Channel Migitations melding
+::  @echo Klik op "OK" bij Channel Migitations melding
 @echo Klik op "I Copied it" bij virtual machine might have been moved or copied
 @echo Klik op "OK" bij Removable Devices melding 
 ::
 ::
-@echo Een minuut wachten voordat LUCT 4.1 wordt overgezet naar VM
+@echo [Stap 17b] Een minuut wachten voordat LUCT 4.1 wordt overgezet naar VM
 ::  powershell -command "Start-Sleep -Seconds 60"
-pwsh -command "Start-Sleep -Seconds 60"
+@pwsh -command "Start-Sleep -Seconds 60"
 ::
 ::
-::  Alternatief
-::  timeout /T 60
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  STAP 18 VM voorzien van LUCT 
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
+@echo [Stap 18a] APT Update uitvoeren in virtuele machine ...
+@"%VMWareInstallPath%"\vmrun -T ws -gu debian -gp debian runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/sudo" apt update -y
 ::
-::  Alternatief
-::  Wacht 30 seconden door het geven van PING (aantal seconden + 1) 
-::  ping 127.0.0.1 -n 31 >nul 2>&1
+@echo [Stap 18b] Curl installeren in virtuele machine ...
+@"%VMWareInstallPath%"\vmrun -T ws -gu debian -gp debian runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/sudo" apt install curl -y
 ::
+@echo [Stap 18c] Downloaden nieuwste versie LUCT vanaf GitHub John Tutert 
+@"%VMWareInstallPath%"\vmrun -T ws -gu debian -gp debian runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/sudo" curl -L -o /home/debian/luctv42.sh https://edu.nl/vnej9
+:: 
+@echo [Stap 18d] Uitvoerbaar maken van LUCT binnen virtuele machine
+@"%VMWareInstallPath%"\vmrun -T ws -gu debian -gp debian runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/sudo" chmod +x /home/debian/luctv42.sh
 ::
-@echo Downloaden nieuwste versie LUCT 4.1 vanaf GitHub John Tutert 
-%VMWareInstallPath%\vmrun -T ws -gu debian -gp debian runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/curl" -L -o /home/ubuntu/luctv41.sh https://edu.nl/n7faw
-@echo Uitvoerbaar maken van LUCT 4.1 binnen virtuele machine
-%VMWareInstallPath%\vmrun -T ws -gu debian -gp debian runProgramInGuest %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx "/bin/sudo" chmod +x /home/ubuntu/luctv41.sh
-@echo LUCT is overgezet naar de virtuele machine 
+@echo [Stap 18e] IP Adres Virtuele Machine ophalen 
+for /f "delims==" %%A in ('vmrun -T ws -gu debian -gp debian getGuestIPAddress %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx') do set vmipadres=%%A
 ::
-::
-@echo IP Adres Virtuele Machine ophalen 
-for /f "delims==" %%A in ('%VMWareInstallPath%\vmrun -T ws -gu debian -gp debian getGuestIPAddress %vmPath%\%VMOSPath%\%VMOSDistroPath%\%VMAPPPath%\%VirtMachNaam%.vmx') do set vmipadres=%%A
-::
-@echo Starten Windows Terminal
-@start wt.exe C:\Windows\System32\OpenSSH\ssh.exe -p 22 debian@%vmipadres%
+:: @echo Starten Windows Terminal
+C:\Windows\System32\OpenSSH\ssh.exe -p 22 debian@%vmipadres%
 ::
 ::
 ::  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -535,13 +565,13 @@ for /f "delims==" %%A in ('%VMWareInstallPath%\vmrun -T ws -gu debian -gp debian
 ::
 ::
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
-::  STAP 18 Lokale Variabelen vrijgeven
+::  STAP 19 Lokale Variabelen vrijgeven
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 @endlocal
 ::
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
-::  STAP 19 Einde Script
+::  STAP 20 Einde Script
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 :: Thats it folks

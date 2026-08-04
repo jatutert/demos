@@ -36,9 +36,9 @@
 @setlocal enabledelayedexpansion
 ::
 @set "prefFile=%AppData%\VMware\preferences.ini"
-set "VMTemplatePath=D:\Virtual-Machines\Templates\Linux\Ubuntu\Desktop\24-04-0-LTS"
-set "VMDestinationHigherPath=Linux\Ubuntu"
-set "VMDestinationPath=Linux\Ubuntu\CLT-001"
+@set "VMTemplatePath=D:\Virtual-Machines\Templates\Linux\Ubuntu\Desktop\24-04-0-LTS"
+@set "VMDestinationHigherPath=Linux\Ubuntu"
+@set "VMDestinationPath=Linux\Ubuntu\CLT-001"
 ::
 ::
 ::	:::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -59,15 +59,15 @@ for /f "tokens=1,* delims==" %%A in ('findstr /i "prefvmx.defaultVMPath" "%prefF
 ::	:::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 ::
-7z >nul 2>&1
-if %errorlevel% neq 0 (
+@7z >nul 2>&1
+@if %errorlevel% neq 0 (
    @winget install --id M2Team.NanaZip --silent >%TEMP%\WinGet-NanaZip-Installatie.log
 ) else (
    echo 7z is aanwezig ... 
 )
 ::
-curl -V >nul 2>&1
-if %errorlevel% neq 0 (
+@curl -V >nul 2>&1
+@if %errorlevel% neq 0 (
    @winget install --id cURL.cURL --silent >%TEMP%\WinGet-cURL-Installatie.log
 ) else (
    echo cURL is aanwezig ...
@@ -79,7 +79,8 @@ if %errorlevel% neq 0 (
 ::	:::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 :: Stoppen eventueel draaiend VMware Workstation PRo
-@taskkill /IM vmware.exe /F
+@echo Stoppen eventueel draaiende VMware Workstation Pro
+@taskkill /IM vmware.exe /F >nul 2>&1
 ::
 :: https://techdocs.broadcom.com/us/en/vmware-cis/desktop-hypervisors/workstation-pro/17-0/using-vmware-workstation-pro/using-the-vmrun-command-to-control-virtual-machines/running-vmrun-commands/syntax-of-vmrun-commands.html
 ::
