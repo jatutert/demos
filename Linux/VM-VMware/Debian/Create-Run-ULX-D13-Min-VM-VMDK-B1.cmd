@@ -30,6 +30,9 @@
 @ECHO OFF
 @CLS
 ::
+@echo Gebruik ULVMM en niet meer dit script !
+@pause
+@exit
 ::
 ::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::  STAP 1 Administrator rechten check
