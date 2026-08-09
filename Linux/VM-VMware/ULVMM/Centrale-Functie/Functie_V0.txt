@@ -1,0 +1,441 @@
+
+Parameter 1 D:\Virtual-Machines\Templates\Linux\Debian\13\Minimal
+Parameter 2 Debian_13_VMM_LinuxVMImages.COM
+Parameter 3 D:\Virtual-Machines\VMware-Workstation-PRO\Linux\Debian\13\Server\D13-TRX-S-LAB-001
+Parameter 4 D13-TRX-S-LAB-001
+Parameter 5 https://edu.nl/wmdrh
+
+
+
+
+
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  Functie Installeer tools
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+::
+@call :f_Installeer_Tools
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  Functie maak directories
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+::
+@call :f_maak_directory_structuur
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  VMware Workstation Pro afsluiten
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+::
+::  Onderzoek of VMWare Workstation Pro actief is
+@tasklist /FI "IMAGENAME eq vmware.exe" | findstr "vmware.exe"
+::
+::  Bij errorlevel 0 is VMWare Workstation Pro actief en wordt afgesloten
+@if %errorlevel% equ 0 (
+    @taskkill /IM vmware.exe /F
+)
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  Start Opruimen
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+::
+::  ::::::::
+::  Template
+::  ::::::::
+::
+::
+@echo Opruimen template directory
+::
+if exist "%1"\*.vm* (
+    @del /F /S /Q "%1"\*.vm* >nul 2>&1
+)
+::
+if exist "%1"\*.nvram (
+    @del /F /S /Q "%1"\*.nvram >nul 2>&1
+)
+::
+if exist "%1"\*.scoreboard (
+    @del /F /S /Q "%1"\*.scoreboard >nul 2>&1
+)
+::
+if exist "%1"\*.log (
+    @del /F /S /Q "%1"\*.log >nul 2>&1
+)
+::
+@for /d %%d in ("%1\*") do rd /s /q "%%d"
+::
+::
+::  ::::::::
+::  Virtuele machine
+::  ::::::::
+::
+@echo Stoppen eventueel draaiende virtuele machine 
+@IF EXIST "%3\%4.vmx" (
+    @"%VMWareInstallPath%"\vmrun -T ws stop %3\%4.vmx >nul 2>&1
+)
+::
+@echo Verwijderen eventueel aanwezige virtuele machine
+@IF EXIST "%3\%4.vmx" (
+    @"%VMWareInstallPath%"\vmrun -T ws DeleteVM %3\%4.vmx >nul 2>&1
+)
+::
+::  Opruimen eventueel aanwezig bestanden in virtuele machine directory
+::
+@IF EXIST "%3\%4.vmx" (
+    @del %3\*.vm* >nul 2>&1
+    @del %3\*.nvram >nul 2>&1
+    @del %3\*.scoreboard >nul 2>&1
+    @del %3\*.log >nul 2>&1
+    @for /d %%d in ("%3\*") do rd /s /q "%%d" >nul 2>&1
+)
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  Einde Opruimen
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  Downloaden template als 7z bestand vanaf Linux VM Images website
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+::
+::  Downloaden 7Z Template indien niet aanwezig
+::
+@IF NOT EXIST "%1\%2.7z" (
+    @echo Downloaden Debian 13 Server Template vanaf LinuxVMImages website ...
+    @curl -s -L -o %1\%2.7z %5
+)
+::
+::  Uitpakken template virtuele machine naar virtuele machine directory 
+::
+@IF EXIST "%1\%2.7z" (
+    @echo Uitpakken Debian 13 Server Template
+    @REM
+    @REM    Bestaande virtuele machine is reeds hiervoor opgeruimd door dit script
+    @REM
+    @7z x %1\%2.7z -o%3 -y >nul 2>&1
+)
+::
+::  Overzetten bestanden uit eventuele subdirectory naar directory 
+::  Noodzakelijk omdat Debian 13 uitpak doet naar een subdirectory binnen directory
+::
+
+@REM @echo Eventueel VMX en VMDK bestand uit subdirectory op de juiste plek zetten 
+
+for /d %%D in ("%3\*") do (
+
+    set "FoundVMX="
+    set "FoundVMDK="
+
+    for %%F in ("%%~fD\*.vmx") do (
+        if exist "%%~fF" set "FoundVMX=1"
+    )
+
+    for %%F in ("%%~fD\*.vmdk") do (
+        if exist "%%~fF" set "FoundVMDK=1"
+    )
+
+    if defined FoundVMX if defined FoundVMDK (
+
+        @REM echo VM directory gevonden: %%~fD
+
+        for %%F in ("%%~fD\*.vmx") do (
+            @REM echo Verplaatsen: %%~nxF
+            move /Y "%%~fF" "%3\" >nul 2>&1
+        )
+
+        for %%F in ("%%~fD\*.vmdk") do (
+            @REM echo Verplaatsen: %%~nxF
+            move /Y "%%~fF" "%3\" >nul 2>&1
+        )
+        @REM
+        @REM echo.
+        @REM
+    )
+)
+::
+::
+::  Verwijderen eventuele aanwezige subdirectories uit vorige stap
+@for /d %%d in ("%3\*") do rd /s /q "%%d" >nul 2>&1
+::
+::
+::  Hernoemen VMX bestand in virtuele machine directory
+::
+@IF EXIST "%3\%2.vmx" (
+    @echo [VMX] Hernoem naar %4
+    @rename "%3\%2.vmx" %4.vmx
+)
+::
+::  Hernoemen VMDK bestand in virtuele machine directory
+::
+@IF EXIST "%3\%2.vmdk" (
+    @echo [VMDK] Hernoem naar %4
+    @rename "%3\%2.vmdk" %4.vmdk
+)
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  Configuratie virtuele machine 
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+::
+::  Header aanmaken
+::
+echo # > %3\%4-new.vmx
+echo # >> %3\%4-new.vmx
+echo #   TTTTTT  U    U  TTTTTT  SSSSSS  OOOOOO  FFFFFF  TTTTTT >> %3\%4-new.vmx
+echo #     TT    U    U    TT    SS      O    O  FF        TT >> %3\%4-new.vmx
+echo #     TT    U    U    TT    SSSSSS  O    O  FFFF      TT >> %3\%4-new.vmx
+echo #     TT    U    U    TT        SS  O    O  FF        TT >> %3\%4-new.vmx
+echo #     TT    UUUUUU    TT    SSSSSS  OOOOOO  FF        TT >> %3\%4-new.vmx
+echo # >> %3\%4-new.vmx
+echo # >> %3\%4-new.vmx
+echo # Debian 13 Server >> %3\%4-new.vmx
+echo # Linux Virtual Images (LVI) >> %3\%4-new.vmx
+echo # >> %3\%4-new.vmx
+echo # >> %3\%4-new.vmx
+::
+::  Huidige VMX in nieuwe VMX zetten
+type %3\%4.vmx >> %3\%4-new.vmx
+::
+::
+@powershell -command "Start-Sleep -Seconds 2"
+::
+::
+rename %3\%4.vmx %4.org 
+rename %3\%4-new.vmx %4.vmx 
+del %3\%4.org
+::
+::
+::  :::::::::::::::::
+::  Virtuele machine UUID
+::  :::::::::::::::::
+::
+::  You can configure a virtual machine to always receive a new UUID when it is copied or moved so that you are not prompted when you move or copy the virtual machine.
+::  Zie https://techdocs.broadcom.com/us/en/vmware-cis/desktop-hypervisors/workstation-pro/26H1/using-vmware-workstation-pro/configuring-and-managing-virtual-machines/moving-virtual-machines/using-the-virtual-machine-uuid/configure-a-virtual-machine-to-always-receive-a-new-uuid.html
+::
+::
+@echo [VMX] Nieuw UUID aanmaken %4
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx ConfigParams SetEntry uuid.action "create"
+::
+::
+::  ::::::::::::::::
+::  Display Name
+::  ::::::::::::::::
+::
+::
+@ECHO [VMX] DisplayName aanpassen %4
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx ConfigParams SetEntry displayName "%4"
+::
+::
+::  ::::::::::::::::
+::  Annotation
+::  ::::::::::::::::
+::
+::
+@ECHO [VMX] Annotation aanpassen %4
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx ConfigParams SetEntry annotation "Debian: debian/debian Ubuntu: ubuntu/ubuntu"
+::
+::  ::::::::::::::::
+::  Namen bestanden in VMX
+::  ::::::::::::::::
+::
+@echo [VMX] Namen bestanden aanpassen %4
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx ConfigParams SetEntry scsi0:0.fileName "%4.vmdk"
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx ConfigParams SetEntry extendedConfigFile "%4.vmxf"
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx ConfigParams SetEntry nvram "%4.nvram"
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx ConfigParams SetEntry vmxstats.filename "%4.scoreboard"
+::
+::
+::  ::::::::::::::::
+::  CPU
+::  ::::::::::::::::
+::
+::
+@echo [VMX] Processor instellen %4
+@SET /a div_result=%NUMBER_OF_PROCESSORS% / 3
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx ConfigParams SetEntry numvcpus "%div_result%"
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx ConfigParams SetEntry cpuid.coresPerSocket "2"
+::
+::
+::  ::::::::::::::::
+::  RAM
+::  ::::::::::::::::
+::
+::
+@echo [VMX] RAM Geheugen instellen %4
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx ConfigParams SetEntry memsize "%Host_RAM_Quarter_MB%"
+::
+::  ::::::::::::::::
+::  Storage
+::  ::::::::::::::::
+::
+::  CD-ROM Drive 
+::
+::  Je krijgt SetBackingInfo foutmelding is er geen geldig ISO bestand aanwezig is
+::  Vanwege ontbreken Debian 13 ISO dit onderdeel uitgezet
+::
+::  @echo [VMX] CD-ROM Drive configuratie %4
+::  @"%VMWareInstallPath%"\vmcli %3\%4.vmx Sata SetPresent sata0 1
+::  @"%VMWareInstallPath%"\vmcli %3\%4.vmx Disk SetBackingInfo sata0:0 cdrom_image "%MediaPath%\%MediaFile%" 1
+::  @"%VMWareInstallPath%"\vmcli %3\%4.vmx Disk SetPresent sata0:0 1
+::
+::  RAID DISK 0
+::
+@echo [VMX] RAID DISK 0 toevoegen %4
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx Disk Create -f %3\RaidDisk0.vmdk -a lsilogic -s 64GB -t 0 >nul 2>&1
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx nvme SetPresent nvme0 1
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx Disk SetBackingInfo nvme0:0 disk RaidDisk0.vmdk 1 
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx Disk SetPresent nvme0:0 1 
+::
+::  RAID DISK 1
+::
+@echo [VMX] RAID DISK 1 toevoegen %4
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx Disk Create -f %3\RaidDisk1.vmdk -a lsilogic -s 64GB -t 0 >nul 2>&1
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx nvme SetPresent nvme0 1
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx Disk SetBackingInfo nvme0:1 disk RaidDisk1.vmdk 1 
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx Disk SetPresent nvme0:1 1 
+::
+::
+::
+::  ::::::::::::::::
+::  Netwerk
+::  ::::::::::::::::
+::
+::
+@echo [VMX] Netwerk configuratie ...
+::
+::  Ethernet0
+::
+::  Type instellen beschikbare opties: vlance vmxnet e1000e vmxnet3 vrdma 
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx Ethernet SetVirtualDevice ethernet0 vmxnet
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx Ethernet SetConnectionType ethernet0 nat
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx Ethernet SetLinkStatePropagation ethernet0 true
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx Ethernet SetPresent ethernet0 1
+::
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx ConfigParams SetEntry ethernet0.vnet "VMnet8"
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx ConfigParams SetEntry ethernet0.displayName "VMnet8"
+::
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx Ethernet SetAddressType ethernet0 generated ""
+::
+::  Ethernet1
+::
+::  Type instellen beschikbare opties: vlance vmxnet e1000e vmxnet3 vrdma 
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx Ethernet SetVirtualDevice ethernet1 vmxnet
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx Ethernet SetConnectionType ethernet1 custom
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx Ethernet SetLinkStatePropagation ethernet1 true
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx Ethernet SetPresent ethernet1 1
+:: 
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx ConfigParams SetEntry ethernet1.vnet "VMnet1"
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx ConfigParams SetEntry ethernet1.displayName "VMnet1"
+::
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx Ethernet SetAddressType ethernet1 generated ""
+::
+::
+::  ::::::::::::::::
+::  Hyper-V
+::  ::::::::::::::::
+::
+::  Disable Side Channeld migitations for Hyper-V Enabled Hosts
+::
+@"%VMWareInstallPath%"\vmcli %3\%4.vmx ConfigParams SetEntry ulm.disableMitigations "TRUE"
+::
+::
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  VMX Openen in VMware Workstation Pro
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+::
+@echo Openen %4
+@IF EXIST %3\%4.vmx (
+    @start /B "" "%VMWareInstallPath%\vmware.exe" -n %3\%4.vmx
+)
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  VM starten in VMware Workstation Pro
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+::
+@echo Starten %4
+@IF EXIST %3\%4.vmx (
+    start /B "" "%VMWareInstallPath%\vmrun.exe" -T ws start %3\%4.vmx
+)
+::
+@echo Ga naar VMWare Workstation Pro
+::  @echo Klik op "I Copied it" bij virtual machine might have been moved or copied
+@echo Klik op "OK" bij Removable Devices melding 
+::
+::
+@echo Wachten op opstarten van virtuele machine ... 
+@powershell -command "Start-Sleep -Seconds 60"
+::
+::
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  VM configuratie Debian Linux
+::  :::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+@echo Linux tijdzone aanpassen ...
+@"%VMWareInstallPath%"\vmrun.exe -T ws -gu debian -gp debian runProgramInGuest %3\%4.vmx "/bin/sudo" timedatectl set-timezone "Europe/Amsterdam"
+::
+::  Alles aanpassen naar Nederland
+@echo Aanpassen APT Repository in virtuele machine
+@"%VMWareInstallPath%"\vmrun.exe -T ws -gu debian -gp debian runProgramInGuest %3\%4.vmx "/bin/sudo" sed -i "1c\deb https://mirror.nl.mirhosting.net/debian/ trixie main non-free non-free-firmware" /etc/apt/sources.list
+@"%VMWareInstallPath%"\vmrun.exe -T ws -gu debian -gp debian runProgramInGuest %3\%4.vmx "/bin/sudo" sed -i "2c\deb-src https://mirror.nl.mirhosting.net/debian/ trixie main non-free non-free-firmware" /etc/apt/sources.list
+@"%VMWareInstallPath%"\vmrun.exe -T ws -gu debian -gp debian runProgramInGuest %3\%4.vmx "/bin/sudo" sed -i "9c\deb https://mirror.nl.mirhosting.net/debian/ trixie-updates main non-free non-free-firmware" /etc/apt/sources.list
+@"%VMWareInstallPath%"\vmrun.exe -T ws -gu debian -gp debian runProgramInGuest %3\%4.vmx "/bin/sudo" sed -i "10c\deb-src https://mirror.nl.mirhosting.net/debian/ trixie-updates main non-free non-free-firmware" /etc/apt/sources.list
+::  Moet worden gedaan omdat APT Repositories zijn aangepast
+@echo APT Update uitvoeren in virtuele machine ...
+@"%VMWareInstallPath%"\vmrun -T ws -gu debian -gp debian runProgramInGuest %3\%4.vmx "/bin/sudo" apt update -y
+::  Deze stap maakt curl en sed beschikbaar voor andere stappen
+@echo Tools installeren in virtuele machine ...
+@"%VMWareInstallPath%"\vmrun -T ws -gu debian -gp debian runProgramInGuest %3\%4.vmx "/bin/sudo" apt install curl jq sed wget wget2 -y
+::
+::  Voor deze stap wordt curl gebruikt
+@echo Linux Bash voorkeuren downloaden ...
+@"%VMWareInstallPath%"\vmrun -T ws -gu debian -gp debian runProgramInGuest %3\%4.vmx "/bin/sudo" curl -s -o /home/debian/.bashrc https://raw.githubusercontent.com/jatutert/Ubuntu-Config/main/.bashrc
+@"%VMWareInstallPath%"\vmrun -T ws -gu debian -gp debian runProgramInGuest %3\%4.vmx "/bin/sudo" curl -s -o /home/debian/.bash_profile https://raw.githubusercontent.com/jatutert/Ubuntu-Config/main/.bash_profile
+::  Voor deze stap wordt sed gebruikt
+@echo Hosts bestand aanpassen in de virtuele machine ...
+@"%VMWareInstallPath%"\vmrun -T ws -gu debian -gp debian runProgramInGuest %3\%4.vmx "/bin/sudo" sed -i "1a\\127.0.1.1       DB13-TRX-S-LAB-001" /etc/hosts
+@"%VMWareInstallPath%"\vmrun -T ws -gu debian -gp debian runProgramInGuest %3\%4.vmx "/bin/sudo" sed -i "3s/^127\.0\.1\.1/99.99.99.99/" /etc/hosts
+::  Voor deze stap wordt sed gebruikt
+@echo Linux Hostname aanpassen in de virtuele machine ...
+@"%VMWareInstallPath%"\vmrun -T ws -gu debian -gp debian runProgramInGuest %3\%4.vmx "/bin/sudo" sed -i "s/^debian13$/DB13-TRX-S-LAB-001/" /etc/hostname
+::  @"%VMWareInstallPath%"\vmrun -T ws -gu debian -gp debian runProgramInGuest %3\%4.vmx "/bin/sudo" sed -i 's/^debian13$/DB13-TRX-S-LAB-001/' /etc/hostname
+::
+@echo Downloaden nieuwste versie LUCT vanaf GitHub John Tutert 
+@"%VMWareInstallPath%"\vmrun -T ws -gu debian -gp debian runProgramInGuest %3\%4.vmx "/bin/sudo" curl -L -o /home/debian/luctv42.sh https://edu.nl/vnej9
+:: 
+@echo Uitvoerbaar maken van LUCT binnen virtuele machine
+@"%VMWareInstallPath%"\vmrun -T ws -gu debian -gp debian runProgramInGuest %3\%4.vmx "/bin/sudo" chmod +x /home/debian/luctv42.sh
+::
+@echo Linux APT stiller maken ...
+@"%VMWareInstallPath%"\vmrun.exe -T ws -gu debian -gp debian runProgramInGuest %3\%4.vmx "/bin/sudo" "curl -s -o /etc/apt/apt.conf.d/99quiet https://raw.githubusercontent.com/jatutert/Ubuntu-Config/refs/heads/main/99quiet"
+::
+@echo IP Adres Virtuele Machine ophalen 
+for /f "delims==" %%A in ('vmrun -T ws -gu debian -gp debian getGuestIPAddress %3\%4.vmx') do set vmipadres=%%A
+::
+@echo SSH Sessie virtuele machine starten
+@wt ssh -p 22 debian@%vmipadres%
+::
+::
+
+::
+::
+@goto :eof
+::
+::
+
+
+

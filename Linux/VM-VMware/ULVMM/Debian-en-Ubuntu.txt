@@ -1,0 +1,32 @@
+@set "Debian12Desktop_Template_Location=%Templates_Default_Location%\%Templates_Linux_DirName%\%Templates_Linux_Debian_DirName%\12\%Templates_Linux_Desktop_DirName%
+@set "Debian12Server_Template_Location=%Templates_Default_Location%\%Templates_Linux_DirName%\%Templates_Linux_Debian_DirName%\12\%Templates_Linux_Server_DirName%
+::
+@set "Debian13Desktop_Template_Location=%Templates_Default_Location%\%Templates_Linux_DirName%\%Templates_Linux_Debian_DirName%\13\%Templates_Linux_Desktop_DirName%
+@set "Debian13Server_Template_Location=%Templates_Default_Location%\%Templates_Linux_DirName%\%Templates_Linux_Debian_DirName%\13\%Templates_Linux_Server_DirName%
+::
+@set "Ubuntu24Desktop_Template_Location=%Templates_Default_Location%\%Templates_Linux_DirName%\%Templates_Linux_Ubuntu_DirName%\2404\%Templates_Linux_Desktop_DirName%
+@set "Ubuntu24Server_Template_Location=%Templates_Default_Location%\%Templates_Linux_DirName%\%Templates_Linux_Ubuntu_DirName%\2404\%Templates_Linux_Server_DirName%
+::
+@set "Ubuntu26Desktop_Template_Location=%Templates_Default_Location%\%Templates_Linux_DirName%\%Templates_Linux_Ubuntu_DirName%\2604\%Templates_Linux_Desktop_DirName%
+@set "Ubuntu26Server_Template_Location=%Templates_Default_Location%\%Templates_Linux_DirName%\%Templates_Linux_Ubuntu_DirName%\2604\%Templates_Linux_Server_DirName%
+::
+
+
+::  Parameters
+::
+::  Directory van de Templates
+::  %Debian13Server_Template_Location%
+::
+::  Naam van de template
+::  %LVIDebian13S%
+::
+::  Directory van de virtuele machine
+::  %Debian13ServerVM%
+::
+::  Naam van de virtuele machine
+::  %Linux_Debian_13_Server_Hostname%
+::
+::  Download URL van de virtuele machine
+::  %Debian13ServerUrl%
+::
+
