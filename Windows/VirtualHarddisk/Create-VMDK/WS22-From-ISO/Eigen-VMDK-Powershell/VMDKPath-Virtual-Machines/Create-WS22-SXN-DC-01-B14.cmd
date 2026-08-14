@@ -38,30 +38,43 @@
 @REM  ::::::::
 @REM  :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 @REM
+@REM Thuisdirectories
+@REM
+Set "HyperVVMHome=D:\Virtualization-Home\Virtual-Machines\Microsoft-Hyper-V"
+set "VMWVMHome=D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO"
+
+IF %COMPUTERNAME% == CND0475SYS (
+    set "GithubHome=D:\OneDrive\OneDrive - Saxion\Bestanden\GitHub-JATUTERT"
+)
+@REM
+IF %COMPUTERNAME% == PF6FNDPL (
+    set "GithubHome=D:\Bestanden\GitHub-JATUTERT
+)
+@REM
 @REM  ISO Bestand SXN-DC-01
 @REM
 Set "ISOVHDBestand=D:\Virtualization-Home\Installation-Media\OperatingSystems\Windows\10-11\10-22-Windows-Server-2022\Standard-DataCenter-Microsoft\Standard-DataCenter-Microsoft\en-us_windows_server_2022_updated_latest.iso"
 @REM
 @REM  VHD Bestand
-Set "VHDBestandVMDK=D:\Virtualization-Home\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\2022\SXN-DC-01\SXN-DC-01.VHD"
+Set "VHDBestandVMDK=%HyperVVMHOME%\Windows\Server\2022\SXN-DC-01\SXN-DC-01.VHD"
 @REM
 @REM  VMDK Bestand
-Set "VMDKBestandVM=D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\SXN-DC-01.VMDK"
-Set "VMXBestandVM=D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\SXN-DC-01.VMX"
+Set "VMDKBestandVM=%VMWVMHome%\Windows\Server\2022\SXN-DC-01\SXN-DC-01.VMDK"
+Set "VMXBestandVM=%VMWVMHome%\Windows\Server\2022\SXN-DC-01\SXN-DC-01.VMX"
 @REM
 @REM  Powershell Script
 @REM
 @REM    Werklaptop
 @REM
-IF %COMPUTERNAME% == CND0475SYS (
-    Set "PSISOVHDScriptDirectory=D:\OneDrive\OneDrive - Saxion\Bestanden\GitHub-JATUTERT\Configuration\Demos\Windows\VirtualHarddisk\Create-VHD\WS22-From-ISO\Powershell\VHDPath-Virtual-Machines\SXN-DC-01"
+
+    Set "PSISOVHDScriptDirectory=%GithubHome%\Demos\Windows\VirtualHarddisk\Create-VHD\WS22-From-ISO\Powershell\VHDPath-Virtual-Machines\SXN-DC-01"
     Set "PSISOVHDScriptFile=WS22-SXN-DC-01-Create-VHD-Latest.ps1"
 )
 @REM
 @REM    Privelaptop
 @REM
-IF %COMPUTERNAME% == PF6FNDPL (
-    Set "PSISOVHDScriptDirectory=D:\Bestanden\GitHub-JATUTERT\demos\Windows\VirtualHarddisk\Create-VHD\WS22-From-ISO\Powershell\VHDPath-Virtual-Machines\SXN-DC-01"
+
+    Set "PSISOVHDScriptDirectory=%GithubHome%\demos\Windows\VirtualHarddisk\Create-VHD\WS22-From-ISO\Powershell\VHDPath-Virtual-Machines\SXN-DC-01"
     Set "PSISOVHDScriptFile=WS22-SXN-DC-01-Create-VHD-Latest.ps1"
 )
 @REM
@@ -157,23 +170,23 @@ goto hoofdmenu
 @REM
 @REM  Aanmaken noodzakelijke directories en subdirectories voor VHD omgeving 
 @REM
-@mkdir D:\Virtualization-Home\Virtual-Machines\Microsoft-Hyper-V\Windows\ >nul 2>&1
+@mkdir %HyperVVMHOME%\Windows\ >nul 2>&1
 @REM
-@mkdir D:\Virtualization-Home\Virtual-Machines\Microsoft-Hyper-V\Windows\Client\ >nul 2>&1
-@mkdir D:\Virtualization-Home\Virtual-Machines\Microsoft-Hyper-V\Windows\Client\11\SXN-WS-01 >nul 2>&1
-@mkdir D:\Virtualization-Home\Virtual-Machines\Microsoft-Hyper-V\Windows\Client\11\W11-EDU-C-LAB-001 >nul 2>&1
+@mkdir %HyperVVMHOME%\Windows\Client\ >nul 2>&1
+@mkdir %HyperVVMHOME%\Windows\Client\11\SXN-WS-01 >nul 2>&1
+@mkdir %HyperVVMHOME%\Windows\Client\11\W11-EDU-C-LAB-001 >nul 2>&1
 @REM
-@mkdir D:\Virtualization-Home\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\ >nul 2>&1
-@mkdir D:\Virtualization-Home\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\2022\SXN-DB-01 >nul 2>&1
-@mkdir D:\Virtualization-Home\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\2022\SXN-DC-01 >nul 2>&1
-@mkdir D:\Virtualization-Home\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\2022\SXN-RD-01 >nul 2>&1
-@mkdir D:\Virtualization-Home\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\2022\W22-DTC-S-LAB-001 >nul 2>&1
+@mkdir %HyperVVMHOME%\Windows\Server\ >nul 2>&1
+@mkdir %HyperVVMHOME%\Windows\Server\2022\SXN-DB-01 >nul 2>&1
+@mkdir %HyperVVMHOME%\Windows\Server\2022\SXN-DC-01 >nul 2>&1
+@mkdir %HyperVVMHOME%\Windows\Server\2022\SXN-RD-01 >nul 2>&1
+@mkdir %HyperVVMHOME%\Windows\Server\2022\W22-DTC-S-LAB-001 >nul 2>&1
 @REM
 @REM  Controleren leeftijd van eventueel aanwezige VHD
 @REM
 @IF EXIST "%VHDBestandVMDK%" (
     @REM
-    forfiles /p "D:\Virtualization-Home\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\2022\SXN-DC-01" /m "SXN-DC-01.VHD" /d -21 >nul 2>&1
+    forfiles /p "%HyperVVMHOME%\Windows\Server\2022\SXN-DC-01" /m "SXN-DC-01.VHD" /d -21 >nul 2>&1
     @REM
     if %errorlevel%==0 (
         @REM
@@ -181,10 +194,11 @@ goto hoofdmenu
         @echo Verwijderen VHD bestand op D schijf 
         @REM
         @REM Verwijderen eventueel aanwezige bestanden
-        @del /F /S /Q "D:\Virtualization-Home\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\2022\SXN-DC-01"\*.* >nul 2>&1
+        @del /F /S /Q "%HyperVVMHOME%\Windows\Server\2022\SXN-DC-01"\*.* >nul 2>&1
         @REM
         @REM Verwijder ook eventueel aanwezige subdirectories in de directory 
-        for /d %%d in ("D:\Virtualization-Home\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\2022\SXN-DC-01\*") do rd /s /q "%%d"
+        @REM for /d %%d in ("%HyperVVMHOME%\Windows\Server\2022\SXN-DC-01\*") do rd /s /q "%%d"
+        for /d %%d in ("%HyperVVMHOME%\Windows\Server\2022\SXN-DC-01\*") do rd /s "%%d"
         @REM
     ) else (
         @REM
@@ -209,7 +223,7 @@ goto hoofdmenu
 @REM
 @REM  Controle aanwezigheid Powershell script
 @REM
-Set "PowershellScriptBestand=D:\OneDrive\OneDrive - Saxion\Bestanden\GitHub-JATUTERT\Configuration\Demos\Windows\VirtualHarddisk\Create-VHD\WS22-From-ISO\Powershell\VHDPath-Virtual-Machines\SXN-DC-01\WS22-SXN-DC-01-Create-VHD-Latest.ps1"
+Set "PowershellScriptBestand=%GithubHome%\Demos\Windows\VirtualHarddisk\Create-VHD\WS22-From-ISO\Powershell\VHDPath-Virtual-Machines\SXN-DC-01\WS22-SXN-DC-01-Create-VHD-Latest.ps1"
 @REM
 @IF NOT EXIST "%PowershellScriptBestand%" (
     @echo Powershell Script voor conversie is NIET gevonden
@@ -259,17 +273,17 @@ goto hoofdmenu
 @REM
 @REM  Aanmaken noodzakelijke directories en subdirectories VMWare Workstation Pro virtuele machines 
 @REM
-@mkdir D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\ >nul 2>&1
-@mkdir D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\ >nul 2>&1
-@mkdir D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\ >nul 2>&1
+@mkdir %VMWVMHome%\Windows\ >nul 2>&1
+@mkdir %VMWVMHome%\Windows\Client\ >nul 2>&1
+@mkdir %VMWVMHome%\Windows\Server\ >nul 2>&1
 @REM
-@mkdir D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\SXN-WS-01 >nul 2>&1
-@mkdir D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Client\W11-EDU-C-LAB-001 >nul 2>&1
+@mkdir %VMWVMHome%\Windows\Client\11\SXN-WS-01 >nul 2>&1
+@mkdir %VMWVMHome%\Windows\Client\11\W11-EDU-C-LAB-001 >nul 2>&1
 @REM
-@mkdir D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-DB-01 >nul 2>&1
-@mkdir D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01 >nul 2>&1
-@mkdir D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\SXN-RD-01 >nul 2>&1
-@mkdir D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\W22-DTC-S-LAB-001 >nul 2>&1
+@mkdir %VMWVMHome%\Windows\Server\2022\SXN-DB-01 >nul 2>&1
+@mkdir %VMWVMHome%\Windows\Server\2022\SXN-DC-01 >nul 2>&1
+@mkdir %VMWVMHome%\Windows\Server\2022\SXN-RD-01 >nul 2>&1
+@mkdir %VMWVMHome%\Windows\Server\2022\W22-DTC-S-LAB-001 >nul 2>&1
 @REM
 @REM      :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 @REM      ::::
@@ -278,7 +292,7 @@ goto hoofdmenu
 @REM      :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 @REM
 @REM  Controleer aanwezigheid van VMX en VMDK in de directory van de virtuele machine 
-set "DIR=D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01"
+set "DIR=%VMWVMHome%\Windows\Server\2022\SXN-DC-01"
 dir /b "%DIR%\*.vmx" >nul 2>&1 && set VMX=1 || set VMX=0
 dir /b "%DIR%\*.vmdk" >nul 2>&1 && set VMDK=1 || set VMDK=0
 @REM
@@ -289,9 +303,9 @@ if "%VMX%"=="1" if "%VMDK%"=="0" (
     @REM Er is wel een VMX gevonden maar geen VMDK aangetroffen
     @REM
     @REM Verwijderen eventueel aanwezige bestanden
-    del /F /S /Q D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\*.* >nul 2>&1
+    del /F /S /Q %VMWVMHome%\Windows\Server\2022\SXN-DC-01\*.* >nul 2>&1
     @REM Verwijder ook eventueel aanwezige subdirectories in de directory van de virtuele machine
-    for /d %%d in ("D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\*") do rd /s /q "%%d"
+    for /d %%d in ("%VMWVMHome%\Windows\Server\2022\SXN-DC-01\*") do rd /s /q "%%d"
 )
 @REM
 @REM  Ongeldig VMDK
@@ -301,9 +315,9 @@ if "%VMX%"=="0" if "%VMDK%"=="1" (
     @REM Er is wel een VMDK gevonden maar geen VMX aangetroffen
     @REM
     @REM Verwijderen eventueel aanwezige bestanden
-    del /F /S /Q D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\*.* >nul 2>&1
+    del /F /S /Q %VMWVMHome%\Windows\Server\2022\SXN-DC-01\*.* >nul 2>&1
     @REM Verwijder ook eventueel aanwezige subdirectories in de directory van de virtuele machine
-    for /d %%d in ("D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\*") do rd /s /q "%%d"
+    for /d %%d in ("%VMWVMHome%\Windows\Server\2022\SXN-DC-01\*") do rd /s /q "%%d"
 )
 @REM
 @REM  Geldig VMX en VMDK
@@ -317,7 +331,7 @@ if "%VMX%"=="1" if "%VMDK%"=="1" (
     @REM    ##########################################
     @REM
     @REM    Controleer of het aanwezige VMDK bestand niet ouder is dan 22 dagen (maand) 
-    forfiles /p "D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01" /m "SXN-DC-01.VMDK" /d -22 >nul 2>&1
+    forfiles /p "%VMWVMHome%\Windows\Server\2022\SXN-DC-01" /m "SXN-DC-01.VMDK" /d -22 >nul 2>&1
     @REM
     if %errorlevel%==0 (
         @REM
@@ -326,9 +340,9 @@ if "%VMX%"=="1" if "%VMDK%"=="1" (
         @REM Verwijderen eventueel aanwezige virtuele machine
         @vmrun -T ws DeleteVM "%VMXBestandVM%" >nul 2>&1
         @REM Verwijderen eventueel aanwezige bestanden
-        @del /F /S /Q D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\*.* >nul 2>&1
+        @del /F /S /Q %VMWVMHome%\Windows\Server\2022\SXN-DC-01\*.* >nul 2>&1
         @REM Verwijder ook eventueel aanwezige subdirectories in de directory van de virtuele machine
-        for /d %%d in ("D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\*") do rd /s /q "%%d"
+        for /d %%d in ("%VMWVMHome%\Windows\Server\2022\SXN-DC-01\*") do rd /s /q "%%d"
         @REM
     ) else (
         @REM
@@ -342,14 +356,14 @@ if "%VMX%"=="1" if "%VMDK%"=="1" (
     @REM    ##########################################
     @REM
     @REM    Controleer of het aanwezige VMX bestand niet ouder is dan 22 dagen (maand)
-    forfiles /p "D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01" /m "SXN-DC-01.VMX" /d -22 >nul 2>&1
+    forfiles /p "%VMWVMHome%\Windows\Server\2022\SXN-DC-01" /m "SXN-DC-01.VMX" /d -22 >nul 2>&1
     @REM
     if %errorlevel%==0 (
         @REM
         @echo VMX is aanwezig maar ouder dan 22 dagen
         @echo Verwijderen VMX 
         @REM
-        del "D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\SXN-DC-01.VMX"
+        del "%VMWVMHome%\Windows\Server\2022\SXN-DC-01\SXN-DC-01.VMX"
     ) else (
         @REM
         @echo VMX van Virtuele machine is aanwezig en ook niet ouder dan 22 dagen. 
@@ -387,7 +401,7 @@ if "%VMX%"=="1" if "%VMDK%"=="1" (
 )
 @REM
 @REM  Log bestanden overzetten naar C: schijf zodat ze niet mee worden genomen in update naar GitHub
-@robocopy "D:\OneDrive\OneDrive - Saxion\Bestanden\GitHub-JATUTERT\Configuration\Demos\Windows\VirtualHarddisk\Create-VMDK\WS22-From-ISO\Eigen-VMDK-Powershell\VMDKPath-Virtual-Machines\logs" "C:\Program Files\StarWind Software\StarWind V2V Converter\logs" *.log /MOV
+@robocopy "%GithubHome%\Demos\Windows\VirtualHarddisk\Create-VMDK\WS22-From-ISO\Eigen-VMDK-Powershell\VMDKPath-Virtual-Machines\logs" "C:\Program Files\StarWind Software\StarWind V2V Converter\logs" *.log /MOV
 @REM
 @REM  Aanmaken VMX indien niet aanwezig
 @REM
@@ -396,7 +410,7 @@ if "%VMX%"=="1" if "%VMDK%"=="1" (
     @REM  VMX bestand is niet aanwezig
     @REM
     @echo   Aanmaken VMX in VM Directory VMWare Workstation 
-    @copy "D:\OneDrive\OneDrive - Saxion\Bestanden\GitHub-JATUTERT\Configuration\Demos\Windows\Hypervisor\VMware-Desktop\VMX\SXN-DC-01.vmx" "%VMXBestandVM%"
+    @copy "%GithubHome%\Demos\Windows\Hypervisor\VMware-Desktop\VMX\SXN-DC-01.vmx" "%VMXBestandVM%"
 )
 @REM
 @REM
@@ -421,13 +435,13 @@ goto hoofdmenu
 @echo off
 @cls
 @REM
-@IF EXIST D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\SXN-DC-01.VMX (
+@IF EXIST %VMWVMHome%\Windows\Server\2022\SXN-DC-01\SXN-DC-01.VMX (
     @REM
     @echo Openen SXN-DC-01 in VMware Workstation PRO
-    @start /B vmware -n D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\SXN-DC-01.vmx
+    @start /B vmware -n %VMWVMHome%\Windows\Server\2022\SXN-DC-01\SXN-DC-01.vmx
     @REM
     @echo Starten VM 
-    @start vmrun -T ws start D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\SXN-DC-01.vmx
+    @start vmrun -T ws start %VMWVMHome%\Windows\Server\2022\SXN-DC-01\SXN-DC-01.vmx
 )
 @REM
 @REM
@@ -450,7 +464,7 @@ goto hoofdmenu
 @REM
 @REM
 @REM  Controleer aanwezigheid van VMX en VMDK in de directory van de virtuele machine 
-set "DIR=D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01"
+set "DIR=%VMWVMHome%\Windows\Server\2022\SXN-DC-01"
 dir /b "%DIR%\*.vmx" >nul 2>&1 && set VMX=1 || set VMX=0
 dir /b "%DIR%\*.vmdk" >nul 2>&1 && set VMDK=1 || set VMDK=0
 @REM
@@ -461,9 +475,9 @@ if "%VMX%"=="1" if "%VMDK%"=="0" (
     @REM Er is wel een VMX gevonden maar geen VMDK aangetroffen
     @REM
     @REM Verwijderen eventueel aanwezige bestanden
-    del /F /S /Q D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\*.* >nul 2>&1
+    del /F /S /Q %VMWVMHome%\Windows\Server\2022\SXN-DC-01\*.* >nul 2>&1
     @REM Verwijder ook eventueel aanwezige subdirectories in de directory van de virtuele machine
-    for /d %%d in ("D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\*") do rd /s /q "%%d"
+    for /d %%d in ("%VMWVMHome%\Windows\Server\2022\SXN-DC-01\*") do rd /s /q "%%d"
 )
 @REM
 @REM  Ongeldig VMDK
@@ -473,22 +487,22 @@ if "%VMX%"=="0" if "%VMDK%"=="1" (
     @REM Er is wel een VMDK gevonden maar geen VMX aangetroffen
     @REM
     @REM Verwijderen eventueel aanwezige bestanden
-    del /F /S /Q D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\*.* >nul 2>&1
+    del /F /S /Q %VMWVMHome%\Windows\Server\2022\SXN-DC-01\*.* >nul 2>&1
     @REM Verwijder ook eventueel aanwezige subdirectories in de directory van de virtuele machine
-    for /d %%d in ("D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\*") do rd /s /q "%%d"
+    for /d %%d in ("%VMWVMHome%\Windows\Server\2022\SXN-DC-01\*") do rd /s /q "%%d"
 )
 @REM
 @REM  Geldige VMX en VMDK
 @REM
 if "%VMX%"=="1" if "%VMDK%"=="1" (
         @REM Stoppen eventueel draaiende virtuele machine
-        @vmrun -T ws stop D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\SXN-DC-01.vmx >nul 2>&1
+        @vmrun -T ws stop %VMWVMHome%\Windows\Server\2022\SXN-DC-01\SXN-DC-01.vmx >nul 2>&1
         @REM Verwijderen eventueel aanwezige virtuele machine
-        @vmrun -T ws DeleteVM D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\SXN-DC-01.vmx >nul 2>&1
+        @vmrun -T ws DeleteVM %VMWVMHome%\Windows\Server\2022\SXN-DC-01\SXN-DC-01.vmx >nul 2>&1
         @REM Verwijderen eventueel aanwezige bestanden
-        @del /F /S /Q D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\*.* >nul 2>&1
+        @del /F /S /Q %VMWVMHome%\Windows\Server\2022\SXN-DC-01\*.* >nul 2>&1
         @REM Verwijder ook eventueel aanwezige subdirectories in de directory van de virtuele machine
-        for /d %%d in ("D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\*") do rd /s /q "%%d"
+        for /d %%d in ("%VMWVMHome%\Windows\Server\2022\SXN-DC-01\*") do rd /s /q "%%d"
         @REM
 )
 @REM
@@ -554,9 +568,9 @@ goto hoofdmenu
         @REM
         @echo Overzetten VMDK uit VM Directory naar NextCloud
         @REM
-        @robocopy D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01 D:\SurfDrive-Home\Virtualization\VirtualMachines\Windows\Server\2022\SXN-DC-01 SXN-DC-01.VMDK /MT:16 /J /ETA
+        @robocopy %VMWVMHome%\Windows\Server\2022\SXN-DC-01 D:\SurfDrive-Home\Virtualization\VirtualMachines\Windows\Server\2022\SXN-DC-01 SXN-DC-01.VMDK /MT:16 /J /ETA
         @REM
-        @REM copy D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\SXN-DC-01.VMDK D:\SurfDrive-Home\Virtualization\VirtualMachines\Windows\Server\2022\SXN-DC-01
+        @REM copy %VMWVMHome%\Windows\Server\2022\SXN-DC-01\SXN-DC-01.VMDK D:\SurfDrive-Home\Virtualization\VirtualMachines\Windows\Server\2022\SXN-DC-01
         @REM
     )
 )
@@ -595,7 +609,7 @@ goto hoofdmenu
         @REM  VMX bestand is niet aanwezig
         @REM
         @echo Overzetten VMX uit VM Directory naar NextCloud
-        @copy D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\SXN-DC-01.vmx D:\SurfDrive-Home\Virtualization\VirtualMachines\Windows\Server\2022\SXN-DC-01
+        @copy %VMWVMHome%\Windows\Server\2022\SXN-DC-01\SXN-DC-01.vmx D:\SurfDrive-Home\Virtualization\VirtualMachines\Windows\Server\2022\SXN-DC-01
     )
 )
 @REM
@@ -627,11 +641,11 @@ goto hoofdmenu
 @REM
 @REM
 @IF EXIST "%VHDBestandVMDK%" (
-    del /F /S /Q D:\Virtualization-Home\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\2022\SXN-DC-01\*.* >nul 2>&1
+    del /F /S /Q %HyperVVMHOME%\Windows\Server\2022\SXN-DC-01\*.* >nul 2>&1
 ) 
 @REM
 @REM  Controleer aanwezigheid van VMX en VMDK in de directory van de virtuele machine 
-set "DIR=D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01"
+set "DIR=%VMWVMHome%\Windows\Server\2022\SXN-DC-01"
 dir /b "%DIR%\*.vmx" >nul 2>&1 && set VMX=1 || set VMX=0
 dir /b "%DIR%\*.vmdk" >nul 2>&1 && set VMDK=1 || set VMDK=0
 @REM
@@ -639,27 +653,27 @@ dir /b "%DIR%\*.vmdk" >nul 2>&1 && set VMDK=1 || set VMDK=0
 @REM
 if "%VMX%"=="1" if "%VMDK%"=="0" (
     @REM Verwijderen eventueel aanwezige bestanden
-    del /F /S /Q D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\*.* >nul 2>&1
+    del /F /S /Q %VMWVMHome%\Windows\Server\2022\SXN-DC-01\*.* >nul 2>&1
     @REM Verwijder ook eventueel aanwezige subdirectories in de directory van de virtuele machine
-    for /d %%d in ("D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\*") do rd /s /q "%%d"
+    for /d %%d in ("%VMWVMHome%\Windows\Server\2022\SXN-DC-01\*") do rd /s /q "%%d"
 )
 @REM
 @REM  VMDK is aanwezig maar VMX niet
 @REM
 if "%VMX%"=="0" if "%VMDK%"=="1" (
     @REM Verwijderen eventueel aanwezige bestanden
-    del /F /S /Q D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\*.* >nul 2>&1
+    del /F /S /Q %VMWVMHome%\Windows\Server\2022\SXN-DC-01\*.* >nul 2>&1
     @REM Verwijder ook eventueel aanwezige subdirectories in de directory van de virtuele machine
-    for /d %%d in ("D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\*") do rd /s /q "%%d"
+    for /d %%d in ("%VMWVMHome%\Windows\Server\2022\SXN-DC-01\*") do rd /s /q "%%d"
 )
 @REM
 @REM  VMDK is aanwezig en VDMK is aanwezig 
 @REM
 if "%VMX%"=="1" if "%VMDK%"=="1" (
     @REM Verwijderen eventueel aanwezige bestanden
-    del /F /S /Q D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\*.* >nul 2>&1
+    del /F /S /Q %VMWVMHome%\Windows\Server\2022\SXN-DC-01\*.* >nul 2>&1
     @REM Verwijder ook eventueel aanwezige subdirectories in de directory van de virtuele machine
-    for /d %%d in ("D:\Virtualization-Home\Virtual-Machines\VMware-Workstation-PRO\Windows\Server\2022\SXN-DC-01\*") do rd /s /q "%%d"
+    for /d %%d in ("%VMWVMHome%\Windows\Server\2022\SXN-DC-01\*") do rd /s /q "%%d"
 )
 @REM
 @REM
