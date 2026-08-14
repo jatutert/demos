@@ -18,7 +18,7 @@
 #
 #   For Personal and/or Education Use Only ! 
 #
-#   16 juli 2026
+#   13 Augustus 2026
 #
 #
 #
@@ -53,10 +53,10 @@ Write-Host  "ISO2VHD Stap 1 Declaratie van parameters voor Script"
 $TS_WIN_ISO_FOLDER      = 'C:\Users\jtu03\Nextcloud\Shared\ISO-Bestanden\Operating-Systems\Windows\10-11\10.22-Windows-Server-2022\Standard-DataCenter-Microsoft\'
 $TS_WIN_ISO_FILE        = 'en-us_windows_server_2022_updated_latest.iso'
 #
-$TS_WIN_UNATTEND_FOLDER = 'D:\OneDrive\OneDrive - Saxion\Repository-Playground\Development\GitHub-GitDesktop\Demos\Windows\Guest\Windows\2022\AutoUnattend\GitHub-Ruzickap\SXN-RD-01\'
+$TS_WIN_UNATTEND_FOLDER = 'D:\OneDrive\OneDrive - Saxion\Bestanden\GitHub-JATUTERT\Demos\Windows\Guest\Windows\2022\AutoUnattend\GitHub-Ruzickap\SXN-RD-01\'
 $TS_WIN_UNATTEND_FILE   = 'Autounattend_SXN-RD-01-Latest.xml'
 #
-$TS_VHD_PATH            = 'D:\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\SXN-RD-01\SXN-RD-01.VHD'
+$TS_VHD_PATH            = 'D:\Virtualization-Home\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\SXN-RD-01\SXN-RD-01.VHD'
 #
 #
 #
