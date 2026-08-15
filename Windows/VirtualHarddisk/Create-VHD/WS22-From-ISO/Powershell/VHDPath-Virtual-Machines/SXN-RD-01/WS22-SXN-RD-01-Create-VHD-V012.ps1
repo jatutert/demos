@@ -14,7 +14,7 @@
 #   Windows Server 2022 DataCenter ISO naar Virtual Harddisk VHD
 #   PowerSHELL SCRIPT
 #
-#   SXN-DC-01 Edition of the script
+#   SXN-RD-01 Edition of the script
 #
 #   For Personal and/or Education Use Only ! 
 #
@@ -56,18 +56,18 @@ $TS_WIN_ISO_FILE        = 'en-us_windows_server_2022_updated_latest.iso'
 #   Werk Laptop
 #
 if ($env:COMPUTERNAME -eq "CND0475SYS") { 
-    $TS_WIN_UNATTEND_FOLDER = 'D:\OneDrive\OneDrive - Saxion\Bestanden\GitHub-JATUTERT\Demos\Windows\Guest\Windows\2022\AutoUnattend\GitHub-Ruzickap\SXN-DC-01\'
-    $TS_WIN_UNATTEND_FILE   = 'Autounattend_SXN-DC-01-Latest.xml'
+    $TS_WIN_UNATTEND_FOLDER = 'D:\OneDrive\OneDrive - Saxion\Bestanden\GitHub-JATUTERT\Demos\Windows\Guest\Windows\2022\AutoUnattend\GitHub-Ruzickap\SXN-RD-01\'
+    $TS_WIN_UNATTEND_FILE   = 'Autounattend_SXN-RD-01-Latest.xml'
 } 
 #
 #   Prive Laptop
 #
 if ($env:COMPUTERNAME -eq "PF6FNDPL") { 
-    $TS_WIN_UNATTEND_FOLDER = 'D:\Bestanden\GitHub-JATUTERT\demos\Windows\Guest\Windows\2022\AutoUnattend\GitHub-Ruzickap\SXN-DC-01\'
-    $TS_WIN_UNATTEND_FILE   = 'Autounattend_SXN-DC-01-Latest.xml'
+    $TS_WIN_UNATTEND_FOLDER = 'D:\Bestanden\GitHub-JATUTERT\demos\Windows\Guest\Windows\2022\AutoUnattend\GitHub-Ruzickap\SXN-RD-01\'
+    $TS_WIN_UNATTEND_FILE   = 'Autounattend_SXN-RD-01-Latest.xml'
 } 
 #
-$TS_VHD_PATH            = 'D:\Virtualization-Home\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\2022\SXN-DC-01\SXN-DC-01.VHD'
+$TS_VHD_PATH            = 'D:\Virtualization-Home\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\2022\SXN-RD-01\SXN-RD-01.VHD'
 #
 #
 #
@@ -110,7 +110,7 @@ BCDinVHD                =   'VirtualMachine'
 #
 #
 #
-Write-Host "ISO2VHD Stap 3 Maken SXN-DC-01 Virtual Harddisk op basis van ISO gestart ..."
+Write-Host "ISO2VHD Stap 3 Maken SXN-RD-01 Virtual Harddisk op basis van ISO gestart ..."
 Convert-WindowsImage @ConvertParams
 #
 #
@@ -129,7 +129,7 @@ Write-Host "ISO2VHD Stap 4 software overzetten op VHD"
 Mount-DiskImage -ImagePath "$TS_VHD_PATH"
 #
 #   #   Ophalen toegewezen schijfletter
-#   $vhdschijfltr = (Get-DiskImage -ImagePath 'D:\Virtualization-Home\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\2022\SXN-DC-01\SXN-DC-01.VHD' | Get-Disk | Get-Partition | Get-Volume ).DriveLetter
+#   $vhdschijfltr = (Get-DiskImage -ImagePath 'D:\Virtualization-Home\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\2022\SXN-RD-01\SXN-RD-01.VHD' | Get-Disk | Get-Partition | Get-Volume ).DriveLetter
 #
 #
 #   #############

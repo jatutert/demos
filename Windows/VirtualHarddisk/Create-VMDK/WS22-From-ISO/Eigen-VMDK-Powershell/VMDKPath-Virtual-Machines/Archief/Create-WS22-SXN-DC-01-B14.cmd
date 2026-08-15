@@ -66,14 +66,14 @@ Set "VMXBestandVM=%VMWVMHome%\Windows\Server\2022\SXN-DC-01\SXN-DC-01.VMX"
 @REM
 @REM    Werklaptop
 @REM
-
+IF %COMPUTERNAME% == CND0475SYS (
     Set "PSISOVHDScriptDirectory=%GithubHome%\Demos\Windows\VirtualHarddisk\Create-VHD\WS22-From-ISO\Powershell\VHDPath-Virtual-Machines\SXN-DC-01"
     Set "PSISOVHDScriptFile=WS22-SXN-DC-01-Create-VHD-Latest.ps1"
 )
 @REM
 @REM    Privelaptop
 @REM
-
+IF %COMPUTERNAME% == PF6FNDPL (
     Set "PSISOVHDScriptDirectory=%GithubHome%\demos\Windows\VirtualHarddisk\Create-VHD\WS22-From-ISO\Powershell\VHDPath-Virtual-Machines\SXN-DC-01"
     Set "PSISOVHDScriptFile=WS22-SXN-DC-01-Create-VHD-Latest.ps1"
 )
