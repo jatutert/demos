@@ -12,8 +12,8 @@
 @REM  Virtual Machine Manager
 @REM  Windows Command Prompt 
 @REM
-@REM  Build 15
-@REM  15 Augustus 2026
+@REM  Build 16
+@REM  17 Augustus 2026
 @REM
 @REM  By John Tutert
 @REM
@@ -29,22 +29,12 @@
 @REM
 @NET SESSION >nul 2>&1
 @IF %ERRORLEVEL% NEQ 0 (
-      @REM
-      @cls
-      @echo.
-      echo @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-      echo @@@@@ Windows Virtuele machine Manager
-      echo @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-      echo.
-      @IF "%COMPUTERNAME%"=="CND0475SYS" (
-         echo Werklaptop %NUMBER_OF_PROCESSORS% vCPU %TotalMemoryGB% GB RAM
-      )   
-      echo VMware gevonden in %VMWareInstallPath%
-      echo.
-      @REM
-      @ECHO Script NIET gestart met Adminstrator rechten ! 
-      @PAUSE
-      @EXIT /b 0
+   @REM
+   @CALL :f_scrnhd
+   @REM
+   @ECHO Script NIET gestart met Adminstrator rechten ! 
+   @PAUSE
+   @EXIT /b 0
 )
 @REM
 @REM
@@ -112,27 +102,14 @@ for /f %%i in ('powershell -command "[math]::round(((Get-CimInstance Win32_Compu
 @REM
 :hoofdmenu
 @REM
-@cls
-@echo.
-echo @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-echo @@@@@@ %VirtMachName% virtuele machine Manager
-echo @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-echo.
 @REM
-@IF %COMPUTERNAME% == CND0475SYS (
-    echo Werk laptop %NUMBER_OF_PROCESSORS% vCPU %TotalMemoryGB% GB RAM
-)
-@REM
-@IF %COMPUTERNAME% == PF6FNDPL (
-    echo Prive laptop %NUMBER_OF_PROCESSORS% vCPU %TotalMemoryGB% GB RAM
-)
-@REM
-echo VMware gevonden in %VMWareInstallPath%
-echo.
+@CALL :f_scrnhd
 @REM
 echo [1] Downloaden ISO Bestanden
-echo [2] Aanmaken %VirtMachName% VHD
-echo [3] Aanmaken %VirtMachName% VMDK en VMX
+echo [2] Aanmaken VHD bestanden
+@REM echo [2] Aanmaken %VirtMachName% VHD
+echo [3] Aanmaken VMDK en VMX bestanden
+@REM echo [3] Aanmaken %VirtMachName% VMDK en VMX
 echo [4] Starten VMWare Workstation Pro %VirtMachName% virtuele machine
 echo [5] Stop en verwijder VMWare Workstation Pro %VirtMachName% virtuele machine 
 echo [6] Overzetten %VirtMachName% VMDK en VMX naar NextCloud
@@ -152,8 +129,10 @@ if %hfd_menu_keuze% EQU 7 goto :hoofdmenu
 if %hfd_menu_keuze% EQU 6 goto :nxtcld
 if %hfd_menu_keuze% EQU 5 goto :delvmx
 if %hfd_menu_keuze% EQU 4 goto :runvmx
-if %hfd_menu_keuze% EQU 3 goto :vhdvmdk
-if %hfd_menu_keuze% EQU 2 goto :visonvhd
+if %hfd_menu_keuze% EQU 3 goto :mkvmdnew
+@REM if %hfd_menu_keuze% EQU 3 goto :vhdvmdk
+if %hfd_menu_keuze% EQU 2 goto :mkvhdnew
+@REM  if %hfd_menu_keuze% EQU 2 goto :visonvhd
 if %hfd_menu_keuze% EQU 1 goto :dwndiso
 goto :hoofdmenu
 @REM
@@ -164,29 +143,10 @@ goto :hoofdmenu
 @REM
 :dwndiso
 @REM
-@cls
-@echo.
-echo @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-echo @@@@@@ %VirtMachName% virtuele machine Manager
-echo @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-echo.
-@REM
-@IF %COMPUTERNAME% == CND0475SYS (
-    echo Werk laptop %NUMBER_OF_PROCESSORS% vCPU %TotalMemoryGB% GB RAM
-)
-@REM
-@IF %COMPUTERNAME% == PF6FNDPL (
-    echo Prive laptop %NUMBER_OF_PROCESSORS% vCPU %TotalMemoryGB% GB RAM
-)
-@REM
-echo VMware gevonden in %VMWareInstallPath%
-echo.
-@REM
-@REM
+@CALL :f_scrnhd
 @REM
 start /MAX chrome.exe https://massgrave.dev/windows-server-links#windows-server-%WindowsVersie%
 start /MAX chrome.exe https://massgrave.dev/windows_11_links
-@REM
 @REM
 @REM
 goto hoofdmenu
@@ -198,23 +158,7 @@ goto hoofdmenu
 @REM
 :visonvhd
 @REM
-@cls
-@echo.
-echo @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-echo @@@@@@ %VirtMachName% virtuele machine Manager
-echo @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-echo.
-@REM
-@IF %COMPUTERNAME% == CND0475SYS (
-    echo Werk laptop %NUMBER_OF_PROCESSORS% vCPU %TotalMemoryGB% GB RAM
-)
-@REM
-@IF %COMPUTERNAME% == PF6FNDPL (
-    echo Prive laptop %NUMBER_OF_PROCESSORS% vCPU %TotalMemoryGB% GB RAM
-)
-@REM
-echo VMware gevonden in %VMWareInstallPath%
-echo.
+@CALL :f_scrnhd
 @REM
 @REM    Stap 0A Aanmaken noodzakelijke directories en subdirectories VHD 
 @REM
@@ -316,23 +260,7 @@ goto hoofdmenu
 @REM
 :vhdvmdk
 @REM
-@cls
-@echo.
-echo @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-echo @@@@@@ %VirtMachName% virtuele machine Manager
-echo @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-echo.
-@REM
-@IF %COMPUTERNAME% == CND0475SYS (
-    echo Werk laptop %NUMBER_OF_PROCESSORS% vCPU %TotalMemoryGB% GB RAM
-)
-@REM
-@IF %COMPUTERNAME% == PF6FNDPL (
-    echo Prive laptop %NUMBER_OF_PROCESSORS% vCPU %TotalMemoryGB% GB RAM
-)
-@REM
-echo VMware gevonden in %VMWareInstallPath%
-echo.
+@CALL :f_scrnhd
 @REM
 @REM    Stap 0A Aanmaken noodzakelijke directories en subdirectories VHD 
 @REM
@@ -542,23 +470,7 @@ goto hoofdmenu
 @REM
 :runvmx
 @REM
-@cls
-@echo.
-echo @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-echo @@@@@@ %VirtMachName% virtuele machine Manager
-echo @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-echo.
-@REM
-@IF %COMPUTERNAME% == CND0475SYS (
-    echo Werk laptop %NUMBER_OF_PROCESSORS% vCPU %TotalMemoryGB% GB RAM
-)
-@REM
-@IF %COMPUTERNAME% == PF6FNDPL (
-    echo Prive laptop %NUMBER_OF_PROCESSORS% vCPU %TotalMemoryGB% GB RAM
-)
-@REM
-echo VMware gevonden in %VMWareInstallPath%
-echo.
+@CALL :f_scrnhd
 @REM
 @IF EXIST %VMWVMHome%\Windows\Server\%WindowsVersie%\%VirtMachName%\%VirtMachName%.VMX (
     @REM
@@ -575,12 +487,7 @@ goto hoofdmenu
 @REM
 :delvmx
 @REM
-@cls
-@echo.
-echo ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-echo ::::: %VirtMachName% virtuele machine Manager
-echo ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-echo.
+@CALL :f_scrnhd
 @REM
 @IF %COMPUTERNAME% == CND0475SYS (
     echo Werk laptop %NUMBER_OF_PROCESSORS% vCPU %TotalMemoryGB% GB RAM
@@ -646,12 +553,7 @@ goto hoofdmenu
 @REM
 :nxtcld
 @REM
-@cls
-@echo.
-echo ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-echo ::::: %VirtMachName% virtuele machine Manager
-echo ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-echo.
+@CALL :f_scrnhd
 @REM
 @IF %COMPUTERNAME% == CND0475SYS (
     echo Werk laptop %NUMBER_OF_PROCESSORS% vCPU %TotalMemoryGB% GB RAM
@@ -761,14 +663,7 @@ goto hoofdmenu
 @REM
 :cleanall
 @REM
-@REM
-@cls
-@echo.
-echo ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-echo ::::: %VirtMachName% virtuele machine Manager
-echo ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-echo.
-@REM
+@CALL :f_scrnhd
 @REM
 @IF EXIST "%VHDBestandVMDK%" (
     del /F /S /Q "%HyperVVMHOME%\Windows\Server\%WindowsVersie%\%VirtMachName%"\*.* >nul 2>&1
@@ -814,27 +709,101 @@ goto hoofdmenu
 @REM
 @REM
 @REM
+
+
+:mkvhdnew
+@REM
+@REM  Menukeuze 2 
+@REM
+@CALL :f_scrnhd
+@REM
+@CALL :f_mkflds
+@REM
+echo [1] Aanmaken SXN-DB-01 VHD
+echo [2] Aanmaken SXN-DC-01 VHD
+echo [3] Aanmaken SXN-RD-01 VHD
+echo [4] x
+echo [5] x
+echo [6] x
+echo [7] x
+echo [8] x
+echo. 
+echo [9] Verlaten / Einde 
+echo. 
+@REM echo Maak uw keuze 
+@REM
+choice /C:123456789 /N /M "Maak uw keuze"
+set hfd_menu_keuze=%errorlevel%
+@REM
+if %hfd_menu_keuze% EQU 9 goto :hoofdmenu
+if %hfd_menu_keuze% EQU 8 goto :cleanall
+if %hfd_menu_keuze% EQU 7 goto :hoofdmenu
+if %hfd_menu_keuze% EQU 6 goto :nxtcld
+if %hfd_menu_keuze% EQU 5 goto :delvmx
+if %hfd_menu_keuze% EQU 4 goto :runvmx
+if %hfd_menu_keuze% EQU 3 call :f_mkvhdf SXN-RD-01
+if %hfd_menu_keuze% EQU 2 call :f_mkvhdf SXN-DC-01
+if %hfd_menu_keuze% EQU 1 call :f_mkvhdf SXN-DB-01
+@REM
+goto :hoofdmenu
+@REM
+
+:mkvmdnew
+@REM
+@REM  Menukeuze 2 
+@REM
+@CALL :f_scrnhd
+@REM
+@CALL :f_mkflds
+@REM
+echo [1] Aanmaken SXN-DB-01 VMDK
+echo [2] Aanmaken SXN-DC-01 VMDK
+echo [3] Aanmaken SXN-RD-01 VMDK
+echo [4] x
+echo [5] x
+echo [6] x
+echo [7] x
+echo [8] x
+echo. 
+echo [9] Verlaten / Einde 
+echo. 
+@REM echo Maak uw keuze 
+@REM
+choice /C:123456789 /N /M "Maak uw keuze"
+set hfd_menu_keuze=%errorlevel%
+@REM
+if %hfd_menu_keuze% EQU 9 goto :hoofdmenu
+if %hfd_menu_keuze% EQU 8 goto :cleanall
+if %hfd_menu_keuze% EQU 7 goto :hoofdmenu
+if %hfd_menu_keuze% EQU 6 goto :nxtcld
+if %hfd_menu_keuze% EQU 5 goto :delvmx
+if %hfd_menu_keuze% EQU 4 goto :runvmx
+if %hfd_menu_keuze% EQU 3 call :f_mkvmdf SXN-RD-01
+if %hfd_menu_keuze% EQU 2 call :f_mkvmdf SXN-DC-01
+if %hfd_menu_keuze% EQU 1 call :f_mkvmdf SXN-DB-01
+@REM
+goto :hoofdmenu
+@REM
+
+
+
+
+
+
 @REM
 @REM
 @REM ==== [9] EINDE ===================================================================================================================================
 @REM
 :einde
 @REM
-@cls
-@echo.
-echo ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-echo ::::: %VirtMachName% virtuele machine Manager
-echo ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-echo.
-@IF "%COMPUTERNAME% == CND0475SYS (
-    echo Werklaptop %NUMBER_OF_PROCESSORS% vCPU %TotalMemoryGB% GB RAM
-)
-echo VMware gevonden in %VMWareInstallPath%
-echo.
+@CALL :f_scrnhd
 @REM
 @echo Einde Script !
 @REM
 exit /b 0
+
+
+
 @REM
 @REM      Thats all folks
 @REM
@@ -852,3 +821,331 @@ exit /b 0
 @REM      Copyright 2012 Melted Stone Ltd under exclusive license to Columbia Records / Skyfall 
 @REM      Copyright 2012 Danjaq LLC, United Artists Corporation, Columbia Pictures Industries Inc., Skyfall, 007 Gun Logo, and related James Bond Trademarks Copyright 1962-2012
 @REM
+
+
+
+@REM
+@REM ==== FUNCTIES ===================================================================================================================================
+@REM
+
+
+
+:f_scrnhd
+@REM
+@REM  Functie
+@REM  Toon Scherm Header
+@REM
+@cls
+@echo.
+@echo @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@echo @@@@@ Windows Virtuele machine Manager
+@echo @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@echo.
+@IF "%COMPUTERNAME%" == CND0475SYS (
+   echo Werk Laptop %NUMBER_OF_PROCESSORS% vCPU %TotalMemoryGB% GB RAM
+)   
+@REM
+IF %COMPUTERNAME% == PF6FNDPL (
+   echo Prive Laptop %NUMBER_OF_PROCESSORS% vCPU %TotalMemoryGB% GB RAM
+)
+@REM
+echo VMware gevonden in %VMWareInstallPath%
+echo.
+goto :eof
+
+:f_mkflds
+@REM
+@REM  Functie
+@REM  Maak Folders
+@REM
+@REM    Stap 0A Aanmaken noodzakelijke directories en subdirectories VHD 
+@REM
+@mkdir "%HyperVVMHOME%\Windows" >nul 2>&1
+@mkdir "%HyperVVMHOME%\Windows\Client" >nul 2>&1
+@mkdir "%HyperVVMHOME%\Windows\Client\11" >nul 2>&1
+@mkdir "%HyperVVMHOME%\Windows\Client\11\SXN-WS-01" >nul 2>&1
+@REM
+@mkdir "%HyperVVMHOME%\Windows\Server" >nul 2>&1
+@mkdir "%HyperVVMHOME%\Windows\Server\2022" >nul 2>&1
+@mkdir "%HyperVVMHOME%\Windows\Server\2022\SXN-DB-01" >nul 2>&1
+@mkdir "%HyperVVMHOME%\Windows\Server\2022\SXN-DC-01" >nul 2>&1
+@mkdir "%HyperVVMHOME%\Windows\Server\2022\SXN-RD-01" >nul 2>&1
+@REM
+@REM    Stap 0B Aanmaken noodzakelijke directories en subdirectories VMWare Workstation Pro virtuele machines 
+@REM
+@mkdir "%VMWVMHome%\Windows" >nul 2>&1
+@REM
+@mkdir "%VMWVMHome%\Windows\Client" >nul 2>&1
+@mkdir "%VMWVMHome%\Windows\Client\11" >nul 2>&1
+@mkdir "%VMWVMHome%\Windows\Client\11\SXN-WS-01" >nul 2>&1
+@REM
+@mkdir "%VMWVMHome%\Windows\Server" >nul 2>&1
+@mkdir "%VMWVMHome%\Windows\Server\2022" >nul 2>&1
+@mkdir "%VMWVMHome%\Windows\Server\2022\SXN-DB-01" >nul 2>&1
+@mkdir "%VMWVMHome%\Windows\Server\2022\SXN-DC-01" >nul 2>&1
+@mkdir "%VMWVMHome%\Windows\Server\2022\SXN-RD-01" >nul 2>&1
+@REM
+@REM
+@REM
+goto :eof
+
+
+:f_mkvhdf
+@REM
+@CALL :f_scrnhd
+@REM
+@CALL :f_mkflds
+@REM
+@REM    Stap 1  Controleren leeftijd van eventueel aanwezige VHD
+@REM
+@IF EXIST "%HyperVVMHOME%\Windows\Server\%WindowsVersie%\%1\%1.VHD" (
+    @REM
+    forfiles /p "%HyperVVMHOME%\Windows\Server\%WindowsVersie%\%1" /m "%1.VHD" /d -30 >nul 2>&1
+    @REM
+    IF %errorlevel% EQU 0 (
+        @REM
+        @echo Het VHD Bestand is aanwezig maar ouder dan 30 dagen
+        @echo Verwijderen VHD bestand op D schijf 
+        @REM
+        @REM Verwijderen eventueel aanwezige bestanden
+        @del /F /S /Q "%HyperVVMHOME%\Windows\Server\%WindowsVersie%\%1\*.*" >nul 2>&1
+        @REM
+        @REM Verwijder ook eventueel aanwezige subdirectories in de directory 
+        for /d %%d in ("%HyperVVMHOME%\Windows\Server\%WindowsVersie%\%1\*") do rd /s /q "%%d"
+        @REM
+    ) ELSE (
+        @REM
+        @echo VHD bestand is aanwezig en is niet ouder dan 30 dagen.
+        @echo VHD bestand blijft daarom behouden. 
+        @pause
+        @REM
+    )
+)
+@REM
+@REM    Stap 2  Controle aanwezigheid ISO bestand  
+@REM
+@IF NOT EXIST "%ISOVHDBestand%" (
+    @echo Windows Server %WindowsVersie% ISO bestand voor conversie is NIET gevonden
+    @echo.
+    @echo VHD kan NIET aangemaakt worden ... 
+    @echo.
+    @echo Zorg voor en-us_windows_server_2022_updated_latest.iso
+    @echo.
+    @pause
+    goto :eof
+)
+@REM
+@REM    Stap 3  Controle aanwezigheid Powershell script
+@REM
+@IF NOT EXIST "%GithubHome%\Demos\Windows\VirtualHarddisk\Create-VHD\WS22-From-ISO\Powershell\VHDPath-Virtual-Machines\%1\WS22-%1-Create-VHD-Latest.ps1" (
+    @echo Powershell Script voor conversie is NIET gevonden
+    @echo.
+    @echo VHD kan NIET aangemaakt worden ... 
+    @echo.
+    @echo Maak WS22-%1-Create-VHD-Latest.ps1
+    @echo.
+    @pause
+    goto :eof
+)
+@REM
+@REM    Stap 4  Aanmaken VHD bestand indien niet aanwezig 
+@REM
+@IF NOT EXIST "%HyperVVMHOME%\Windows\Server\%WindowsVersie%\%1\%1.VHD" (
+    @REM    VHD bestand is niet aanwezig
+    @REM 
+    @REM    Powershell script voor aanmaken van VHD wordt gestart
+    @REM
+    @echo Aanmaken VHD bestand ...
+    @@Powershell -file "%GithubHome%\Demos\Windows\VirtualHarddisk\Create-VHD\WS22-From-ISO\Powershell\VHDPath-Virtual-Machines\%1\WS22-%1-Create-VHD-Latest.ps1"
+    @echo VHD bestand is aangemaakt ... 
+)
+@REM
+@REM
+@REM
+
+goto :eof
+
+
+
+:f_mkvmdf
+@REM
+@CALL :f_scrnhd
+@REM
+@CALL :f_mkflds
+@REM
+dir /b "%VMWVMHome%\Windows\Server\2022\%1\*.vmx"  >nul 2>&1 && set VMX=1 || set VMX=0
+dir /b "%VMWVMHome%\Windows\Server\2022\%1\*.vmdk" >nul 2>&1 && set VMDK=1 || set VMDK=0
+@REM
+@REM  Geen VMX
+@REM  Geen VMDK
+@REM
+if "%VMX%" == "0" if "%VMDK%" == "0" (
+   @REM
+   @IF NOT EXIST "%HyperVVMHOME%\Windows\Server\%WindowsVersie%\%1\%1.VHD" (
+      @echo %1 VHD bestand voor conversie is NIET gevonden
+      @echo.
+      @echo VMDK kan NIET aangemaakt worden ... 
+      @echo.
+      @echo Zorg voor %1.VHD
+      @echo.
+      @pause
+      goto :eof
+   )
+   @REM
+   @echo Conversie van VHD naar VMDK gestart ... 
+   @echo %HyperVVMHOME%\Windows\Server\%WindowsVersie%\%1\%1.VHD
+   @echo %VMWVMHome%\Windows\Server\2022\%1\%1.VMDK
+   @REM
+   "C:\Program Files\StarWind Software\StarWind V2V Converter\V2V_ConverterConsole.exe" convert in_file_name="%HyperVVMHOME%\Windows\Server\%WindowsVersie%\%1\%1.VHD" out_file_name="%VMWVMHome%\Windows\Server\2022\%1\%1.VMDK" out_file_type=ft_vmdk_ws_growable
+   @REM
+   IF EXIST "%GithubHome%\Demos\Windows\VirtualHarddisk\Create-VMDK\WS22-From-ISO\Eigen-VMDK-Powershell\VMDKPath-Virtual-Machines\logs\*.log" (
+      @robocopy "%GithubHome%\Demos\Windows\VirtualHarddisk\Create-VMDK\WS22-From-ISO\Eigen-VMDK-Powershell\VMDKPath-Virtual-Machines\logs" "C:\Program Files\StarWind Software\StarWind V2V Converter\logs" *.log /MOV
+   )
+   @echo   Aanmaken VMX in VM Directory VMWare Workstation 
+   @copy "%GithubHome%\Demos\Windows\Hypervisor\VMware-Desktop\VMX\%1.vmx" "%VMWVMHome%\Windows\Server\2022\%1\%1.VMX"
+   @REM
+   goto :eof
+)
+@REM
+@REM  Wel VMX
+@REM  Geen VMDK
+@REM
+if "%VMX%" == "1" if "%VMDK%" == "0" (
+   @REM
+   @IF NOT EXIST "D:\Virtualization-Home\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\%WindowsVersie%\%1\%1.VHD" (
+      @echo %1 VHD bestand voor conversie is NIET gevonden
+      @echo.
+      @echo VMDK kan NIET aangemaakt worden ... 
+      @echo.
+      @echo Zorg voor %1.VHD
+      @echo.
+      @pause
+      goto :eof
+   )
+   @REM
+   @echo Conversie van VHD naar VMDK gestart ... 
+   "C:\Program Files\StarWind Software\StarWind V2V Converter\V2V_ConverterConsole.exe" convert in_file_name="%HyperVVMHOME%\Windows\Server\%WindowsVersie%\%1\%1.VHD" out_file_name="%VMWVMHome%\Windows\Server\2022\%1\%1.VMDK" out_file_type=ft_vmdk_ws_growable
+   @REM
+   IF EXIST "%GithubHome%\Demos\Windows\VirtualHarddisk\Create-VMDK\WS22-From-ISO\Eigen-VMDK-Powershell\VMDKPath-Virtual-Machines\logs\*.log" (
+      @robocopy "%GithubHome%\Demos\Windows\VirtualHarddisk\Create-VMDK\WS22-From-ISO\Eigen-VMDK-Powershell\VMDKPath-Virtual-Machines\logs" "C:\Program Files\StarWind Software\StarWind V2V Converter\logs" *.log /MOV
+   )
+   @echo Aanmaken VMX in VM Directory VMWare Workstation 
+   @copy /Y "%GithubHome%\Demos\Windows\Hypervisor\VMware-Desktop\VMX\%1.vmx" "%VMWVMHome%\Windows\Server\2022\%1\%1.VMX"
+   @REM
+   goto :eof
+)
+@REM
+@REM  Geen VMX
+@REM  Wel VMDK
+if "%VMX%" == "0" if "%VMDK%" == "1" (
+   @REM
+   @REM Er is wel een VMDK gevonden maar geen VMX aangetroffen
+   @REM
+   @echo Aanmaken VMX in VM Directory VMWare Workstation 
+   @copy /Y "%GithubHome%\Demos\Windows\Hypervisor\VMware-Desktop\VMX\%1.vmx" "%VMWVMHome%\Windows\Server\2022\%1\%1.VMX"
+   @REM
+   goto :eof
+)
+@REM
+@REM  Wel VMX
+@REM  Wel VMDK
+@REM
+if "%VMX%"=="1" if "%VMDK%"=="1" (
+   @REM    Er is zowel een VMX als een VMDK aangetroffen
+   @REM
+   @REM    ##########################################
+   @REM    VMDK 
+   @REM    ##########################################
+   @REM
+   @REM    Controleer of het aanwezige VMDK bestand niet ouder is dan 30 dagen
+   forfiles /p "%VMWVMHome%\Windows\Server\2022\%1" /m "%1.VMDK" /d -30 >nul 2>&1
+   @REM
+   if %errorlevel% == "0" (
+      @REM
+      @echo VMDK is aanwezig maar ouder dan 30 dagen
+      @echo Verwijderen Virtuele Machine
+      @REM
+      @REM Stoppen eventueel draaiende virtuele machine
+      "%VMWareInstallPath%\vmrun.exe" -T ws stop "VMWVMHome%\Windows\Server\2022\%1\%1.VMX" >nul 2>&1
+      @REM Verwijderen eventueel aanwezige virtuele machine
+      "%VMWareInstallPath%\vmrun.exe" -T ws DeleteVM "VMWVMHome%\Windows\Server\2022\%1\%1.VMX" >nul 2>&1
+      @REM Verwijderen eventueel aanwezige bestanden
+      @del /F /S /Q "%VMWVMHome%\Windows\Server\2022\%1\*.*" >nul 2>&1
+      @REM Verwijder ook eventueel aanwezige subdirectories in de directory van de virtuele machine
+      for /d %%d in ("%VMWVMHome%\Windows\Server\2022\%1\*") do rd /s /q "%%d"
+      @REM
+   ) else (
+      @REM
+      @REM  VMDK is aanwezig maar niet ouder dan 30 dagen 
+      @echo VMDK is aanwezig maar NIET ouder dan 30 dagen
+      @echo VMX is ook aanwezig
+      @echo Virtuele machine wordt NIET aangemaakt
+      @pause
+      goto :eof
+   )
+   @REM
+   @IF NOT EXIST "D:\Virtualization-Home\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\%WindowsVersie%\%1\%1.VHD" (
+      @echo %1 VHD bestand voor conversie is NIET gevonden
+      @echo.
+      @echo VMDK kan NIET aangemaakt worden ... 
+      @echo.
+      @echo Zorg voor %1.VHD
+      @echo.
+      @pause
+      goto :eof
+   )
+   @REM
+   @echo Conversie van VHD naar VMDK gestart ... 
+   "C:\Program Files\StarWind Software\StarWind V2V Converter\V2V_ConverterConsole.exe" convert in_file_name="%HyperVVMHOME%\Windows\Server\%WindowsVersie%\%1\%1.VHD" out_file_name="%VMWVMHome%\Windows\Server\2022\%1\%1.VMDK" out_file_type=ft_vmdk_ws_growable
+   @REM
+   IF EXIST "%GithubHome%\Demos\Windows\VirtualHarddisk\Create-VMDK\WS22-From-ISO\Eigen-VMDK-Powershell\VMDKPath-Virtual-Machines\logs\*.log" (
+      @robocopy "%GithubHome%\Demos\Windows\VirtualHarddisk\Create-VMDK\WS22-From-ISO\Eigen-VMDK-Powershell\VMDKPath-Virtual-Machines\logs" "C:\Program Files\StarWind Software\StarWind V2V Converter\logs" *.log /MOV
+   )
+   @echo Aanmaken VMX in VM Directory VMWare Workstation 
+   @copy /Y "%GithubHome%\Demos\Windows\Hypervisor\VMware-Desktop\VMX\%1.vmx" "%VMWVMHome%\Windows\Server\2022\%1\%1.VMX"
+   @REM
+   goto :eof
+)
+
+
+@REM
+@REM    Stap 2  Controle aanwezigheid VHD bestand voor aanmaak van VMDK
+@REM
+@IF NOT EXIST "D:\Virtualization-Home\Virtual-Machines\Microsoft-Hyper-V\Windows\Server\%WindowsVersie%\%1\%1.VHD" (
+    @echo %1 VHD bestand voor conversie is NIET gevonden
+    @echo.
+    @echo VMDK kan NIET aangemaakt worden ... 
+    @echo.
+    @echo Zorg voor %1.VHD
+    @echo.
+    @pause
+    goto :eof
+)
+@REM
+@REM   Stap 3  Aanmaken VMDK indien niet aanwezig 
+@REM
+@IF NOT EXIST "VMWVMHome%\Windows\Server\2022\%1\%1.VMX" (
+   @REM
+    @echo Conversie van VHD naar VMDK gestart ... 
+    @"C:\Program Files\StarWind Software\StarWind V2V Converter\V2V_ConverterConsole.exe" convert in_file_name="%HyperVVMHOME%\Windows\Server\%WindowsVersie%\%1\%1.VHD" out_file_name=""VMWVMHome%\Windows\Server\2022\%1\%1.VMDK"" out_file_type=ft_vmdk_ws_growable
+    @REM
+)
+@REM
+@REM   Stap 4   Log bestanden overzetten naar C: schijf zodat ze niet mee worden genomen in update naar GitHub
+IF EXIST "%GithubHome%\Demos\Windows\VirtualHarddisk\Create-VMDK\WS22-From-ISO\Eigen-VMDK-Powershell\VMDKPath-Virtual-Machines\logs\*.log" (
+    @robocopy "%GithubHome%\Demos\Windows\VirtualHarddisk\Create-VMDK\WS22-From-ISO\Eigen-VMDK-Powershell\VMDKPath-Virtual-Machines\logs" "C:\Program Files\StarWind Software\StarWind V2V Converter\logs" *.log /MOV
+)
+@REM
+@REM   Stap 5   Aanmaken VMX indien niet aanwezig
+@REM
+@IF NOT EXIST "VMWVMHome%\Windows\Server\2022\%1\%1.VMX" (
+    @REM
+    @REM  VMX bestand is niet aanwezig
+    @REM
+    @echo   Aanmaken VMX in VM Directory VMWare Workstation 
+    @copy "%GithubHome%\Demos\Windows\Hypervisor\VMware-Desktop\VMX\%1.vmx" "VMWVMHome%\Windows\Server\2022\%1\%1.VMX"
+)
+@REM
+
+
+goto :eof 
