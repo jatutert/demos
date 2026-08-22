@@ -11,12 +11,12 @@
 #   For Personal and/or Education Use Only ! 
 #
 #
-#   29 JULI 2026
+#   21 Augustus 2026
 #
 #
 #
 #
-Write-Host  "Powershell ISO 2 VHD Converter by TutSOFT Version 14"
+Write-Host  "Powershell ISO 2 VHD Converter by TutSOFT Version 15"
 #
 #
 #
@@ -43,13 +43,18 @@ Write-Host  "ISO2VHD Stap 1 Declaratie van parameters voor Script"
 #
 #
 #
-$TS_WIN_ISO_FOLDER      = 'C:\Users\jtu03\Nextcloud\Shared\ISO-Bestanden\Operating-Systems\Windows\10-11\10.22-Windows-11\Consumer-Editions-Microsoft\25H2\Retail-OEM\'
+$TS_WIN_ISO_FOLDER      = 'D:\Virtualization-Home\Installation-Media\OperatingSystems\Windows\10-11\10-22-Windows-11\Consumer-Editions-Microsoft\25H2\'
 $TS_WIN_ISO_FILE        = 'en-us_windows_11_consumer_editions_version_25h2_updated_latest.iso'
 #
-$TS_WIN_UNATTEND_FOLDER = 'D:\OneDrive\OneDrive - Saxion\Repository-Playground\Development\GitHub-GitDesktop\Demos\Windows\Guest\Windows\11\AutoUnattend\GitHub-Ruzickap\SXN-WS-01\'
+$TS_WIN_UNATTEND_FOLDER = 'D:\OneDrive\OneDrive - Saxion\Bestanden\GitHub-JATUTERT\Demos\Windows\Guest\Windows\11\AutoUnattend\GitHub-Ruzickap\SXN-WS-01\'
 $TS_WIN_UNATTEND_FILE   = 'Autounattend_SXN-WS-01-Latest.xml'
 #
-$TS_VHD_PATH            = 'D:\Virtual-Machines\Microsoft-Hyper-V\Windows\Client\SXN-WS-01\SXN-WS-01.VHD'
+$TS_VHD_PATH            = 'D:\Virtualization-Home\Virtual-Machines\Microsoft-Hyper-V\Windows\Client\11\SXN-WS-01\SXN-WS-01.VHD'
+#
+#
+Write-Host 'ISO-Bestand:' $TS_WIN_ISO_FOLDER $TS_WIN_ISO_FILE
+Write-Host 'Unattend:' $TS_WIN_UNATTEND_FOLDER $TS_WIN_UNATTEND_FILE
+Write-Host 'VHD:' $TS_VHD_PATH
 #
 #
 #   #####################
@@ -127,7 +132,7 @@ cmd.exe /c "xcopy e:\*.* g:\vmware-tools /e /h /r /y"
 #
 mkdir G:\SQL-Server-2022-Express -Force
 #
-cmd.exe /c "xcopy C:\Users\jtu03\Nextcloud\Shared\ISO-Bestanden\Application-Servers\DBMS\Microsoft\SQL-Server\SQL-Server-2022-Express\*.* g:\SQL-Server-2022-Express /e /h /r /y"
+cmd.exe /c "xcopy D:\SurfDrive-Home\Installation-Media\Application-Servers\DBMS\Microsoft\SQL-Server\SQL-Server-2022-Express\*.* g:\SQL-Server-2022-Express /e /h /r /y"
 #
 #   Dismounten VHD 
 DisMount-DiskImage -ImagePath "$TS_VHD_PATH"
