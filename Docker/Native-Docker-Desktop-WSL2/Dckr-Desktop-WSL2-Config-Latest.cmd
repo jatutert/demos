@@ -30,7 +30,7 @@
 @REM    Docker Desktop on Windows Subsystem for Linux (WSL)
 @REM    Configuration Script
 @REM
-@REM    Version 6
+@REM    Version 7
 @REM
 @REM
 @NET SESSION >nul 2>&1
@@ -139,7 +139,7 @@ if /I not "%CUR_SSID%"=="eduroam" (
 :: Windows NAT service starten 
 @net start winnat >nul 2>&1
 ::
-:: Overzicht vrijgegeven poorten 
+::  Overzicht vrijgegeven poorten 
 ::  @netsh interface ipv4 show excludedportrange protocol=tcp
 ::
 ::
@@ -177,9 +177,7 @@ FOR /F %%i IN ('docker volume ls -q') DO docker volume rm %%i >nul 2>&1
 ::
 ::  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
-@echo [Stap 3] Docker Desktop configureren
-::
-@echo   [Stap 3a] Docker Images laden ... 
+@echo [Stap 3] Docker Images laden
 ::
 ::  Operating Systems
 ::
@@ -235,11 +233,14 @@ FOR /F %%i IN ('docker volume ls -q') DO docker volume rm %%i >nul 2>&1
 @docker pull -q nickfedor/watchtower            >nul 2>&1
 @docker pull -q registry:latest                 >nul 2>&1
 @docker pull -q portainer/portainer-ce:latest   >nul 2>&1
+@docker pull -q portainer/helper-reset-password >nul 2>&1
 @docker pull -q selfhostedpro/yacht:latest      >nul 2>&1
 @docker pull -q lirantal/dockly:latest          >nul 2>&1
 @docker pull -q moncho/dry:latest               >nul 2>&1
 ::
-::  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+@echo [Stap 4] Docker Volumes maken
 ::
 ::  @echo Docker Volumes verwijderen
 ::
@@ -249,30 +250,39 @@ FOR /F %%i IN ('docker volume ls -q') DO docker volume rm %%i >nul 2>&1
 ::  @docker volume rm yacht_data
 ::  @docker volume rm jenkins_data
 ::
-@echo   [Stap 3b] Docker Volumes aanmaken
-::
-@docker volume create portainer_data
-@docker volume create yacht_data
+@echo   Dozzle
+@docker volume create dozzle_data
+@echo   Jenkins
 @docker volume create jenkins_data
+@echo   Portainer
+@docker volume create portainer_data
+@echo   SonarQube
 @docker volume create sonarqube_data
 @docker volume create sonarqube_extensions
 @docker volume create sonarqube_logs
 @docker volume create sonarqube_temp
-@docker volume create dozzle_data
+@echo   Yacht
+@docker volume create yacht_data
 ::
-@echo   [Stap 3c] Docker Netwerken aanmaken
+::  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+@echo [Stap 5] Docker netwerken maken
 ::
 @docker network prune --force
+@echo   DevOps Netwerk
 @docker network create -d bridge devops
 ::
 ::
 ::  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
-@echo [Stap 4] Docker Images starten als Containers
+@echo [Stap 6] Docker Images starten als Containers
 ::
 ::
 ::  Portainer
 ::  :::::::::
+::
+::  Gebruiker admin
+::  Wachtwoord wordt later aangepast naar !@PASSword#$
 ::
 @echo   Portainer op poort 9101
 @docker run -q -d ^
@@ -282,12 +292,8 @@ FOR /F %%i IN ('docker volume ls -q') DO docker volume rm %%i >nul 2>&1
 --restart=always ^
 --volume /var/run/docker.sock:/var/run/docker.sock ^
 --volume portainer_data:/data ^
-portainer/portainer-ce:latest
-::
-::  @docker run -d -p 8000:8000 -p 9101:9443 --name LUCT_portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest --no-setup-token
-::
-::  @echo Portainer is beschikbaar op https://localhost:9101
-::  @echo Gebruik password1234 als wachtwoord bij aanmaken van gebruiker
+portainer/portainer-ce:latest ^
+--no-setup-token
 ::
 ::  Yacht
 ::  :::::
@@ -317,6 +323,10 @@ echo    Visual Studio Code Server op poort 9103
 --volume "/home/$USER:/home/coder/project" ^
 codercom/code-server:latest ^
 --auth=none
+::
+::  Portainer stoppen om verderop wachtwoord aan te kunnen passen
+::
+docker stop Virtu_Lab_portainer
 ::
 ::  Jenkins
 ::  ::::::::
@@ -359,8 +369,6 @@ nickfedor/watchtower ^
 -e WATCHTOWER_SCHEDULE=0 0 */6 * * * ^
 -e TZ=Europe/Amsterdam
 ::
-@REM    @docker run -q -d   --name Virtu_Lab_Watchtower --restart always -p 9106:8080   -v /var/run/docker.sock:/var/run/docker.sock percona/watchtower
-::
 ::  SonarQube
 ::  ::::::::::
 ::  
@@ -399,32 +407,42 @@ amir20/dozzle:latest
 ::
 ::  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
-@echo [Stap 5a] Installatie Plugins binnen Jenkins
+@echo [Stap 7] Jenkins configureren
+::
+@echo   [Stap 7a] Installatie Plugins binnen Jenkins
 ::
 @docker exec -it Virtu_Lab_Jenkins jenkins-plugin-cli --plugins ansible
 @docker exec -it Virtu_Lab_Jenkins jenkins-plugin-cli --plugins blueocean
 @docker exec -it Virtu_Lab_Jenkins jenkins-plugin-cli --plugins git
 @docker exec -it Virtu_Lab_Jenkins jenkins-plugin-cli --plugins github
 @docker exec -it Virtu_Lab_Jenkins jenkins-plugin-cli --plugins sonar
-::
-::
-::  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-::
-@echo [Stap 5b] Jenkins wachtwoord opslaan in %userprofile% Jenkins_Initial_Password.txt
+:
+@echo   [Stap 7b] Jenkins wachtwoord opslaan in %userprofile% Jenkins_Initial_Password.txt
 ::
 ::
 ::  Jenkins Wachtwoord opslaan
 @docker exec -it Virtu_Lab_Jenkins cat /var/jenkins_home/secrets/initialAdminPassword > %userprofile%\Jenkins_Initial_Password.txt
 ::  @docker cp LUCT_Jenkins:/var/jenkins_home/secrets/initialAdminPassword %userprofile%/Jenkins_Initial_Password.txt
 ::
-::  @echo docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock lirantal/dockly > %userprofile%/dkr_run_dockly.cmd
-::  @echo docker run --rm -it -v /var/run/docker.sock:/var/run/docker.sock -e DOCKER_HOST=$DOCKER_HOST moncho/dry > %userprofile%/dkr_run_dry.cmd
 ::
+::  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+@echo [Stap 8] Portainer configureren
+::
+docker run --rm -v portainer_data:/data portainer/helper-reset-password --password "!@WACHTwoord#$"
+docker start Virtu_Lab_portainer
+::
+::  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::
+@echo [Stap 9] Scrips maken voor Dockly en Dry
+::
+@echo docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock lirantal/dockly > %userprofile%/dkr_run_dockly.cmd
+@echo docker run --rm -it -v /var/run/docker.sock:/var/run/docker.sock -e DOCKER_HOST=$DOCKER_HOST moncho/dry > %userprofile%/dkr_run_dry.cmd
 ::
 ::
 ::  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
-@echo [Stap 6] Tools installeren
+@echo [Stap 10] Tools installeren
 ::
 ::
 @kubectl >nul 2>&1
@@ -452,19 +470,19 @@ amir20/dozzle:latest
 ::
 ::  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
-@echo [Stap 7] Configureren Minikube 
+@echo [Stap 11] Configureren Minikube 
 ::
 @minikube config set driver docker >nul 2>&1
 ::
 ::  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
-@echo [Stap 8] Kubernetes Cluster Docker Desktop verwijderen 
+@echo [Stap 12] Kubernetes Cluster Docker Desktop verwijderen 
 ::
 @docker desktop kubernetes reset-cluster
 ::
 ::  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
-@echo [Stap 9] Docker Desktop updaten 
+@echo [Stap 13] Docker Desktop updaten 
 @docker desktop update
 ::
 ::
