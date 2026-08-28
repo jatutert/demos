@@ -30,7 +30,7 @@
 @REM    Docker Desktop on Windows Subsystem for Linux (WSL)
 @REM    Configuration Script
 @REM
-@REM    Version 6
+@REM    Version 7
 @REM
 @REM
 @NET SESSION >nul 2>&1
@@ -233,6 +233,7 @@ FOR /F %%i IN ('docker volume ls -q') DO docker volume rm %%i >nul 2>&1
 @docker pull -q nickfedor/watchtower            >nul 2>&1
 @docker pull -q registry:latest                 >nul 2>&1
 @docker pull -q portainer/portainer-ce:latest   >nul 2>&1
+@docker pull -q portainer/helper-reset-password >nul 2>&1
 @docker pull -q selfhostedpro/yacht:latest      >nul 2>&1
 @docker pull -q lirantal/dockly:latest          >nul 2>&1
 @docker pull -q moncho/dry:latest               >nul 2>&1
