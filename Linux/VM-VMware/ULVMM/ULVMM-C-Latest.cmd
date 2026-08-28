@@ -168,7 +168,7 @@
 @set "Templates_Linux_DirName=Linux"
 @REM  Naam de directory met Debian templates          default is debian
 @set "Templates_Linux_Debian_DirName=Debian"
-@REM  Naam de directory met Rocky templates          default is debian
+@REM  Naam de directory met Rocky templates             default is debian
 @set "Templates_Linux_Rocky_DirName=Rocky"
 @REM  Naam van de directory met Ubuntu templates      default is ubuntu
 @set "Templates_Linux_Ubuntu_DirName=Ubuntu"
