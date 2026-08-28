@@ -1,0 +1,1 @@
+sudo wget -O - https://edu.nl/kmbyg | sudo bash
