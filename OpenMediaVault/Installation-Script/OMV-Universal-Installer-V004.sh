@@ -26,38 +26,20 @@
 #    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #
 #
+#   Debian 
+#   Open Media Vault (OMV) Installer Script
+#   Version 3
 #
 #
 clear
 #
 #
-echo   "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-echo   "@@@@@@  Open Media Vault (OMV) Configurator Script by TutSOFT"
-echo   "@@@@@@  Created for Personal and/or Educational Use"
-echo   "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-#
-#
-#
-#
-if [ $(id -u) -ne 0 ]; then
-    clear
-    echo ''
-    echo "Script started as user $USER"
-    echo 'Script NOT started with ROOT rights !'
-    echo ''
-    echo 'Please start script with sudo in advance for the correct rights to execute !'
-    echo ''
-    echo 'Terminate script execution ...'
-    exit 1
-fi
-#
-#
 #
 #
 #   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#   @@@@@ Tijdzone
+#   Tijdzone
 #   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#
+echo "Configure System Timezone to Europe Amsterdam"
 TARGET_TIMEZONE="Europe/Amsterdam"
 CURRENT_TIMEZONE=$(timedatectl | grep "Time zone" | awk '{print $3}')
 if [ "$CURRENT_TIMEZONE" != "$TARGET_TIMEZONE" ]; then
@@ -70,13 +52,9 @@ fi
 #
 #
 #   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#   @@@@@ Debian Linux bijwerken
+#   Debian Linux bijwerken
 #   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#
-#
-#
-#
-#
+
 . /etc/os-release
 distro=$(echo "$ID" | tr '[:upper:]' '[:lower:]')
 versie=$(echo "$VERSION_ID" | tr '[:upper:]' '[:lower:]')
@@ -98,87 +76,29 @@ fi
 #
 if [[ $distro == "debian" ]]; then
     #
-    apt update  -qq -y || true > /dev/null 2>&1
     #
+    echo "Executing system update"
+    #
+    #
+    apt update -qq -y || true > /dev/null 2>&1
     apt upgrade -qq -y || true > /dev/null 2>&1
     #
-    apt autoremove -qq -y || true > /dev/null 2>&1 
     #
-    apt install python3-distupgrade -qq -y || true > /dev/null 2>&1
+    apt install curl jq sed wget wget2 -qq -y || true > /dev/null 2>&1
+    #
     #
     echo "Version before upgrade $deb_vers_oud"
     deb_vers_nw=$(cat /etc/debian_version | tr '[:upper:]' '[:lower:]')
     echo "Version after upgrade $deb_vers_nw"
 fi
 #
-#
-#
-#
-if [[ $distro == "debian" ]]; then
-    #
-    APT_INSTALL_ARRAY=(
-        "7zip"
-        "apt-transport-https"
-        "bridge-utils"
-        "ca-certificates"
-        "cowsay"
-        "curl"
-        "default-jdk"
-        "dmidecode"
-        "dpkg"
-        "git"
-        "glances"
-        "gnupg"
-        "gzip"
-        "jq"
-        "lolcat"
-        "make"
-        "mc"
-        "micro"
-        "nano"
-        "neofetch"
-        "nmap"
-        "php"
-        "libapache2-mod-php"
-        "python3"
-        "screenfetch"
-        "shellcheck"
-        "sed"
-        "sl"
-        "software-properties-common"
-        "tar"
-        "unzip"
-        "wget"
-        "wget2"
-        "zip"
-    )
-    #
-    #
-    #
-    #
-    TOTAL_APT_INSTALL=${#APT_INSTALL_ARRAY[@]}
-    CURRENT_APT_INSTALL_COUNT=0
-    #
-    for apt_install in "${APT_INSTALL_ARRAY[@]}"; do
-        CURRENT_APT_INSTALL_COUNT=$((CURRENT_APT_INSTALL_COUNT + 1))
-        apt install "$apt_install" -qq -y || true
-    done
-    #
-    #
-    #
-    #
-fi
+#    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #
 #
 #
 #
 #   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#
-#
-#
-#
-#   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#   @@@@@@ Open Media Vault Installeren
+#   Open Media Vault Installeren
 #   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #
 #
@@ -201,10 +121,8 @@ fi
 #
 #
 #   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#   @@@@@ Open Media Vault Updaten
+#   Open Media Vault Updaten
 #   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#
-#
 #
 #
 if dpkg -l | grep -q openmediavault; then
@@ -216,13 +134,8 @@ fi
 #
 #
 #   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#   @@@@@@ APT Repositories uitbreiden
+#   Docker Installeren
 #   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#
-#
-#   ############################
-#   ## Docker
-#   ############################
 #
 #
 #   Keyrings ophalen
@@ -232,7 +145,7 @@ rm -f /etc/apt/keyrings/docker.asc
 curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc > /dev/null 2>&1
 chmod a+r /etc/apt/keyrings/docker.asc
 #
-#   Keyrings toevoegen aan repository Debian
+#   Keyrings toevoegen aan repository
 if [[ $distro = "debian" ]]; then
     echo \
     "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
@@ -240,7 +153,6 @@ if [[ $distro = "debian" ]]; then
     sudo tee /etc/apt/sources.list.d/docker.list > /dev/null 2>&1
 fi
 #
-#   Keyrings toevoegen aan repository Ubuntu
 if [[ $distro = "ubuntu" ]]; then
     echo \
     "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
@@ -248,60 +160,8 @@ if [[ $distro = "ubuntu" ]]; then
     sudo tee /etc/apt/sources.list.d/docker.list > /dev/null 2>&1
 fi
 #
-#
-#   ############################
-#   ## Microsoft
-#   ############################
-#
-#
-#   Zie https://learn.microsoft.com/en-us/linux/packages
-#
-curl -s -SL "https://packages.microsoft.com/config/$distro/$versie/packages-microsoft-prod.deb" -o "/tmp/packages-microsoft-prod.deb" > /dev/null 2>&1
-dpkg -i /tmp/packages-microsoft-prod.deb > /dev/null 2>&1
-#
-#
-#   ############################
-#   ## Kubernetes
-#   ############################
-#
-#
-rm -f /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-k8sstable_lang=$(curl -Ls https://dl.k8s.io/release/stable.txt)
-k8sstable_kort=${k8sstable_lang:0:5}
-curl -fsSL https://pkgs.k8s.io/core:/stable:/$k8sstable_kort/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/$k8sstable_kort/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list > /dev/null 2>&1
-##
-#
-#
-#
-#   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#   @@@@@ APT Repository bijwerken
-#   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#
-#
-#
-#
-apt update -y
-apt upgrade -y
-apt autoremove -y
-#
-#
-#
-#
-#
-#   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#   @@@@@@ Services installeren
-#   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#
-#
-#
-#
-#   ############################
-#   ## Docker
-#   ############################
-#
-#
-#
+#   APT Repository bijwerken
+apt update -qq -y
 #
 #   Docker installeren
 APT_DOCKER_INSTALL_ARRAY=(
@@ -319,26 +179,11 @@ done
 #
 #
 #   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#   @@@@@ APT Repository bijwerken
-#   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#
-#
-#
-#
-apt update -y
-apt upgrade -y
-apt autoremove -y
-#
-#
-#
-#
-#   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#   @@@@@ Docker Images starten als Containers
+#   Docker Images starten als Containers
 #   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #
 #
 docker pull -q lirantal/dockly:latest
-docker pull -q amir20/dozzle:latest
 docker pull -q moncho/dry:latest
 docker pull -q portainer/portainer-ce:latest  
 docker pull -q nickfedor/watchtower
@@ -358,7 +203,7 @@ docker volume create yacht_data
 docker run -q -d \
 --publish 8000:8000 \
 --publish 9101:9443 \
---name OMV_Lab_portainer \
+--name Virtu_Lab_portainer \
 --restart=always \
 --volume /var/run/docker.sock:/var/run/docker.sock \
 --volume portainer_data:/data \
@@ -367,7 +212,7 @@ portainer/portainer-ce:latest
 #
 @docker run -q -d \
 --publish 9102:8000 \
---name OMV_Lab_Yacht \
+--name Virtu_Lab_Yacht \
 --restart=always \
 --volume /var/run/docker.sock:/var/run/docker.sock \
 --volume yacht_data:/config \
@@ -375,15 +220,7 @@ selfhostedpro/yacht
 #
 #
 @docker run -q -d \
---name OMV_Lab_Local_Registry \
---restart always \
---publish 9105:5000 \
---volume registry-data:/var/lib/registry \
-registry
-#
-#
-@docker run -q -d \
---name OMV_Lab_Watchtower \
+--name Virtu_Lab_Watchtower \
 --restart always \
 --publish 9106:8080 \
 --volume /var/run/docker.sock:/var/run/docker.sock \
@@ -394,38 +231,47 @@ nickfedor/watchtower \
 -e TZ=Europe/Amsterdam
 #
 #
-docker stop OMV_Lab_portainer
-#
-#
 @docker run -q -d \
---name OMV_Lab_Dozzle \
+--name Virtu_Lab_Dozzle \
 --volume=/var/run/docker.sock:/var/run/docker.sock \
 --volume dozzle_data:/data \
 --publish 9108:8080 \
 amir20/dozzle:latest
-#
-#
-docker run --rm -v portainer_data:/data portainer/helper-reset-password --password "!@#PASSword#$%"
-docker start OMV_Lab_portainer
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #
 #
 #
 #
 #   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#   @@@@@ Configuratie huidige gebruiker 
+#   Configuratie huidige gebruiker 
 #   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #
 #   Algemene Groepen
 #
 echo "Adding current user to several security groups"
-usermod -aG _ssh        $SUDO_USER
-usermod -aG operator    $SUDO_USER
-usermod -aG root        $SUDO_USER
-usermod -aG staff       $SUDO_USER
-usermod -aG sys         $SUDO_USER
-usermod -aG www-data    $SUDO_USER
-usermod -aG docker      $SUDO_USER
+usermod -aG _ssh $SUDO_USER
+usermod -aG operator $SUDO_USER
+usermod -aG root $SUDO_USER
+usermod -aG staff $SUDO_USER
+usermod -aG sys $SUDO_USER
+usermod -aG www-data $SUDO_USER
+usermod -aG docker $SUDO_USER
 #
 #   Open Media Vault Groepen
 #
@@ -451,22 +297,14 @@ curl -s -o /home/${SUDO_USER}/.bash_profile https://raw.githubusercontent.com/ja
 #
 #
 #
-#   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#   @@@@@ APT Repository bijwerken
-#   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #
+#   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#   OpenMediaVault Plugins installeren
+#   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #
 apt update -y
 apt upgrade -y
 apt autoremove -y
-#
-#
-#
-#
-#   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#   @@@@@@ OpenMediaVault Plugins installeren
-#   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#
 #
 apt install openmediavault-apt -y
 apt install openmediavault-apttool -y
