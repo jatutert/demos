@@ -130,6 +130,7 @@ if [[ $distro == "debian" ]]; then
         "apt-transport-https"
         "bridge-utils"
         "ca-certificates"
+        "cowsay"
         "curl"
         "dmidecode"
         "dpkg"
@@ -165,7 +166,7 @@ if [[ $distro == "debian" ]]; then
     #
     for apt_install in "${APT_INSTALL_ARRAY[@]}"; do
         CURRENT_APT_INSTALL_COUNT=$((CURRENT_APT_INSTALL_COUNT + 1))
-        apt install "$apt_install" -qq -y || true > /dev/null 2>&1
+        apt install "$apt_install" -qq -y || true
     done
     #
     #
@@ -198,11 +199,11 @@ clear
 if [[ $distro == "debian" ]] ; then
     if [[ $versie == "12" ]] ; then
         echo "Installing Open Media Vault 7"
-        wget -O - https://github.com/OpenMediaVault-Plugin-Developers/installScript/raw/master/installOld7 | sudo bash > /dev/null 2>&1
+        wget -O - https://github.com/OpenMediaVault-Plugin-Developers/installScript/raw/master/installOld7 | sudo bash
     fi
     if [[ $versie == "13" ]] ; then
         echo "Installing Open Media Vault 8"
-        wget -O - https://github.com/OpenMediaVault-Plugin-Developers/installScript/raw/master/install | sudo bash > /dev/null 2>&1
+        wget -O - https://github.com/OpenMediaVault-Plugin-Developers/installScript/raw/master/install | sudo bash
     fi
 fi
 #
@@ -375,23 +376,23 @@ clear
 #
 #
 echo "Docker Images pull"
-docker pull -q lirantal/dockly:latest           > /dev/null 2>&1
-docker pull -q amir20/dozzle:latest             > /dev/null 2>&1
-docker pull -q moncho/dry:latest                > /dev/null 2>&1
-docker pull -q portainer/portainer-ce:latest    > /dev/null 2>&1
-docker pull -q nickfedor/watchtower             > /dev/null 2>&1
-docker pull -q selfhostedpro/yacht:latest       > /dev/null 2>&1
+docker pull -q lirantal/dockly:latest > /dev/null 2>&1
+docker pull -q amir20/dozzle:latest > /dev/null 2>&1
+docker pull -q moncho/dry:latest > /dev/null 2>&1
+docker pull -q portainer/portainer-ce:latest > /dev/null 2>&1
+docker pull -q nickfedor/watchtower > /dev/null 2>&1
+docker pull -q selfhostedpro/yacht:latest > /dev/null 2>&1
 #
 #
 echo "Docker Volumes create"
-docker volume create dozzle_data                > /dev/null 2>&1
-docker volume create jenkins_data               > /dev/null 2>&1
-docker volume create portainer_data             > /dev/null 2>&1
-docker volume create sonarqube_data             > /dev/null 2>&1
-docker volume create sonarqube_extensions       > /dev/null 2>&1
-docker volume create sonarqube_logs             > /dev/null 2>&1
-docker volume create sonarqube_temp             > /dev/null 2>&1
-docker volume create yacht_data                 > /dev/null 2>&1
+docker volume create dozzle_data > /dev/null 2>&1
+docker volume create jenkins_data > /dev/null 2>&1
+docker volume create portainer_data > /dev/null 2>&1
+docker volume create sonarqube_data > /dev/null 2>&1
+docker volume create sonarqube_extensions > /dev/null 2>&1
+docker volume create sonarqube_logs > /dev/null 2>&1
+docker volume create sonarqube_temp > /dev/null 2>&1
+docker volume create yacht_data > /dev/null 2>&1
 #
 #
 docker run -q -d \
@@ -451,29 +452,29 @@ amir20/dozzle:latest
 #   Algemene Groepen
 #
 echo "Adding current user to several security groups"
-usermod -aG _ssh        $SUDO_USER > /dev/null 2>&1
-usermod -aG operator    $SUDO_USER > /dev/null 2>&1
-usermod -aG root        $SUDO_USER > /dev/null 2>&1
-usermod -aG staff       $SUDO_USER > /dev/null 2>&1
-usermod -aG sys         $SUDO_USER > /dev/null 2>&1
-usermod -aG www-data    $SUDO_USER > /dev/null 2>&1
-usermod -aG docker      $SUDO_USER > /dev/null 2>&1
+usermod -aG _ssh        $SUDO_USER
+usermod -aG operator    $SUDO_USER
+usermod -aG root        $SUDO_USER
+usermod -aG staff       $SUDO_USER
+usermod -aG sys         $SUDO_USER
+usermod -aG www-data    $SUDO_USER
+usermod -aG docker      $SUDO_USER
 #
 #   Open Media Vault Groepen
 #
 if dpkg -l | grep -q openmediavault; then
     echo "Adding current user to Open Media Vault Security Groups"
-    usermod -aG openmediavault-admin    $SUDO_USER > /dev/null 2>&1
-    usermod -aG openmediavault-config   $SUDO_USER > /dev/null 2>&1
-    usermod -aG openmediavault-engined  $SUDO_USER > /dev/null 2>&1
-    usermod -aG openmediavault-notify   $SUDO_USER > /dev/null 2>&1
-    usermod -aG openmediavault-webgui   $SUDO_USER > /dev/null 2>&1
+    usermod -aG openmediavault-admin    $SUDO_USER
+    usermod -aG openmediavault-config   $SUDO_USER
+    usermod -aG openmediavault-engined  $SUDO_USER
+    usermod -aG openmediavault-notify   $SUDO_USER
+    usermod -aG openmediavault-webgui   $SUDO_USER
 fi
 #
 #   Default Shell 
 #
 echo "Configure Default Shell for current user to Bash"
-sudo usermod -s /bin/bash $SUDO_USER > /dev/null 2>&1
+sudo usermod -s /bin/bash $SUDO_USER
 #
 #   Bash Shell instellingen
 #
@@ -511,28 +512,14 @@ clear
 #
 #
 echo "Installing Open Media Vault Plugins"
-apt install openmediavault-apt -qq -y > /dev/null 2>&1
-apt install openmediavault-apttool -qq -y > /dev/null 2>&1
-#   apt install openmediavault-filebrowser -y
-apt install openmediavault-hosts -qq -y > /dev/null 2>&1
-apt install openmediavault-compose -qq -y > /dev/null 2>&1
-apt install openmediavault-k8s -qq -y > /dev/null 2>&1
-apt install openmediavault-webdav -qq -y > /dev/null 2>&1
+apt install openmediavault-apt -y
+apt install openmediavault-apttool -y
+apt install openmediavault-filebrowser -y
+apt install openmediavault-hosts -y
+apt install openmediavault-compose -y
+apt install openmediavault-k8s -y
+apt install openmediavault-webdav -y
 #   apt install openmediavault-zfs -y
-#
-#
-#
-#
-sudo tee /etc/apt/apt.conf.d/99quiet > /dev/null << 'EOF'
-quiet "1";
-Dpkg::Use-Pty "0";
-EOF
-#
-#
-#
-#
-echo "System Reboot requested"
-shutdown -r now
 #
 #
 #
@@ -542,3 +529,5 @@ shutdown -r now
 #
 #
 #
+echo "System Reboot requested"
+shutdown -r now
