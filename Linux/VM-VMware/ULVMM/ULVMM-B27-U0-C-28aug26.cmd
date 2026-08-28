@@ -53,7 +53,7 @@
 @REM
 @REM
 @REM
-@Set "ULVMMBuild=26"
+@Set "ULVMMBuild=27"
 @Set "ULVMMUpdate=0"
 @Set "ULVMMChannel=Canary"
 @REM
@@ -492,7 +492,7 @@ goto hoofdmenu
 @echo [2] Aanmaken/Create Debian 12 Server virtual machine
 @echo [3] Aanmaken/Create Debian 13 Desktop virtual machine
 @echo [4] Aanmaken/Create Debian 13 Server virtual machine
-@echo [5] x
+@echo [5] Installeer/Install Open Media Vault (OMV) in Debian 12 Server VM
 @echo [6] Installeer/Install Open Media Vault (OMV) in Debian 13 Server VM
 @echo [7] x
 @echo [8] x
@@ -505,12 +505,25 @@ goto hoofdmenu
 @if %antwoord%==9 goto hoofdmenu
 @if %antwoord%==8 goto dbsubmenu
 @if %antwoord%==7 goto dbsubmenu
-@if %antwoord%==6 goto omv8
-@if %antwoord%==5 goto dbsubmenu
-@if %antwoord%==4 goto d13srv
-@if %antwoord%==3 goto d13dsk
-@if %antwoord%==2 goto d12srv
-@if %antwoord%==1 goto d12dsk
+@REM
+@if %antwoord%==6 (
+    goto omv8
+)
+@if %antwoord%==5 (
+    goto omv7
+)
+@if %antwoord%==4 (
+    goto d13srv
+)
+@if %antwoord%==3 (
+    goto d13dsk
+)
+@if %antwoord%==2 (
+    goto d12srv
+)
+@if %antwoord%==1 (
+    goto d12dsk
+)
 @REM
 @goto hoofdmenu
 
@@ -569,6 +582,10 @@ for /f "delims==" %%A in ('vmrun -T ws -gu debian -gp debian getGuestIPAddress %
 @REM
 @REM
 @goto dbsubmenu
+
+
+
+
 @REM
 @REM
 @REM  ==========================================================================================
@@ -679,6 +696,10 @@ for /f "delims==" %%A in ('vmrun.exe -T ws -gu debian -gp debian getGuestIPAddre
 @REM
 @REM
 @goto dbsubmenu
+
+
+
+
 @REM
 @REM
 @REM  ==========================================================================================
@@ -747,39 +768,38 @@ for /f "delims==" %%A in ('vmrun -T ws -gu debian -gp debian getGuestIPAddress %
 :omv7
 @REM
 @REM
-@echo Open Media Vault versie 7 installeren ...
+@echo   Open Media Vault versie 7 installeren ...
 @echo.
-@echo Standaard gebruiker       admin
-@echo Standaard wachtwoord      openmediavault
+@echo   Standaard gebruiker       admin
+@echo   Standaard wachtwoord      openmediavault
 @REM
 @REM
 @"%VMWareInstallPath%"\vmrun.exe -T ws -gu debian -gp debian runProgramInGuest %Debian12ServerVM%\%Linux_Debian_12_Server_Hostname%.vmx "/bin/sudo" wget -O - https://edu.nl/kmbyg | sudo bash
-
-
-
+@REM
+@REM
+@echo.
+@echo   Vanaf nu is inloggen met user debian en wachtwoord debian mogelijk op Open Media Vault
+@echo.
+@echo   Nu wordt HERSTART gedaan van virtuele machine ...
+@echo.
+@echo   LET OP ! Het duurt even voordat de webinterface beschikbaar is ...
+@echo   Je hoort twee (zachte) piepjes als webinterface beschikbaar is. 
+@echo.
+@REM
+@REM
+@pause
 @REM
 @REM
 @REM  ==========================================================================================
 @REM  Debia 12 Server Open Media Vault Einde
 @REM  ==========================================================================================
+
+
+
+
 @REM
 @REM
 @goto dbsubmenu
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @REM
 @REM
 @REM  ==========================================================================================
@@ -792,41 +812,31 @@ for /f "delims==" %%A in ('vmrun -T ws -gu debian -gp debian getGuestIPAddress %
 :omv8
 @REM
 @REM
-@echo Open Media Vault versie 8 installeren ...
+@echo   Open Media Vault versie 8 installeren ...
 @echo.
-@echo Standaard gebruiker       admin
-@echo Standaard wachtwoord      openmediavault
+@echo   Standaard gebruiker       admin
+@echo   Standaard wachtwoord      openmediavault
 @REM
 @REM
 @"%VMWareInstallPath%"\vmrun.exe -T ws -gu debian -gp debian runProgramInGuest %Debian13ServerVM%\%Linux_Debian_13_Server_Hostname%.vmx "/bin/sudo" wget -O - https://edu.nl/kmbyg | sudo bash
-
-
-
 @REM
 @REM
-@echo Vewijderen Sources.list bestand in virtuele machine 
-@echo Anders werkt updaten niet meer ...
-@"%VMWareInstallPath%"\vmrun.exe -T ws -gu debian -gp debian runProgramInGuest %Debian13ServerVM%\%Linux_Debian_13_Server_Hostname%.vmx "/bin/sudo" rm /etc/apt/sources.list
+@REM    @echo Vewijderen Sources.list bestand in virtuele machine 
+@REM    @echo Anders werkt updaten niet meer ...
+@REM    @"%VMWareInstallPath%"\vmrun.exe -T ws -gu debian -gp debian runProgramInGuest %Debian13ServerVM%\%Linux_Debian_13_Server_Hostname%.vmx "/bin/sudo" rm /etc/apt/sources.list
 @REM
-@REM
-
 @REM
 @echo.
-@echo Vanaf nu is inloggen met user debian en wachtwoord debian mogelijk op Open Media Vault
+@echo   Vanaf nu is inloggen met user debian en wachtwoord debian mogelijk op Open Media Vault
 @echo.
-@echo Nu wordt HERSTART gedaan van virtuele machine ...
+@echo   Nu wordt HERSTART gedaan van virtuele machine ...
 @echo.
 @echo   LET OP ! Het duurt even voordat de webinterface beschikbaar is ...
 @echo   Je hoort twee (zachte) piepjes als webinterface beschikbaar is. 
 @echo.
 @REM
-@REM  @REM  Upgrade OMV
-@REM  @echo OMV upgraden naar de nieuwste versie ...
-@REM  @"%VMWareInstallPath%"\vmrun -T ws -gu debian -gp debian runProgramInGuest %Debian13ServerVM%\%Linux_Debian_13_Server_Hostname%.vmx "/bin/sudo" omv-upgrade
-@REM
 @REM
 @pause
-@REM
 @REM
 @REM
 @REM  ==========================================================================================
@@ -835,22 +845,6 @@ for /f "delims==" %%A in ('vmrun -T ws -gu debian -gp debian getGuestIPAddress %
 @REM
 @REM
 @goto dbsubmenu
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
