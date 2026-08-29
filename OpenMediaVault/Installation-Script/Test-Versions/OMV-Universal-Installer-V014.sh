@@ -1,5 +1,14 @@
 #! /bin/bash
 #
+
+
+#
+#   Deze versie van het script doe een aanpassen van DHCP naar Static NA de installatie van OMV
+#   OMV zet echter de instelling automatisch op DHCP en alleen via interface kan je aanpassen
+#
+
+
+
 #
 #    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #
