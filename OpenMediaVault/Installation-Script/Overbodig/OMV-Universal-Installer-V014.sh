@@ -1,4 +1,13 @@
 #! /bin/bash
+
+
+#
+#   In deze versie van het script zit aanpassing naar static IP adres
+#
+#   Na de installatie van OMV zet OMV alles weer op dynamic 
+#
+
+
 #
 #
 #    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

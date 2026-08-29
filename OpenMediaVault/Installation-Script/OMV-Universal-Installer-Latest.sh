@@ -165,25 +165,33 @@ sleep 5
 if ping -c ${PING_COUNT} -W 2 ${TEST_IP} >/dev/null 2>&1
 then
     echo "Netwerkverbinding is OK."
-else
-    echo
-    echo "WAARSCHUWING: Verbindingstest mislukt."
-    echo "Oude configuratie wordt hersteld..."
-
-    ip addr flush dev "${NIC}"
-    ip addr add "${OLD_IP}" dev "${NIC}"
-
-    ip route del default 2>/dev/null
-
-    if [ -n "${OLD_GW}" ]; then
-        ip route add default via "${OLD_GW}" dev "${NIC}"
-    fi
-
-    echo "Oude configuratie hersteld."
-    exit 2
+    exit 0
 fi
 
-echo "Netwerkconfiguratie succesvol aangepast."
+##############################################################################
+# Test mislukt -> rollback
+##############################################################################
+
+echo
+echo "WAARSCHUWING: Verbindingstest mislukt."
+echo "Oude configuratie wordt hersteld..."
+
+ip addr flush dev "${NIC}"
+
+ip addr add "${OLD_IP}" dev "${NIC}"
+
+ip route del default 2>/dev/null
+
+if [ -n "${OLD_GW}" ]; then
+    ip route add default via "${OLD_GW}" dev "${NIC}"
+fi
+
+echo "Oude configuratie hersteld."
+
+exit 2
+
+
+
 
 #
 #
