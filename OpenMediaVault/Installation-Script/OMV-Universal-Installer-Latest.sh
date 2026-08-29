@@ -70,6 +70,121 @@ if [ $(id -u) -ne 0 ]; then
     echo 'Terminate script execution ...'
     exit 1
 fi
+
+
+#
+#
+#
+#
+#   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#   @@@@@   IP Adres aanpassen 
+#   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#
+#
+#
+
+
+
+
+##############################################################################
+# Instellingen
+##############################################################################
+
+NETWORK_PREFIX="192.168.139"
+NEW_IP="192.168.139.11/24"
+NEW_GW="192.168.139.2"
+
+TEST_IP="8.8.8.8"
+PING_COUNT=3
+
+##############################################################################
+# Interface zoeken
+##############################################################################
+
+echo "Zoeken naar netwerkkaart in ${NETWORK_PREFIX}.x ..."
+
+NIC=$(ip -4 -o addr show | \
+      awk -v net="${NETWORK_PREFIX}" '$4 ~ "^"net"\\." {print $2; exit}')
+
+if [ -z "${NIC}" ]; then
+    echo "Geen netwerkkaart gevonden met een adres in ${NETWORK_PREFIX}.x"
+    exit 1
+fi
+
+echo "Gevonden interface : ${NIC}"
+
+##############################################################################
+# Huidige configuratie opslaan
+##############################################################################
+
+OLD_IP=$(ip -4 -o addr show dev "${NIC}" | awk '{print $4}' | head -n1)
+
+OLD_GW=$(ip route show default | \
+         awk '/default/ {print $3; exit}')
+
+echo "Huidig IP      : ${OLD_IP}"
+echo "Huidige gateway: ${OLD_GW}"
+
+##############################################################################
+# Nieuwe configuratie toepassen
+##############################################################################
+
+echo
+echo "Nieuwe configuratie toepassen..."
+
+ip addr flush dev "${NIC}"
+
+ip addr add "${NEW_IP}" dev "${NIC}"
+
+ip link set "${NIC}" up
+
+ip route del default 2>/dev/null
+
+ip route add default via "${NEW_GW}" dev "${NIC}"
+
+##############################################################################
+# Resultaat tonen
+##############################################################################
+
+echo
+echo "Nieuwe instellingen:"
+ip -4 addr show dev "${NIC}" | grep inet
+
+echo
+ip route | grep default
+
+##############################################################################
+# Connectiviteitstest
+##############################################################################
+
+echo
+echo "Controleren van netwerkverbinding..."
+
+sleep 5
+
+if ping -c ${PING_COUNT} -W 2 ${TEST_IP} >/dev/null 2>&1
+then
+    echo "Netwerkverbinding is OK."
+else
+    echo
+    echo "WAARSCHUWING: Verbindingstest mislukt."
+    echo "Oude configuratie wordt hersteld..."
+
+    ip addr flush dev "${NIC}"
+    ip addr add "${OLD_IP}" dev "${NIC}"
+
+    ip route del default 2>/dev/null
+
+    if [ -n "${OLD_GW}" ]; then
+        ip route add default via "${OLD_GW}" dev "${NIC}"
+    fi
+
+    echo "Oude configuratie hersteld."
+    exit 2
+fi
+
+echo "Netwerkconfiguratie succesvol aangepast."
+
 #
 #
 #
